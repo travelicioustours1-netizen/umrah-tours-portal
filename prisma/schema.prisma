@@ -1,0 +1,275 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+//
+// USER
+//
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//
+// PACKAGE
+//
+
+model Package {
+  id String @id @default(cuid())
+
+  title String
+  slug  String @unique
+
+  packageCode String? @unique
+  status      String  @default("ACTIVE")
+
+  description String @db.Text
+
+  duration String
+  category String?
+
+  departureCity String?
+
+  departureDate DateTime?
+  returnDate    DateTime?
+  flightNumber  String?
+
+  price Float
+
+  quadPrice   Float?
+  triplePrice Float?
+  doublePrice Float?
+  singlePrice Float?
+
+  childBedPrice   Float?
+  childNoBedPrice Float?
+  infantPrice     Float?
+
+  featured Boolean @default(false)
+
+  visa      Boolean @default(true)
+  transport Boolean @default(true)
+  meals     Boolean @default(true)
+
+  itinerary  String? @db.Text
+  inclusions String? @db.Text
+  exclusions String? @db.Text
+
+  makkahHotelId String?
+  makkahHotel   Hotel?  @relation("MakkahHotel", fields: [makkahHotelId], references: [id])
+
+  madinahHotelId String?
+  madinahHotel   Hotel?  @relation("MadinahHotel", fields: [madinahHotelId], references: [id])
+
+  airlineId String?
+  airline   Airline? @relation(fields: [airlineId], references: [id])
+
+  makkahNights  Int @default(0)
+  madinahNights Int @default(0)
+
+  brochure String?
+
+  images   PackageImage[]
+  bookings Booking[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  enquiries Enquiry[]
+}
+
+//
+// PACKAGE IMAGES
+//
+
+model PackageImage {
+  id String @id @default(cuid())
+
+  url       String
+  alt       String?
+  sortOrder Int     @default(0)
+
+  packageId String
+  package   Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  brochure  String?
+}
+
+//
+// HOTELS
+//
+
+model Hotel {
+  id        String  @id @default(cuid())
+  name      String
+  city      String
+  stars     Int
+  distance  String?
+  address   String?
+  phone     String?
+  email     String?
+  website   String?
+  thumbnail String?
+  active    Boolean @default(true)
+
+  makkahPackages  Package[] @relation("MakkahHotel")
+  madinahPackages Package[] @relation("MadinahHotel")
+
+  images HotelImage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HotelImage {
+  id String @id @default(cuid())
+
+  url String
+  alt String?
+
+  hotelId String
+  hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+//
+// AIRLINES
+//
+
+model Airline {
+  id String @id @default(cuid())
+
+  name String
+  code String?
+  logo String?
+
+  packages Package[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RoomType {
+  id          String  @id @default(cuid())
+  name        String
+  occupancy   Int
+  description String?
+  active      Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PaymentStatus {
+  UNPAID
+  PARTIAL
+  PAID
+  REFUNDED
+}
+
+enum BookingStatus {
+  DRAFT
+  PENDING
+  PENDING_PAYMENT
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model Booking {
+  id            String @id @default(cuid())
+  bookingNumber String @unique
+
+  customerName String
+  email        String
+  phone        String
+
+  adults   Int @default(1)
+  children Int @default(0)
+  infants  Int @default(0)
+
+  travelDate DateTime?
+
+  totalAmount Float
+
+  paymentStatus PaymentStatus @default(UNPAID)
+  status        BookingStatus @default(PENDING)
+
+  payment Payment?
+
+  notes String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  packageId String
+  package   Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id String @id @default(cuid())
+
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  provider PaymentProvider
+
+  transactionId String?
+  orderId       String?
+
+  amount   Float
+  currency String @default("AED")
+
+  status PaymentStatus @default(UNPAID)
+
+  response Json?
+
+  paidAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PaymentProvider {
+  STRIPE
+  RAZORPAY
+  PAYTABS
+  TELR
+}
+
+model Enquiry {
+  id      String  @id @default(cuid())
+  name    String
+  email   String
+  phone   String?
+  subject String?
+  message String  @db.Text
+
+  packageId String?
+  package   Package? @relation(fields: [packageId], references: [id])
+
+  status EnquiryStatus @default(NEW)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  CLOSED
+}

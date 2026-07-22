@@ -1,154 +1,108 @@
 import Image from "next/image";
 import Link from "next/link";
-
+import { CalendarDays, Plane, Building2 } from "lucide-react";
 
 interface PackageCardProps {
+  package: {
+    id: string;
+    slug: string;
+    title: string;
+    duration: string;
+    price: number;
+    featured: boolean;
+    departureDate: Date | null;
 
-  title: string;
-  duration: string;
-  price: string;
-  image: string;
-  popular?: boolean;
+    images: {
+      url: string;
+    }[];
 
+    airline: {
+      name: string;
+    } | null;
+
+    makkahHotel: {
+      name: string;
+    } | null;
+  };
 }
 
-
-
 export default function PackageCard({
-  title,
-  duration,
-  price,
-  image,
-  popular,
+  package: pkg,
 }: PackageCardProps) {
-
+  const image =
+    pkg.images[0]?.url || "/images/package-placeholder.jpg";
 
   return (
-
-    <div className="relative overflow-hidden rounded-3xl bg-white shadow-lg transition hover:-translate-y-2 hover:shadow-2xl">
-
-
-      {popular && (
-
-        <div className="absolute right-4 top-4 z-10 rounded-full bg-yellow-500 px-4 py-2 text-sm font-bold text-white">
-
-          Most Popular
-
-        </div>
-
-      )}
-
-
-
-
-      <div className="relative h-64">
-
-
+    <Link
+      href={`/umrah/${pkg.slug}`}
+      className="group overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+    >
+      <div className="relative h-60 overflow-hidden">
         <Image
+  src={image}
+  alt={pkg.title}
+  fill
+  sizes="(max-width:768px) 100vw, 33vw"
+  loading="eager"
+/>
 
-          src={image}
-          alt={title}
-          fill
-          sizes="(max-width:768px)100vw,33vw"
-          className="object-cover"
-
-        />
-
-
+        {pkg.featured && (
+          <div className="absolute left-4 top-4 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
+            Featured
+          </div>
+        )}
       </div>
 
-
-
-
-
-      <div className="p-7">
-
-
-
-        <h3 className="text-2xl font-bold text-gray-800">
-
-          {title}
-
+      <div className="space-y-4 p-6">
+        <h3 className="line-clamp-2 text-xl font-bold">
+          {pkg.title}
         </h3>
 
+        <div className="space-y-2 text-sm text-gray-600">
 
+          <div className="flex items-center gap-2">
+            <CalendarDays size={16} />
+            {pkg.duration}
+          </div>
 
+          {pkg.airline && (
+            <div className="flex items-center gap-2">
+              <Plane size={16} />
+              {pkg.airline.name}
+            </div>
+          )}
 
-        <div className="mt-5 space-y-3 text-gray-600">
+          {pkg.makkahHotel && (
+            <div className="flex items-center gap-2">
+              <Building2 size={16} />
+              {pkg.makkahHotel.name}
+            </div>
+          )}
 
-
-          <p>
-            📅 {duration}
-          </p>
-
-
-          <p>
-            🛂 Visa Assistance Included
-          </p>
-
-
-          <p>
-            🏨 Hotel Accommodation
-          </p>
-
-
-          <p>
-            🚐 Transport Available
-          </p>
-
-
+          {pkg.departureDate && (
+            <div className="text-gray-500">
+              Departure:{" "}
+              {new Date(pkg.departureDate).toLocaleDateString()}
+            </div>
+          )}
         </div>
 
-
-
-
-
-        <div className="mt-6 flex items-center justify-between">
-
-
+        <div className="flex items-center justify-between border-t pt-4">
           <div>
-
             <p className="text-sm text-gray-500">
               Starting From
             </p>
 
-
-            <p className="text-3xl font-bold text-emerald-700">
-
-              {price}
-
+            <p className="text-2xl font-bold text-emerald-600">
+              ₹{pkg.price.toLocaleString("en-IN")}
             </p>
-
-
           </div>
 
-
+          <span className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition group-hover:bg-emerald-700">
+            View Details
+          </span>
         </div>
-
-
-
-
-
-        <Link
-
-          href="/contact"
-
-          className="mt-7 block rounded-xl bg-emerald-600 px-5 py-4 text-center font-semibold text-white transition hover:bg-emerald-700"
-
-        >
-
-          Book This Package
-
-        </Link>
-
-
-
       </div>
-
-
-
-    </div>
-
+    </Link>
   );
-
 }

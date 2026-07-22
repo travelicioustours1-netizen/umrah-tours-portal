@@ -1,3 +1,4 @@
+import Providers from "./providers";
 import OrganizationSchema from "@/components/SEO/OrganizationSchema";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import type { Metadata } from "next";
@@ -26,8 +27,7 @@ export const metadata: Metadata = {
   ],
 
   openGraph: {
-    title:
-      "Umrah Tours | Your Trusted Partner For A Blessed Umrah Journey",
+    title: "Umrah Tours | Your Trusted Partner For A Blessed Umrah Journey",
 
     description:
       "Experience a smooth and comfortable Umrah journey with premium packages, visa assistance and complete travel support.",
@@ -41,17 +41,14 @@ export const metadata: Metadata = {
     type: "website",
   },
 
-
   twitter: {
     card: "summary_large_image",
 
-    title:
-      "Umrah Tours | Premium Umrah Packages",
+    title: "Umrah Tours | Premium Umrah Packages",
 
     description:
       "Book your Umrah journey with trusted travel experts.",
   },
-
 
   robots: {
     index: true,
@@ -59,22 +56,20 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
-
       <body>
-        <OrganizationSchema />
-        {children}
-        <WhatsAppButton />
+        <Providers>
+          <OrganizationSchema />
+          {children}
+          <WhatsAppButton />
+        </Providers>
       </body>
-
     </html>
   );
 }

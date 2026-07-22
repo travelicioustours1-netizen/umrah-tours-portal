@@ -1,0 +1,295 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// ==========================
+// USER / ADMIN
+// ==========================
+
+model User {
+
+  id String @id @default(cuid())
+
+  name String?
+
+  email String @unique
+
+  password String
+
+  role String @default("ADMIN")
+
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+
+
+// ==========================
+// PACKAGE
+// ==========================
+
+model Package {
+
+  id String @id @default(cuid())
+
+
+  title String
+
+  slug String @unique
+
+
+  duration String
+
+
+  category String
+
+
+  departureCity String
+
+
+
+  // AIRLINE RELATION
+
+  airlineId String
+
+  airline Airline @relation(
+    fields: [airlineId],
+    references: [id]
+  )
+
+
+
+  // MAKKAH HOTEL
+
+  hotelMakkahId String
+
+  hotelMakkah Hotel @relation(
+    "MakkahHotel",
+    fields: [hotelMakkahId],
+    references: [id]
+  )
+
+
+
+  // MADINAH HOTEL
+
+  hotelMadinahId String
+
+  hotelMadinah Hotel @relation(
+    "MadinahHotel",
+    fields: [hotelMadinahId],
+    references: [id]
+  )
+
+
+
+  makkahNights Int
+
+  madinahNights Int
+
+
+
+  price Float
+
+
+
+  featured Boolean @default(false)
+
+
+
+  status String @default("DRAFT")
+
+
+
+  description String @db.Text
+
+
+  itinerary String @db.Text
+
+
+  inclusions String @db.Text
+
+
+  exclusions String @db.Text
+
+
+
+  visa Boolean @default(true)
+
+  transport Boolean @default(true)
+
+  meals Boolean @default(true)
+
+
+
+  images PackageImage[]
+
+
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+
+
+// ==========================
+// PACKAGE IMAGES
+// ==========================
+
+model PackageImage {
+
+  id String @id @default(cuid())
+
+
+  url String
+
+
+  alt String?
+
+
+  sortOrder Int @default(0)
+
+
+
+  packageId String
+
+
+  package Package @relation(
+    fields: [packageId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+
+
+  createdAt DateTime @default(now())
+}
+
+
+
+// ==========================
+// HOTEL MODULE
+// ==========================
+
+model Hotel {
+
+
+  id String @id @default(cuid())
+
+
+  name String
+
+
+  city String
+
+
+  stars Int?
+
+
+  address String?
+
+
+  description String? @db.Text
+
+
+
+  images HotelImage[]
+
+
+
+  // Packages where this hotel is in Makkah
+
+  makkahPackages Package[]
+    @relation("MakkahHotel")
+
+
+
+  // Packages where this hotel is in Madinah
+
+  madinahPackages Package[]
+    @relation("MadinahHotel")
+
+
+
+  createdAt DateTime @default(now())
+
+
+  updatedAt DateTime @updatedAt
+
+}
+
+
+
+// ==========================
+// HOTEL IMAGES
+// ==========================
+
+model HotelImage {
+
+
+  id String @id @default(cuid())
+
+
+  url String
+
+
+  alt String?
+
+
+
+  hotelId String
+
+
+  hotel Hotel @relation(
+    fields: [hotelId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+
+
+  createdAt DateTime @default(now())
+
+}
+
+
+
+// ==========================
+// AIRLINE MODULE
+// ==========================
+
+model Airline {
+
+
+  id String @id @default(cuid())
+
+
+  name String
+
+
+  code String?
+
+
+  logo String?
+
+
+
+  packages Package[]
+
+
+
+  createdAt DateTime @default(now())
+
+
+  updatedAt DateTime @updatedAt
+
+}
