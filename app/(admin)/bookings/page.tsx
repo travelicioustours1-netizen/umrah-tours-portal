@@ -112,8 +112,8 @@ export default async function BookingsPage() {
 
                   <td className="px-6 py-4">
                     <BookingStatusBadge
-                      status={booking.status}
-                    />
+  status={booking.status}
+/>
                   </td>
 
                   <td className="px-6 py-4">

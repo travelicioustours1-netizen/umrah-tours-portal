@@ -3,18 +3,25 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-
     const {
       customerName,
       email,
       phone,
       adults,
       children,
-      travelDate,
-      notes,
+      infants,
       packageId,
-    } = body;
+      travelDate,
+    }: {
+      customerName: string;
+      email: string;
+      phone: string;
+      adults: number;
+      children: number;
+      infants: number;
+      packageId: string;
+      travelDate?: string;
+    } = await req.json();
 
     if (
       !customerName ||
@@ -27,9 +34,7 @@ export async function POST(req: NextRequest) {
           success: false,
           message: "Missing required fields.",
         },
-        {
-          status: 400,
-        }
+        { status: 400 }
       );
     }
 
@@ -45,14 +50,11 @@ export async function POST(req: NextRequest) {
           success: false,
           message: "Package not found.",
         },
-        {
-          status: 404,
-        }
+        { status: 404 }
       );
     }
 
     const year = new Date().getFullYear();
-
     const totalBookings = await prisma.booking.count();
 
     const bookingNumber = `UT-${year}${String(
@@ -64,28 +66,24 @@ export async function POST(req: NextRequest) {
         bookingNumber,
 
         customerName,
-
         email,
-
         phone,
 
-        adults: Number(adults) || 1,
-
-        children: Number(children) || 0,
+        adults,
+        children,
+        infants,
 
         travelDate: travelDate
           ? new Date(travelDate)
           : null,
 
-        notes: notes || null,
+        totalAmount: 0,
 
-        packageId,
-
-        totalAmount: pkg.price,
-      },
-
-      include: {
-        package: true,
+        package: {
+          connect: {
+            id: packageId,
+          },
+        },
       },
     });
 
@@ -101,9 +99,7 @@ export async function POST(req: NextRequest) {
         success: false,
         message: "Internal Server Error",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }

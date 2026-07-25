@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { sendBookingConfirmationEmail } from "@/lib/services/email.service";
 
 
 // ==========================
@@ -159,13 +160,11 @@ export async function createBooking(data: {
 
   phone: string;
 
-
   adults: number;
 
   children: number;
 
   infants: number;
-
 
   roomType:
     | "QUAD"
@@ -173,42 +172,64 @@ export async function createBooking(data: {
     | "DOUBLE"
     | "SINGLE";
 
-
   travelDate?: string | Date | null;
-
-
-  notes?: string | null;
 
 }) {
 
+  const booking = await prisma.booking.create({
 
-  return prisma.booking.create({
-  data: {
-    bookingNumber: `UMR-${Date.now()}`,
+    data: {
 
-    packageId: data.packageId,
+      bookingNumber: `UMR-${Date.now()}`,
 
-    customerName: data.customerName,
+      packageId: data.packageId,
 
-    email: data.email,
+      customerName: data.customerName,
 
-    phone: data.phone,
+      email: data.email,
 
-    adults: data.adults,
+      phone: data.phone,
 
-    children: data.children,
+      adults: data.adults,
 
-    infants: data.infants,
+      children: data.children,
 
-    travelDate: data.travelDate
-  ? new Date(data.travelDate)
-  : null,
+      infants: data.infants,
 
-totalAmount: 0,
+      roomType: data.roomType,
 
-    paymentStatus: "UNPAID",
+      travelDate: data.travelDate
+        ? new Date(data.travelDate)
+        : null,
 
-    status: "PENDING",
-  },
-});
+      totalAmount: 0,
+
+      paymentStatus: "UNPAID",
+
+      status: "PENDING",
+    },
+
+    include: {
+      package: true,
+    },
+
+  });
+
+
+  await sendBookingConfirmationEmail({
+
+    customerName: booking.customerName,
+
+    email: booking.email,
+
+    bookingNumber: booking.bookingNumber,
+
+    totalAmount: booking.totalAmount,
+
+    package: booking.package,
+
+  });
+
+
+  return booking;
 }

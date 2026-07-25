@@ -12,9 +12,9 @@ export async function createBooking(formData: FormData) {
     phone: formData.get("phone"),
     adults: formData.get("adults"),
     children: formData.get("children"),
+    infants: formData.get("infants"),
     packageId: formData.get("packageId"),
     totalAmount: formData.get("totalAmount"),
-    notes: formData.get("notes"),
     travelDate: formData.get("travelDate"),
   });
 
@@ -30,30 +30,25 @@ export async function createBooking(formData: FormData) {
   const bookingNumber = await generateBookingNumber();
 
   const booking = await prisma.booking.create({
-    data: {
-      bookingNumber,
+  data: {
+    bookingNumber,
+    customerName: data.customerName,
+    email: data.email,
+    phone: data.phone,
 
-      customerName: data.customerName,
+    adults: data.adults,
+    children: data.children,
+    infants: data.infants,
 
-      email: data.email,
+    packageId: data.packageId,
 
-      phone: data.phone,
+    totalAmount: data.totalAmount,
 
-      adults: data.adults,
-
-      children: data.children,
-
-      notes: data.notes,
-
-      packageId: data.packageId,
-
-      totalAmount: data.totalAmount,
-
-      travelDate: data.travelDate
-        ? new Date(data.travelDate)
-        : null,
-    },
-  });
+    travelDate: data.travelDate
+      ? new Date(data.travelDate)
+      : null,
+  },
+});
 
   redirect(
   `/booking/success?booking=${booking.bookingNumber}`

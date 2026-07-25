@@ -6,8 +6,7 @@ export const BookingSchema = z.object({
     .trim()
     .min(2, "Customer name is required"),
 
-  email: z
-    .email("Please enter a valid email address"),
+  email: z.email("Please enter a valid email address"),
 
   phone: z
     .string()
@@ -18,15 +17,13 @@ export const BookingSchema = z.object({
 
   children: z.coerce.number().min(0),
 
+  infants: z.coerce.number().min(0),
+
   packageId: z.string().min(1),
 
   totalAmount: z.coerce.number().min(0),
 
-  notes: z.string().optional(),
-
-  travelDate: z
-    .string()
-    .optional(),
+  travelDate: z.string().optional(),
 });
 
 export type BookingInput = z.infer<typeof BookingSchema>;

@@ -21,9 +21,9 @@ export default function BookingForm({ pkg }: Props) {
     phone: "",
     adults: 1,
     children: 0,
+    infants: 0,
     travelDate: "",
-    notes: "",
-  });
+      });
 
   function updateField(
     e: React.ChangeEvent<
@@ -35,9 +35,12 @@ export default function BookingForm({ pkg }: Props) {
     setForm((prev) => ({
       ...prev,
       [name]:
-        name === "adults" || name === "children"
-          ? Number(value)
-          : value,
+        [name === "adults" ||
+ name === "children" ||
+ 
+ name === "infants"
+  ? Number(value)
+  : value]
     }));
   }
 
@@ -176,19 +179,21 @@ export default function BookingForm({ pkg }: Props) {
         </div>
       </div>
 
-      <div className="mt-6">
-        <label className="mb-2 block text-sm font-medium">
-          Notes
-        </label>
+<div>
+  <label className="mb-2 block text-sm font-medium">
+    Infants
+  </label>
 
-        <textarea
-          rows={5}
-          name="notes"
-          value={form.notes}
-          onChange={updateField}
-          className="w-full rounded-lg border p-3"
-        />
-      </div>
+  <input
+    type="number"
+    min={0}
+    name="infants"
+    value={form.infants}
+    onChange={updateField}
+    className="w-full rounded-lg border p-3"
+  />
+</div>
+      
 
       <button
         disabled={loading}

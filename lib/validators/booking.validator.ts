@@ -47,7 +47,4 @@ export const BookingSchema = z.object({
     .optional(),
 
 
-  notes: z
-    .string()
-    .optional(),
-});
+  });

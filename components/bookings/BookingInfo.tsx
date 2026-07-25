@@ -3,8 +3,8 @@ interface Props {
     bookingNumber: string;
     adults: number;
     children: number;
+    infants: number;
     travelDate: Date | null;
-    notes: string | null;
   };
 }
 
@@ -42,10 +42,7 @@ export default function BookingInfo({
             : "-"}
         </p>
 
-        <p>
-          <strong>Notes:</strong>{" "}
-          {booking.notes || "-"}
-        </p>
+        
       </div>
     </div>
   );
