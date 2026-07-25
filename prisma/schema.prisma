@@ -8,120 +8,103 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-//
+//////////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////////
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  SALES
+  OPERATIONS
+  ACCOUNTANT
+  CUSTOMER
+}
+
+enum BookingStatus {
+  DRAFT
+  PENDING
+  PENDING_PAYMENT
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PARTIAL
+  PAID
+  REFUNDED
+}
+
+enum PaymentProvider {
+  STRIPE
+  RAZORPAY
+  PAYTABS
+  TELR
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  CLOSED
+}
+
+//////////////////////////////////////////////////////
 // USER
-//
+//////////////////////////////////////////////////////
 
 model User {
   id        String   @id @default(cuid())
   name      String?
   email     String   @unique
   password  String
-  role      String   @default("ADMIN")
+
+  role      Role     @default(ADMIN)
+  isActive  Boolean  @default(true)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-//
-// PACKAGE
-//
+//////////////////////////////////////////////////////
+// AIRLINE
+//////////////////////////////////////////////////////
 
-model Package {
-  id String @id @default(cuid())
+model Airline {
+  id        String   @id @default(cuid())
 
-  title String
-  slug  String @unique
+  name      String
+  code      String?
+  logo      String?
 
-  packageCode String? @unique
-  status      String  @default("ACTIVE")
-
-  description String @db.Text
-
-  duration String
-  category String?
-
-  departureCity String?
-
-  departureDate DateTime?
-  returnDate    DateTime?
-  flightNumber  String?
-
-  price Float
-
-  quadPrice   Float?
-  triplePrice Float?
-  doublePrice Float?
-  singlePrice Float?
-
-  childBedPrice   Float?
-  childNoBedPrice Float?
-  infantPrice     Float?
-
-  featured Boolean @default(false)
-
-  visa      Boolean @default(true)
-  transport Boolean @default(true)
-  meals     Boolean @default(true)
-
-  itinerary  String? @db.Text
-  inclusions String? @db.Text
-  exclusions String? @db.Text
-
-  makkahHotelId String?
-  makkahHotel   Hotel?  @relation("MakkahHotel", fields: [makkahHotelId], references: [id])
-
-  madinahHotelId String?
-  madinahHotel   Hotel?  @relation("MadinahHotel", fields: [madinahHotelId], references: [id])
-
-  airlineId String?
-  airline   Airline? @relation(fields: [airlineId], references: [id])
-
-  makkahNights  Int @default(0)
-  madinahNights Int @default(0)
-
-  brochure String?
-
-  images   PackageImage[]
-  bookings Booking[]
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  enquiries Enquiry[]
-}
-
-//
-// PACKAGE IMAGES
-//
-
-model PackageImage {
-  id String @id @default(cuid())
-
-  url       String
-  alt       String?
-  sortOrder Int     @default(0)
-
-  packageId String
-  package   Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  packages  Package[]
 
   createdAt DateTime @default(now())
-  brochure  String?
+  updatedAt DateTime @updatedAt
 }
 
-//
-// HOTELS
-//
+//////////////////////////////////////////////////////
+// HOTEL
+//////////////////////////////////////////////////////
 
 model Hotel {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
+
   name      String
   city      String
   stars     Int
+
   distance  String?
   address   String?
+
   phone     String?
   email     String?
   website   String?
+
   thumbnail String?
+
   active    Boolean @default(true)
 
   makkahPackages  Package[] @relation("MakkahHotel")
@@ -134,142 +117,190 @@ model Hotel {
 }
 
 model HotelImage {
-  id String @id @default(cuid())
+  id        String   @id @default(cuid())
 
-  url String
-  alt String?
+  url       String
+  alt       String?
 
-  hotelId String
-  hotel   Hotel  @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  hotelId   String
+  hotel     Hotel @relation(fields: [hotelId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
 
-//
-// AIRLINES
-//
+//////////////////////////////////////////////////////
+// PACKAGE
+//////////////////////////////////////////////////////
 
-model Airline {
-  id String @id @default(cuid())
+model Package {
+  id              String   @id @default(cuid())
 
-  name String
-  code String?
-  logo String?
+  title           String
+  slug            String   @unique
 
-  packages Package[]
+  packageCode     String?  @unique
+  status          String   @default("ACTIVE")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  description     String   @db.Text
+
+  duration        String
+  category        String?
+
+  departureCity   String?
+
+  departureDate   DateTime?
+  returnDate      DateTime?
+
+  flightNumber    String?
+
+  price           Float
+
+  quadPrice       Float?
+  triplePrice     Float?
+  doublePrice     Float?
+  singlePrice     Float?
+
+  childBedPrice   Float?
+  childNoBedPrice Float?
+  infantPrice     Float?
+
+  featured        Boolean @default(false)
+
+  visa            Boolean @default(true)
+  meals           Boolean @default(true)
+  transport       Boolean @default(true)
+
+  itinerary       String? @db.Text
+  inclusions      String? @db.Text
+  exclusions      String? @db.Text
+
+  makkahNights    Int @default(0)
+  madinahNights   Int @default(0)
+
+  brochure        String?
+
+  airlineId       String?
+  airline         Airline? @relation(fields: [airlineId], references: [id])
+
+  makkahHotelId   String?
+  makkahHotel     Hotel? @relation("MakkahHotel", fields: [makkahHotelId], references: [id])
+
+  madinahHotelId  String?
+  madinahHotel    Hotel? @relation("MadinahHotel", fields: [madinahHotelId], references: [id])
+
+  images          PackageImage[]
+  bookings        Booking[]
+  enquiries       Enquiry[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
+
+//////////////////////////////////////////////////////
+// PACKAGE IMAGE
+//////////////////////////////////////////////////////
+
+model PackageImage {
+  id         String   @id @default(cuid())
+
+  url        String
+  alt        String?
+  brochure   String?
+  sortOrder  Int      @default(0)
+
+  packageId  String
+  package    Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+}
+
+//////////////////////////////////////////////////////
+// ROOM TYPE
+//////////////////////////////////////////////////////
 
 model RoomType {
-  id          String  @id @default(cuid())
-  name        String
-  occupancy   Int
-  description String?
-  active      Boolean @default(true)
+  id        String   @id @default(cuid())
+
+  name      String
+  capacity  Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-enum PaymentStatus {
-  UNPAID
-  PARTIAL
-  PAID
-  REFUNDED
-}
-
-enum BookingStatus {
-  DRAFT
-  PENDING
-  PENDING_PAYMENT
-  CONFIRMED
-  COMPLETED
-  CANCELLED
-}
+//////////////////////////////////////////////////////
+// BOOKING
+//////////////////////////////////////////////////////
 
 model Booking {
-  id            String @id @default(cuid())
-  bookingNumber String @unique
+  id              String   @id @default(cuid())
 
-  customerName String
-  email        String
-  phone        String
+  bookingNumber   String   @unique
 
-  adults   Int @default(1)
-  children Int @default(0)
-  infants  Int @default(0)
+  customerName    String
+  email           String
+  phone           String
 
-  travelDate DateTime?
+  adults          Int
+  children        Int
+  infants         Int
 
-  totalAmount Float
+  roomType        String?
 
-  paymentStatus PaymentStatus @default(UNPAID)
-  status        BookingStatus @default(PENDING)
+  travelDate      DateTime?
 
-  payment Payment?
+  totalAmount     Float
 
-  notes String? @db.Text
+  paymentStatus   PaymentStatus @default(UNPAID)
+  status          BookingStatus @default(PENDING)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  packageId       String
+  package         Package @relation(fields: [packageId], references: [id])
 
-  packageId String
-  package   Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  payments        Payment[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
+
+//////////////////////////////////////////////////////
+// PAYMENT
+//////////////////////////////////////////////////////
 
 model Payment {
-  id String @id @default(cuid())
+  id            String @id @default(cuid())
 
-  bookingId String  @unique
-  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amount        Float
 
-  provider PaymentProvider
+  provider      PaymentProvider
 
   transactionId String?
-  orderId       String?
 
-  amount   Float
-  currency String @default("AED")
+  bookingId     String
+  booking       Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
-  status PaymentStatus @default(UNPAID)
-
-  response Json?
-
-  paidAt DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
 }
 
-enum PaymentProvider {
-  STRIPE
-  RAZORPAY
-  PAYTABS
-  TELR
-}
+//////////////////////////////////////////////////////
+// ENQUIRY
+//////////////////////////////////////////////////////
 
 model Enquiry {
-  id      String  @id @default(cuid())
-  name    String
-  email   String
-  phone   String?
-  subject String?
-  message String  @db.Text
+  id         String @id @default(cuid())
 
-  packageId String?
-  package   Package? @relation(fields: [packageId], references: [id])
+  name       String
+  email      String
+  phone      String?
 
-  status EnquiryStatus @default(NEW)
+  subject    String?
+  message    String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+  status     EnquiryStatus @default(NEW)
 
-enum EnquiryStatus {
-  NEW
-  CONTACTED
-  CONVERTED
-  CLOSED
+  packageId  String?
+  package    Package? @relation(fields: [packageId], references: [id])
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
