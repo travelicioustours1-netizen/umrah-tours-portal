@@ -61,36 +61,59 @@ export async function POST(req: NextRequest) {
       totalBookings + 1
     ).padStart(5, "0")}`;
 
-    const booking = await prisma.booking.create({
-      data: {
-        bookingNumber,
+try {
+  console.log("Booking payload:", {
+    bookingNumber,
+    customerName,
+    email,
+    phone,
+    adults,
+    children,
+    infants,
+    packageId,
+    travelDate,
+  });
 
-        customerName,
-        email,
-        phone,
+  const booking = await prisma.booking.create({
+    data: {
+      bookingNumber,
+      customerName,
+      email,
+      phone,
+      adults,
+      children,
+      infants,
+      travelDate: travelDate ? new Date(travelDate) : null,
+      totalAmount: 0,
+      packageId,
+    },
+  });
 
-        adults,
-        children,
-        infants,
+  return NextResponse.json({
+    success: true,
+    booking,
+  });
 
-        travelDate: travelDate
-          ? new Date(travelDate)
-          : null,
+} catch (error) {
+  console.error("BOOKING CREATE ERROR:");
+  console.error(error);
 
-        totalAmount: 0,
+  if (error instanceof Error) {
+    console.error(error.message);
+    console.error(error.stack);
+  }
 
-        package: {
-          connect: {
-            id: packageId,
-          },
-        },
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      booking,
-    });
+  return NextResponse.json(
+    {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : String(error),
+    },
+    { status: 500 }
+  );
+}
   } catch (error) {
     console.error(error);
 
