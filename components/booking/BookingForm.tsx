@@ -26,23 +26,22 @@ export default function BookingForm({ pkg }: Props) {
       });
 
   function updateField(
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement
-    >
-  ) {
-    const { name, value } = e.target;
+  e: React.ChangeEvent<
+    HTMLInputElement | HTMLTextAreaElement
+  >
+) {
+  const { name, value } = e.target;
 
-    setForm((prev) => ({
-      ...prev,
-      [name]:
-        [name === "adults" ||
- name === "children" ||
- 
- name === "infants"
-  ? Number(value)
-  : value]
-    }));
-  }
+  setForm((prev) => ({
+    ...prev,
+    [name]:
+      name === "adults" ||
+      name === "children" ||
+      name === "infants"
+        ? Number(value)
+        : value,
+  }));
+}
 
   async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>
