@@ -3,6 +3,12 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
+    const body = await req.json();
+
+    console.log("RAW BODY:", body);
+    console.log("customerName:", body.customerName);
+    console.log("Is Array?", Array.isArray(body.customerName));
+
     const {
       customerName,
       email,
@@ -12,31 +18,7 @@ export async function POST(req: NextRequest) {
       infants,
       packageId,
       travelDate,
-    }: {
-      customerName: string;
-      email: string;
-      phone: string;
-      adults: number;
-      children: number;
-      infants: number;
-      packageId: string;
-      travelDate?: string;
-    } = await req.json();
-
-    if (
-      !customerName ||
-      !email ||
-      !phone ||
-      !packageId
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Missing required fields.",
-        },
-        { status: 400 }
-      );
-    }
+    } = body;
 
     const pkg = await prisma.package.findUnique({
       where: {

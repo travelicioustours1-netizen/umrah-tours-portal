@@ -33,12 +33,12 @@ export default async function PackageDetails({ params }: Props) {
   );
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-10">
+    <div className="container mx-auto px-4 py-8">
       {/* Hero */}
       <PackageHero
-        title={pkg.title}
-        images={pkg.images}
-      />
+  title={pkg.title}
+  images={pkg.images}
+/>
 
       <div className="grid lg:grid-cols-3 gap-8 mt-10">
         {/* Left Content */}
@@ -46,9 +46,9 @@ export default async function PackageDetails({ params }: Props) {
           <PackageOverview pkg={pkg} />
 
           <PackageHotels
-  makkahHotel={pkg.makkahHotel}
-  madinahHotel={pkg.madinahHotel}
-/>
+            makkahHotel={pkg.makkahHotel}
+            madinahHotel={pkg.madinahHotel}
+          />
 
           <PackagePricing pkg={pkg} />
 
@@ -105,13 +105,14 @@ export default async function PackageDetails({ params }: Props) {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {relatedPackages.map((item) => (
               <PackageCard
-  key={item.id}
-  package={item}
-/>
+                key={item.id}
+                package={item}
+              />
             ))}
           </div>
         </section>
       )}
-    </main>
+    </div>
   );
 }
+

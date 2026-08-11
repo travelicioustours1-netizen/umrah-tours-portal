@@ -1,16 +1,19 @@
 import { prisma } from "@/lib/prisma";
 import { sendBookingConfirmationEmail } from "@/lib/services/email.service";
 
-
 // ==========================
 // GET ALL BOOKINGS
 // ==========================
 
-export async function getBookings() {
+export async function getAllBookings() {
   return prisma.booking.findMany({
     include: {
-      package: true,
-      payments: true,
+      package: {
+        select: {
+          title: true,
+          slug: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
@@ -18,13 +21,11 @@ export async function getBookings() {
   });
 }
 
-
-
 // ==========================
 // GET SINGLE BOOKING BY ID
 // ==========================
 
-export async function getBooking(id: string) {
+export async function getBookingById(id: string) {
   return prisma.booking.findUnique({
     where: {
       id,
@@ -36,15 +37,11 @@ export async function getBooking(id: string) {
   });
 }
 
-
-
 // ==========================
 // GET BOOKING BY NUMBER
 // ==========================
 
-export async function getBookingByNumber(
-  bookingNumber: string
-) {
+export async function getBookingByNumber(bookingNumber: string) {
   return prisma.booking.findUnique({
     where: {
       bookingNumber,
@@ -56,15 +53,11 @@ export async function getBookingByNumber(
   });
 }
 
-
-
 // ==========================
 // RECENT BOOKINGS
 // ==========================
 
-export async function getRecentBookings(
-  limit = 10
-) {
+export async function getRecentBookings(limit = 10) {
   return prisma.booking.findMany({
     include: {
       package: true,
@@ -77,81 +70,29 @@ export async function getRecentBookings(
   });
 }
 
-
-
 // ==========================
-// BOOKING STATISTICS
+// UPDATE BOOKING STATUS
 // ==========================
 
-export async function getBookingStats() {
-
-  const [
-    total,
-    pending,
-    confirmed,
-    cancelled,
-    paid,
-    unpaid,
-  ] = await Promise.all([
-
-    prisma.booking.count(),
-
-
-    prisma.booking.count({
-      where: {
-        status: "PENDING",
-      },
-    }),
-
-
-    prisma.booking.count({
-      where: {
-        status: "CONFIRMED",
-      },
-    }),
-
-
-    prisma.booking.count({
-      where: {
-        status: "CANCELLED",
-      },
-    }),
-
-
-    prisma.booking.count({
-      where: {
-        paymentStatus: "PAID",
-      },
-    }),
-
-
-    prisma.booking.count({
-      where: {
-        paymentStatus: "UNPAID",
-      },
-    }),
-
-  ]);
-
-
-  return {
-    total,
-    pending,
-    confirmed,
-    cancelled,
-    paid,
-    unpaid,
-  };
+export async function updateBookingStatus(
+  id: string,
+  status: "PENDING" | "CONFIRMED" | "CANCELLED"
+) {
+  return prisma.booking.update({
+    where: {
+      id,
+    },
+    data: {
+      status,
+    },
+  });
 }
-
-
 
 // ==========================
 // CREATE BOOKING
 // ==========================
 
 export async function createBooking(data: {
-
   packageId: string;
 
   customerName: string;
@@ -173,13 +114,60 @@ export async function createBooking(data: {
     | "SINGLE";
 
   travelDate?: string | Date | null;
-
 }) {
+  // ==========================
+  // GET PACKAGE
+  // ==========================
+
+  const pkg = await prisma.package.findUnique({
+    where: {
+      id: data.packageId,
+    },
+  });
+
+  if (!pkg) {
+    throw new Error("Package not found.");
+  }
+
+  // ==========================
+  // DETERMINE ADULT PRICE
+  // ==========================
+
+  let adultPrice = pkg.price;
+
+  switch (data.roomType) {
+    case "QUAD":
+      adultPrice = pkg.quadPrice ?? pkg.price;
+      break;
+
+    case "TRIPLE":
+      adultPrice = pkg.triplePrice ?? pkg.price;
+      break;
+
+    case "DOUBLE":
+      adultPrice = pkg.doublePrice ?? pkg.price;
+      break;
+
+    case "SINGLE":
+      adultPrice = pkg.singlePrice ?? pkg.price;
+      break;
+  }
+
+  // ==========================
+  // CALCULATE TOTAL
+  // ==========================
+
+  const totalAmount =
+    adultPrice * data.adults +
+    (pkg.childBedPrice ?? 0) * data.children +
+    (pkg.infantPrice ?? 0) * data.infants;
+
+  // ==========================
+  // CREATE BOOKING
+  // ==========================
 
   const booking = await prisma.booking.create({
-
     data: {
-
       bookingNumber: `UMR-${Date.now()}`,
 
       packageId: data.packageId,
@@ -202,7 +190,7 @@ export async function createBooking(data: {
         ? new Date(data.travelDate)
         : null,
 
-      totalAmount: 0,
+      totalAmount,
 
       paymentStatus: "UNPAID",
 
@@ -212,12 +200,13 @@ export async function createBooking(data: {
     include: {
       package: true,
     },
-
   });
 
+  // ==========================
+  // SEND CONFIRMATION EMAIL
+  // ==========================
 
   await sendBookingConfirmationEmail({
-
     customerName: booking.customerName,
 
     email: booking.email,
@@ -227,9 +216,29 @@ export async function createBooking(data: {
     totalAmount: booking.totalAmount,
 
     package: booking.package,
-
   });
 
-
   return booking;
+}
+
+// ==========================
+// UPDATE PAYMENT STATUS
+// ==========================
+
+export async function updatePaymentStatus(
+  id: string,
+  paymentStatus:
+    | "UNPAID"
+    | "PARTIAL"
+    | "PAID"
+    | "REFUNDED"
+) {
+  return prisma.booking.update({
+    where: {
+      id,
+    },
+    data: {
+      paymentStatus,
+    },
+  });
 }

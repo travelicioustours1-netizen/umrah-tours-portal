@@ -24,19 +24,28 @@ export default function PackageForm({
     : createPackage;
 
   return (
-    <form action={action} className="space-y-8">
+    <form action={action}>
       <BasicInfoSection
         initialData={initialData}
         airlines={airlines}
       />
 
-      <TravelSection initialData={initialData} />
+      <TravelSection
+        initialData={initialData}
+        hotels={hotels}
+      />
 
-      <PricingSection initialData={initialData} />
+      <PricingSection
+        initialData={initialData}
+      />
 
-      <ContentSection initialData={initialData} />
+      <ContentSection
+        initialData={initialData}
+      />
 
-      <MediaSection initialData={initialData} />
+      <MediaSection
+        initialData={initialData}
+      />
 
       <div className="flex justify-end">
         <button

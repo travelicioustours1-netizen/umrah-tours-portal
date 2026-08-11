@@ -45,7 +45,7 @@ Please send me more information.`
           </p>
 
           <h2 className="text-4xl font-bold text-emerald-600">
-            ₹{pkg.price.toLocaleString()}
+            ₹{pkg.price.toLocaleString("en-IN")}
           </h2>
 
           <p className="text-sm text-gray-500">

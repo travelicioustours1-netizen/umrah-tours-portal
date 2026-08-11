@@ -16,69 +16,87 @@ export default function BookingForm({ pkg }: Props) {
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-    customerName: "",
-    email: "",
-    phone: "",
-    adults: 1,
-    children: 0,
-    infants: 0,
-    travelDate: "",
-      });
+  customerName: "",
+  email: "",
+  phone: "",
+  adults: 1,
+  children: 0,
+  infants: 0,
+  travelDate: "",
+});
+
+console.log("INITIAL FORM:", form);
 
   function updateField(
-  e: React.ChangeEvent<
-    HTMLInputElement | HTMLTextAreaElement
-  >
+  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 ) {
   const { name, value } = e.target;
 
-  setForm((prev) => ({
-    ...prev,
-    [name]:
-      name === "adults" ||
-      name === "children" ||
-      name === "infants"
-        ? Number(value)
-        : value,
-  }));
+  console.log("CHANGE:", {
+    name,
+    value,
+    type: typeof value,
+  });
+
+  setForm((prev) => {
+    const updated = {
+      ...prev,
+      [name]:
+        name === "adults" ||
+        name === "children" ||
+        name === "infants"
+          ? Number(value)
+          : value,
+    };
+
+    console.log("UPDATED FORM:", updated);
+
+    return updated;
+  });
 }
 
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ) {
-    e.preventDefault();
+ async function handleSubmit(
+  e: React.FormEvent<HTMLFormElement>
+) {
+  e.preventDefault();
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const res = await fetch("/api/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...form,
-          packageId: pkg.id,
-        }),
-      });
+  try {
+    const payload = {
+      ...form,
+      packageId: pkg.id,
+    };
 
-      const data = await res.json();
+    console.log("FORM STATE:", form);
+    console.log("CLIENT PAYLOAD:", payload);
+    console.log("JSON:", JSON.stringify(payload));
 
-      if (!res.ok) {
-        alert(data.message || "Booking failed.");
-        return;
-      }
+    const res = await fetch("/api/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-      router.push(
-        `/booking/success?booking=${data.booking.bookingNumber}`
-      );
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong.");
-    } finally {
-      setLoading(false);
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Booking failed.");
+      return;
     }
+
+    router.push(
+      `/booking/success?booking=${data.booking.bookingNumber}`
+    );
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong.");
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <form

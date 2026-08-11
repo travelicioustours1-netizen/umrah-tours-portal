@@ -5,7 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function uploadFile(
   file: File,
-  bucket: "package-images" | "brochures"
+  bucket: "package-images" | "brochures" | "hotel-images"
 ) {
   if (!file || file.size === 0) {
     throw new Error("No file uploaded.");

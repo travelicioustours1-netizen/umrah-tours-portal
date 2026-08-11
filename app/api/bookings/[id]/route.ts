@@ -1,33 +1,49 @@
 import { NextResponse } from "next/server";
-import { getBooking } from "@/lib/services/booking.service";
+import {
+  updateBookingStatus,
+  updatePaymentStatus,
+} from "@/lib/services/booking.service";
 
-
-export async function GET(
+export async function PATCH(
   request: Request,
-  context: {
-    params: Promise<{
-      id: string;
-    }>;
-  }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  try {
+    const { id } = await params;
 
-  const { id } = await context.params;
+    const body = await request.json();
 
+    let booking;
 
-  const booking = await getBooking(id);
+    if (body.status) {
+      booking = await updateBookingStatus(
+        id,
+        body.status
+      );
+    }
 
+    if (body.paymentStatus) {
+      booking = await updatePaymentStatus(
+        id,
+        body.paymentStatus
+      );
+    }
 
-  if (!booking) {
+    return NextResponse.json({
+      success: true,
+      booking,
+    });
+  } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
       {
-        error: "Booking not found",
+        success: false,
+        message: "Unable to update booking",
       },
       {
-        status: 404,
+        status: 500,
       }
     );
   }
-
-
-  return NextResponse.json(booking);
 }

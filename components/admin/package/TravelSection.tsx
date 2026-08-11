@@ -4,10 +4,20 @@ interface Props {
     returnDate?: Date | null;
     departureCity?: string | null;
     flightNumber?: string | null;
+    makkahHotelId?: string | null;
+    madinahHotelId?: string | null;
   };
+
+  hotels: {
+    id: string;
+    name: string;
+  }[];
 }
 
-export default function TravelSection({ initialData }: Props) {
+export default function TravelSection({
+  initialData,
+  hotels,
+}: Props) {
   return (
     <div className="rounded-xl border bg-white p-6">
 
@@ -15,8 +25,9 @@ export default function TravelSection({ initialData }: Props) {
         Travel Details
       </h2>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 
+        {/* Departure City */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Departure City
@@ -29,6 +40,7 @@ export default function TravelSection({ initialData }: Props) {
           />
         </div>
 
+        {/* Flight Number */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Flight Number
@@ -41,6 +53,7 @@ export default function TravelSection({ initialData }: Props) {
           />
         </div>
 
+        {/* Departure Date */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Departure Date
@@ -60,6 +73,7 @@ export default function TravelSection({ initialData }: Props) {
           />
         </div>
 
+        {/* Return Date */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Return Date
@@ -77,6 +91,58 @@ export default function TravelSection({ initialData }: Props) {
             }
             className="w-full rounded border p-3"
           />
+        </div>
+
+        {/* Makkah Hotel */}
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            Makkah Hotel
+          </label>
+
+          <select
+            name="makkahHotelId"
+            defaultValue={initialData?.makkahHotelId ?? ""}
+            className="w-full rounded border p-3"
+          >
+            <option value="">
+              Select Makkah Hotel
+            </option>
+
+            {hotels.map((hotel) => (
+              <option
+                key={hotel.id}
+                value={hotel.id}
+              >
+                {hotel.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Madinah Hotel */}
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            Madinah Hotel
+          </label>
+
+          <select
+            name="madinahHotelId"
+            defaultValue={initialData?.madinahHotelId ?? ""}
+            className="w-full rounded border p-3"
+          >
+            <option value="">
+              Select Madinah Hotel
+            </option>
+
+            {hotels.map((hotel) => (
+              <option
+                key={hotel.id}
+                value={hotel.id}
+              >
+                {hotel.name}
+              </option>
+            ))}
+          </select>
         </div>
 
       </div>

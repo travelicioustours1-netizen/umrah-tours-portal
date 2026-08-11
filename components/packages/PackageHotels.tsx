@@ -55,6 +55,7 @@ function HotelCard({
   title: string;
   hotel: Hotel | null;
 }) {
+
   if (!hotel) {
     return (
       <div className="border rounded-xl p-6 bg-gray-50">

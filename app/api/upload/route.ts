@@ -17,14 +17,15 @@ export async function POST(req: Request) {
     }
 
     if (
-      bucket !== "package-images" &&
-      bucket !== "brochures"
-    ) {
-      return NextResponse.json(
-        { error: "Invalid bucket." },
-        { status: 400 }
-      );
-    }
+  bucket !== "package-images" &&
+  bucket !== "brochures" &&
+  bucket !== "hotel-images"
+) {
+  return NextResponse.json(
+    { error: "Invalid bucket." },
+    { status: 400 }
+  );
+}
 
     const extension = file.name.split(".").pop();
     const fileName = `${randomUUID()}.${extension}`;

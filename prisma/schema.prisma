@@ -8,9 +8,162 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-//////////////////////////////////////////////////////
-// ENUMS
-//////////////////////////////////////////////////////
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isActive  Boolean  @default(true)
+  role      Role     @default(ADMIN)
+}
+
+model Airline {
+  id        String    @id @default(cuid())
+  name      String
+  code      String?
+  logo      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  packages  Package[]
+}
+
+model Hotel {
+  id              String       @id @default(cuid())
+  name            String
+  city            String
+  createdAt       DateTime     @default(now())
+  address         String?
+  updatedAt       DateTime     @updatedAt
+  active          Boolean      @default(true)
+  distance        String?
+  email           String?
+  phone           String?
+  stars           Int
+  thumbnail       String?
+  website         String?
+  images          HotelImage[]
+  madinahPackages Package[]    @relation("MadinahHotel")
+  makkahPackages  Package[]    @relation("MakkahHotel")
+}
+
+model HotelImage {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  hotelId   String
+  createdAt DateTime @default(now())
+  hotel     Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+}
+
+model Package {
+  id              String         @id @default(cuid())
+  title           String
+  createdAt       DateTime       @default(now())
+  airlineId       String?
+  updatedAt       DateTime       @updatedAt
+  category        String?
+  departureCity   String?
+  description     String
+  duration        String
+  featured        Boolean        @default(false)
+  meals           Boolean        @default(true)
+  price           Float
+  slug            String         @unique
+  transport       Boolean        @default(true)
+  visa            Boolean        @default(true)
+  exclusions      String?
+  inclusions      String?
+  itinerary       String?
+  madinahHotelId  String?
+  madinahNights   Int            @default(0)
+  makkahHotelId   String?
+  makkahNights    Int            @default(0)
+  brochure        String?
+  childBedPrice   Float?
+  childNoBedPrice Float?
+  departureDate   DateTime?
+  doublePrice     Float?
+  flightNumber    String?
+  infantPrice     Float?
+  packageCode     String?        @unique
+  quadPrice       Float?
+  returnDate      DateTime?
+  singlePrice     Float?
+  status          String         @default("ACTIVE")
+  triplePrice     Float?
+  bookings        Booking[]
+  enquiries       Enquiry[]
+  airline         Airline?       @relation(fields: [airlineId], references: [id])
+  madinahHotel    Hotel?         @relation("MadinahHotel", fields: [madinahHotelId], references: [id])
+  makkahHotel     Hotel?         @relation("MakkahHotel", fields: [makkahHotelId], references: [id])
+  images          PackageImage[]
+}
+
+model PackageImage {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  sortOrder Int      @default(0)
+  packageId String
+  createdAt DateTime @default(now())
+  brochure  String?
+  package   Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+}
+
+model RoomType {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  capacity  Int
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  bookingNumber String        @unique
+  customerName  String
+  email         String
+  phone         String
+  adults        Int
+  children      Int
+  travelDate    DateTime?
+  totalAmount   Float
+  paymentStatus PaymentStatus @default(UNPAID)
+  status        BookingStatus @default(PENDING)
+  packageId     String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  infants       Int
+  roomType      String?
+  package       Package       @relation(fields: [packageId], references: [id])
+  payments      Payment[]
+}
+
+model Payment {
+  id            String          @id @default(cuid())
+  bookingId     String
+  provider      PaymentProvider
+  transactionId String?
+  amount        Float
+  createdAt     DateTime        @default(now())
+  booking       Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Enquiry {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  packageId String?
+  status    EnquiryStatus @default(NEW)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  package   Package?      @relation(fields: [packageId], references: [id])
+}
 
 enum Role {
   SUPER_ADMIN
@@ -22,12 +175,12 @@ enum Role {
 }
 
 enum BookingStatus {
-  DRAFT
   PENDING
-  PENDING_PAYMENT
   CONFIRMED
-  COMPLETED
   CANCELLED
+  DRAFT
+  PENDING_PAYMENT
+  COMPLETED
 }
 
 enum PaymentStatus {
@@ -49,258 +202,4 @@ enum EnquiryStatus {
   CONTACTED
   CONVERTED
   CLOSED
-}
-
-//////////////////////////////////////////////////////
-// USER
-//////////////////////////////////////////////////////
-
-model User {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String   @unique
-  password  String
-
-  role      Role     @default(ADMIN)
-  isActive  Boolean  @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-//////////////////////////////////////////////////////
-// AIRLINE
-//////////////////////////////////////////////////////
-
-model Airline {
-  id        String   @id @default(cuid())
-
-  name      String
-  code      String?
-  logo      String?
-
-  packages  Package[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-//////////////////////////////////////////////////////
-// HOTEL
-//////////////////////////////////////////////////////
-
-model Hotel {
-  id        String   @id @default(cuid())
-
-  name      String
-  city      String
-  stars     Int
-
-  distance  String?
-  address   String?
-
-  phone     String?
-  email     String?
-  website   String?
-
-  thumbnail String?
-
-  active    Boolean @default(true)
-
-  makkahPackages  Package[] @relation("MakkahHotel")
-  madinahPackages Package[] @relation("MadinahHotel")
-
-  images HotelImage[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model HotelImage {
-  id        String   @id @default(cuid())
-
-  url       String
-  alt       String?
-
-  hotelId   String
-  hotel     Hotel @relation(fields: [hotelId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-}
-
-//////////////////////////////////////////////////////
-// PACKAGE
-//////////////////////////////////////////////////////
-
-model Package {
-  id              String   @id @default(cuid())
-
-  title           String
-  slug            String   @unique
-
-  packageCode     String?  @unique
-  status          String   @default("ACTIVE")
-
-  description     String   @db.Text
-
-  duration        String
-  category        String?
-
-  departureCity   String?
-
-  departureDate   DateTime?
-  returnDate      DateTime?
-
-  flightNumber    String?
-
-  price           Float
-
-  quadPrice       Float?
-  triplePrice     Float?
-  doublePrice     Float?
-  singlePrice     Float?
-
-  childBedPrice   Float?
-  childNoBedPrice Float?
-  infantPrice     Float?
-
-  featured        Boolean @default(false)
-
-  visa            Boolean @default(true)
-  meals           Boolean @default(true)
-  transport       Boolean @default(true)
-
-  itinerary       String? @db.Text
-  inclusions      String? @db.Text
-  exclusions      String? @db.Text
-
-  makkahNights    Int @default(0)
-  madinahNights   Int @default(0)
-
-  brochure        String?
-
-  airlineId       String?
-  airline         Airline? @relation(fields: [airlineId], references: [id])
-
-  makkahHotelId   String?
-  makkahHotel     Hotel? @relation("MakkahHotel", fields: [makkahHotelId], references: [id])
-
-  madinahHotelId  String?
-  madinahHotel    Hotel? @relation("MadinahHotel", fields: [madinahHotelId], references: [id])
-
-  images          PackageImage[]
-  bookings        Booking[]
-  enquiries       Enquiry[]
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
-
-//////////////////////////////////////////////////////
-// PACKAGE IMAGE
-//////////////////////////////////////////////////////
-
-model PackageImage {
-  id         String   @id @default(cuid())
-
-  url        String
-  alt        String?
-  brochure   String?
-  sortOrder  Int      @default(0)
-
-  packageId  String
-  package    Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
-
-  createdAt  DateTime @default(now())
-}
-
-//////////////////////////////////////////////////////
-// ROOM TYPE
-//////////////////////////////////////////////////////
-
-model RoomType {
-  id        String   @id @default(cuid())
-
-  name      String
-  capacity  Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-//////////////////////////////////////////////////////
-// BOOKING
-//////////////////////////////////////////////////////
-
-model Booking {
-  id              String   @id @default(cuid())
-
-  bookingNumber   String   @unique
-
-  customerName    String
-  email           String
-  phone           String
-
-  adults          Int
-  children        Int
-  infants         Int
-
-  roomType        String?
-
-  travelDate      DateTime?
-
-  totalAmount     Float
-
-  paymentStatus   PaymentStatus @default(UNPAID)
-  status          BookingStatus @default(PENDING)
-
-  packageId       String
-  package         Package @relation(fields: [packageId], references: [id])
-
-  payments        Payment[]
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
-
-//////////////////////////////////////////////////////
-// PAYMENT
-//////////////////////////////////////////////////////
-
-model Payment {
-  id            String @id @default(cuid())
-
-  amount        Float
-
-  provider      PaymentProvider
-
-  transactionId String?
-
-  bookingId     String
-  booking       Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-
-  createdAt     DateTime @default(now())
-}
-
-//////////////////////////////////////////////////////
-// ENQUIRY
-//////////////////////////////////////////////////////
-
-model Enquiry {
-  id         String @id @default(cuid())
-
-  name       String
-  email      String
-  phone      String?
-
-  subject    String?
-  message    String
-
-  status     EnquiryStatus @default(NEW)
-
-  packageId  String?
-  package    Package? @relation(fields: [packageId], references: [id])
-
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
 }
