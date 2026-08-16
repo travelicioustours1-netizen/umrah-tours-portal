@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 import PackageHero from "@/components/packages/PackageHero";
 import PackageOverview from "@/components/packages/PackageOverview";
@@ -17,7 +18,49 @@ interface Props {
     slug: string;
   }>;
 }
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { slug } = await params;
 
+  const pkg = await getPackageBySlug(slug);
+
+  if (!pkg) {
+    return {
+      title: "Umrah Package | Umrah Tours",
+      description:
+        "Explore Umrah packages with Umrah Tours.",
+    };
+  }
+
+  const title = `${pkg.title} | Umrah Tours`;
+
+  const description =
+    `Book ${pkg.title} with Umrah Tours. Explore package pricing, hotels, itinerary, flights and complete Umrah travel services from UAE.`;
+
+  return {
+    title,
+    description,
+
+    alternates: {
+      canonical: `https://www.umrahtours.co/umrah/${pkg.slug}`,
+    },
+
+    openGraph: {
+      title,
+      description,
+      url: `https://www.umrahtours.co/umrah/${pkg.slug}`,
+      siteName: "Umrah Tours",
+      locale: "en_AE",
+      type: "website",
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 export default async function PackageDetails({ params }: Props) {
   const { slug } = await params;
 
