@@ -5,19 +5,29 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Umrah Tours | Premium Umrah Packages, Visa & Travel Services",
+  metadataBase: new URL("https://www.umrahtours.co"),
+
+  title: {
+    default: "Umrah Tours | Umrah Packages & International Holidays UAE",
+    template: "%s | Umrah Tours",
+  },
 
   description:
-    "Book reliable Umrah packages with Umrah Tours. Complete Umrah services including visa assistance, hotels, transportation and guided pilgrimage support.",
+    "Book Umrah packages, Umrah visas, flights, hotels and international holiday packages from UAE. Umrah Tours is your trusted partner for Umrah and international holidays.",
 
   keywords: [
+    "Umrah Packages UAE",
+    "Umrah Packages Dubai",
+    "Umrah Packages Sharjah",
+    "Umrah Travel Agency UAE",
+    "Umrah Visa UAE",
     "Umrah Tours",
     "Umrah Packages",
     "Umrah Visa",
-    "Hajj and Umrah",
     "Makkah Hotels",
     "Madinah Hotels",
-    "Umrah Travel Agency",
+    "Holiday Packages UAE",
+    "International Holidays UAE",
   ],
 
   authors: [
@@ -26,17 +36,21 @@ export const metadata: Metadata = {
     },
   ],
 
+  alternates: {
+    canonical: "https://www.umrahtours.co/",
+  },
+
   openGraph: {
-    title: "Umrah Tours | Your Trusted Partner For A Blessed Umrah Journey",
+    title: "Umrah Tours | Umrah Packages & International Holidays UAE",
 
     description:
-      "Experience a smooth and comfortable Umrah journey with premium packages, visa assistance and complete travel support.",
+      "Premium Umrah packages, Umrah visa assistance, flights, hotels and international holiday experiences from UAE.",
 
-    url: "https://www.umrahtours.co",
+    url: "https://www.umrahtours.co/",
 
     siteName: "Umrah Tours",
 
-    locale: "en_US",
+    locale: "en_AE",
 
     type: "website",
   },
@@ -44,10 +58,10 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title: "Umrah Tours | Premium Umrah Packages",
+    title: "Umrah Tours | Umrah Packages & International Holidays",
 
     description:
-      "Book your Umrah journey with trusted travel experts.",
+      "Book Umrah packages and international holidays from UAE with Umrah Tours.",
   },
 
   robots: {
