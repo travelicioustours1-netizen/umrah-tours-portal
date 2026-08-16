@@ -1,5 +1,6 @@
 import HolidayItinerary from "@/components/packages/HolidayItinerary";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 import PackageHero from "@/components/packages/PackageHero";
 import PackageSidebar from "@/components/packages/PackageSidebar";
@@ -16,7 +17,49 @@ interface Props {
     slug: string;
   }>;
 }
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { slug } = await params;
 
+  const pkg = await getPackageBySlug(slug);
+
+  if (!pkg || pkg.category !== "HOLIDAY") {
+    return {
+      title: "Holiday Packages | Umrah Tours",
+      description:
+        "Explore international holiday packages with Umrah Tours.",
+    };
+  }
+
+  const title = `${pkg.title} | Umrah Tours`;
+
+  const description =
+    `Explore ${pkg.title} with Umrah Tours. Discover holiday pricing, itinerary, hotels, inclusions and complete travel support from UAE.`;
+
+  return {
+    title,
+    description,
+
+    alternates: {
+      canonical: `https://www.umrahtours.co/holidays/${pkg.slug}`,
+    },
+
+    openGraph: {
+      title,
+      description,
+      url: `https://www.umrahtours.co/holidays/${pkg.slug}`,
+      siteName: "Umrah Tours",
+      locale: "en_AE",
+      type: "website",
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 export default async function HolidayDetails({
   params,
 }: Props) {
