@@ -35,7 +35,7 @@ export default function Newsletter() {
         <div className="mt-8">
 
           <a
-            href="https://wa.me/917977127500"
+            href="https://wa.me/971525657940"
             target="_blank"
             className="inline-block rounded-lg bg-green-500 px-8 py-3 font-semibold text-white hover:bg-green-600"
           >

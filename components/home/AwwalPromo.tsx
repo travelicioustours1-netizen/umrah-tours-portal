@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 
-const whatsappNumber = "919797127500";
+const whatsappNumber = "971525657940";
 
 const whatsappMessage = encodeURIComponent(
   `Assalamu Alaikum,

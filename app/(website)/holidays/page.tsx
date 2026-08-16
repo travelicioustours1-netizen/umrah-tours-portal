@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { getPackages } from "@/lib/package-service";
 
-const whatsappNumber = "919797127500";
+const whatsappNumber = "971525657940";
 
 function getWhatsAppUrl(title: string) {
   const message = encodeURIComponent(

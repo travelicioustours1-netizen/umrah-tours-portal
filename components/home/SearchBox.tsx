@@ -5,7 +5,7 @@ export default function SearchBox() {
 
   return (
 
-    <section className="relative z-20 -mt-20">
+    <section className="relative -mt-20 mb-20"> 
 
 
       <div className="mx-auto max-w-6xl px-6">

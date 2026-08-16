@@ -16,7 +16,7 @@ export default function OrganizationSchema() {
     contactPoint: {
       "@type": "ContactPoint",
 
-      telephone: "+91-7977127500",
+      telephone: "+971-52-565-7940",
 
       contactType: "customer service",
 

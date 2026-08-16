@@ -35,7 +35,7 @@ export default function ContactPage() {
             </p>
 
             <a
-              href="https://wa.me/917977127500"
+              href="https://wa.me/971525657940"
               target="_blank"
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 font-semibold text-emerald-700"

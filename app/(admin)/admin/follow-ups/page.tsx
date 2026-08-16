@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { getFollowUpEnquiries } from "@/lib/services/followup.service";
 
 function formatDateTime(date: Date | null) {

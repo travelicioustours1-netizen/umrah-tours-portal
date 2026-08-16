@@ -219,7 +219,7 @@ export default async function BookingConfirmationPage({
 
 
           <a
-            href={`https://wa.me/917977127500?text=Hello%20Umrah%20Tours,%20my%20booking%20reference%20is%20${booking.bookingNumber}`}
+            href={`https://wa.me/971525657940?text=Hello%20Umrah%20Tours,%20my%20booking%20reference%20is%20${booking.bookingNumber}`}
             target="_blank"
             className="rounded-lg border border-green-600 px-6 py-3 text-center font-semibold text-green-700 hover:bg-green-50"
           >

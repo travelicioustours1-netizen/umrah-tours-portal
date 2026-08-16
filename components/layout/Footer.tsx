@@ -102,7 +102,7 @@ export default function Footer() {
           <ul className="space-y-3">
 
             <li>
-              📞 +91 7977127500
+              📞 +971 52 565 7940
             </li>
 
             <li>
@@ -117,7 +117,7 @@ export default function Footer() {
 
 
           <a
-            href="https://wa.me/917977127500"
+            href="https://wa.me/971525657940"
             target="_blank"
             className="mt-6 inline-block rounded-lg bg-emerald-600 px-5 py-3 text-white hover:bg-emerald-700"
           >

@@ -1,4 +1,4 @@
-﻿import { getResend } from "@/lib/email/resend";
+import { getResend } from "@/lib/email/resend";
 
 type BookingEmailData = {
   customerName: string;

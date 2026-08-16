@@ -98,7 +98,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
 
               <li>
-                📞 +91 7977127500
+                📞 +971 52 565 7940
               </li>
 
               <li>

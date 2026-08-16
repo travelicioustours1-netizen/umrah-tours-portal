@@ -31,7 +31,7 @@ interface Props {
 export default function PackageSidebar({ pkg }: Props) {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
-  const whatsappNumber = "919797127500";
+  const whatsappNumber = "971525657940";
 
   const isHoliday =
     pkg.category?.toUpperCase() === "HOLIDAY";
@@ -237,7 +237,7 @@ Thank you.`
             </p>
 
             <p className="mt-3 text-sm text-gray-600">
-              +91 7977127500
+              +971 52 565 7940
             </p>
           </div>
 

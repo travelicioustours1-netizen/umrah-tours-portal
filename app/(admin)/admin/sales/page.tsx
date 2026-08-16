@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { getSalesDashboardData } from "@/lib/services/sales-dashboard.service";
 
 function formatCurrency(value: number) {
@@ -237,7 +237,7 @@ export default async function SalesDashboardPage() {
               href="/admin/follow-ups"
               className="mt-4 inline-block text-sm font-semibold text-blue-600 hover:text-blue-800"
             >
-              View all overdue follow-ups →
+              View all overdue follow-ups ?
             </Link>
           )}
         </div>
@@ -307,7 +307,7 @@ export default async function SalesDashboardPage() {
               href="/admin/follow-ups"
               className="mt-4 inline-block text-sm font-semibold text-blue-600 hover:text-blue-800"
             >
-              View all upcoming follow-ups →
+              View all upcoming follow-ups ?
             </Link>
           )}
         </div>
@@ -329,7 +329,7 @@ export default async function SalesDashboardPage() {
             href="/admin/enquiries"
             className="text-sm font-semibold text-blue-600 hover:text-blue-800"
           >
-            Manage Enquiries →
+            Manage Enquiries ?
           </Link>
         </div>
 

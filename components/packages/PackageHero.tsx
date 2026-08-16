@@ -50,7 +50,7 @@ export default function PackageHero({
 
   const destination = getDestination(title);
 
-  const whatsappNumber = "919797127500";
+  const whatsappNumber = "971525657940";
 
   const whatsappMessage = encodeURIComponent(
     `Assalamu Alaikum,

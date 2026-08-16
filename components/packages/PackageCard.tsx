@@ -62,7 +62,7 @@ export default function PackageCard({
     ? getDestination(pkg.title)
     : null;
 
-  const whatsappNumber = "919797127500";
+  const whatsappNumber = "971525657940";
 
   const whatsappMessage = encodeURIComponent(
     `Assalamu Alaikum,
@@ -78,7 +78,7 @@ Thank you.`
     `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
-    <div className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div className="group flex flex-col rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
 
       {/* Image */}
       <Link href={href}>
@@ -116,7 +116,7 @@ Thank you.`
       </Link>
 
       {/* Content */}
-      <div className="space-y-5 p-6">
+      <div className="flex flex-col space-y-5 p-6">
 
         {/* Title */}
         <div>
@@ -194,35 +194,39 @@ Thank you.`
         </div>
 
         {/* Actions */}
-        {isHoliday ? (
-          <div className="grid grid-cols-2 gap-3">
+        <div className="mt-auto pt-1">
 
+          {isHoliday ? (
+            <div className="grid grid-cols-2 gap-3">
+
+              <Link
+                href={href}
+                className="flex items-center justify-center rounded-xl border border-emerald-600 px-3 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+              >
+                View Details
+              </Link>
+
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+              >
+                <MessageCircle size={17} />
+                Get a Quote
+              </a>
+
+            </div>
+          ) : (
             <Link
               href={href}
-              className="flex items-center justify-center rounded-xl border border-emerald-600 px-3 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+              className="block w-full rounded-xl bg-emerald-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
             >
               View Details
             </Link>
+          )}
 
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
-            >
-              <MessageCircle size={17} />
-              Get a Quote
-            </a>
-
-          </div>
-        ) : (
-          <Link
-            href={href}
-            className="block w-full rounded-xl bg-emerald-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
-          >
-            View Details
-          </Link>
-        )}
+        </div>
 
       </div>
     </div>
