@@ -124,11 +124,19 @@ export async function getPackages(
   };
 }
 
-export async function getFeaturedPackages() {
+export async function getFeaturedPackages(category?: string) {
   return prisma.package.findMany({
     where: {
       featured: true,
       status: "ACTIVE",
+      ...(category
+        ? {
+            category: {
+              equals: category,
+              mode: "insensitive",
+            },
+          }
+        : {}),
     },
     include: packageInclude,
     take: 6,
