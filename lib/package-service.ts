@@ -59,8 +59,11 @@ export async function getPackages(
   }
 
   if (category) {
-    where.category = category;
-  }
+  where.category = {
+    equals: category,
+    mode: "insensitive",
+  };
+}
 
   if (departureCity) {
     where.departureCity = departureCity;

@@ -25,7 +25,7 @@ export default async function UmrahPackagesPage({
   const [result, filters] = await Promise.all([
     getPackages({
       search: params.search,
-      category: params.category,
+      category: "economy",
       departureCity: params.departureCity,
       airlineId: params.airline,
       featured:
