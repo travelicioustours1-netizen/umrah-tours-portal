@@ -1,31 +1,50 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = "https://umrahtours.co";
 
   return [
     {
-      url: "https://www.umrahtours.co",
+      url: baseUrl,
       lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 1,
     },
-
     {
-      url: "https://www.umrahtours.co/umrah",
+      url: `${baseUrl}/umrah`,
       lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
-
     {
-      url: "https://www.umrahtours.co/visa",
+      url: `${baseUrl}/holidays`,
       lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
-
     {
-      url: "https://www.umrahtours.co/hotels",
+      url: `${baseUrl}/visa`,
       lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
-
     {
-      url: "https://www.umrahtours.co/contact",
+      url: `${baseUrl}/hotels`,
       lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
     },
   ];
 }
