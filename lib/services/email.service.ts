@@ -191,11 +191,12 @@ export async function sendBookingReceivedEmail(
 export async function sendBookingConfirmationEmail(
   booking: BookingEmailData
 ) {
-    console.log(
-  "CONFIRMATION EMAIL FUNCTION CALLED:",
-  booking.bookingNumber,
-  booking.email
-);
+  console.log(
+    "CONFIRMATION EMAIL FUNCTION CALLED:",
+    booking.bookingNumber,
+    booking.email
+  );
+
   try {
     const result = await getResend().emails.send({
       from: process.env.EMAIL_FROM!,
@@ -337,6 +338,7 @@ export async function sendBookingConfirmationEmail(
     throw error;
   }
 }
+
 // ======================================================
 // PAYMENT RECEIVED EMAIL
 // ======================================================
@@ -360,6 +362,7 @@ type PaymentReceivedEmailData = {
   provider: string;
   transactionId?: string | null;
 };
+
 export async function sendPaymentReceivedEmail(
   payment: PaymentReceivedEmailData
 ) {
@@ -374,7 +377,7 @@ export async function sendPaymentReceivedEmail(
       payment.paymentStatus === "PAID" ||
       payment.remainingBalance <= 0;
 
-    const result = getResend().emails.send({
+    const result = await getResend().emails.send({
       from: process.env.EMAIL_FROM!,
       to: payment.email,
 
@@ -433,7 +436,7 @@ export async function sendPaymentReceivedEmail(
 
             <p>
               <strong>Payment Provider:</strong>
-             ${payment.provider}
+              ${payment.provider}
             </p>
 
             <p>
@@ -446,6 +449,11 @@ export async function sendPaymentReceivedEmail(
             <p>
               <strong>Total Amount:</strong>
               ${formatAmount(payment.totalAmount)}
+            </p>
+
+            <p>
+              <strong>Previous Paid Amount:</strong>
+              ${formatAmount(payment.previousPaidAmount)}
             </p>
 
             <p>
