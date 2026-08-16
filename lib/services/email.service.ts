@@ -1,4 +1,4 @@
-﻿import { resend } from "@/lib/email/resend";
+﻿import { getResend } from "@/lib/email/resend";
 
 type BookingEmailData = {
   customerName: string;
@@ -46,7 +46,7 @@ export async function sendBookingReceivedEmail(
   booking: BookingEmailData
 ) {
   try {
-    const result = await resend.emails.send({
+    const result = await getResend().emails.send({
       from: process.env.EMAIL_FROM!,
       to: booking.email,
 
@@ -197,7 +197,7 @@ export async function sendBookingConfirmationEmail(
   booking.email
 );
   try {
-    const result = await resend.emails.send({
+    const result = await getResend().emails.send({
       from: process.env.EMAIL_FROM!,
       to: booking.email,
 
@@ -374,7 +374,7 @@ export async function sendPaymentReceivedEmail(
       payment.paymentStatus === "PAID" ||
       payment.remainingBalance <= 0;
 
-    const result = await resend.emails.send({
+    const result = getResend().emails.send({
       from: process.env.EMAIL_FROM!,
       to: payment.email,
 
