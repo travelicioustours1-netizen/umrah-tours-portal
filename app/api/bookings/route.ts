@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { createBooking } from "@/lib/services/booking.service";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    console.log("RAW BODY:", body);
-    console.log("customerName:", body.customerName);
-    console.log("Is Array?", Array.isArray(body.customerName));
+    console.log("BOOKING REQUEST:", body);
 
     const {
       customerName,
@@ -18,91 +16,56 @@ export async function POST(req: NextRequest) {
       infants,
       packageId,
       travelDate,
+      roomType,
     } = body;
 
-    const pkg = await prisma.package.findUnique({
-      where: {
-        id: packageId,
-      },
-    });
-
-    if (!pkg) {
+    if (!customerName || !email || !phone || !packageId) {
       return NextResponse.json(
         {
           success: false,
-          message: "Package not found.",
+          message:
+            "Customer name, email, phone and package are required.",
         },
-        { status: 404 }
+        { status: 400 }
       );
     }
 
-    const year = new Date().getFullYear();
-    const totalBookings = await prisma.booking.count();
+    if (!roomType) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Room type is required.",
+        },
+        { status: 400 }
+      );
+    }
 
-    const bookingNumber = `UT-${year}${String(
-      totalBookings + 1
-    ).padStart(5, "0")}`;
-
-try {
-  console.log("Booking payload:", {
-    bookingNumber,
-    customerName,
-    email,
-    phone,
-    adults,
-    children,
-    infants,
-    packageId,
-    travelDate,
-  });
-
-  const booking = await prisma.booking.create({
-    data: {
-      bookingNumber,
+    const booking = await createBooking({
+      packageId,
       customerName,
       email,
       phone,
-      adults,
-      children,
-      infants,
-      travelDate: travelDate ? new Date(travelDate) : null,
-      totalAmount: 0,
-      packageId,
-    },
-  });
+      adults: Number(adults) || 1,
+      children: Number(children) || 0,
+      infants: Number(infants) || 0,
+      roomType,
+      travelDate: travelDate || null,
+    });
 
-  return NextResponse.json({
-    success: true,
-    booking,
-  });
-
-} catch (error) {
-  console.error("BOOKING CREATE ERROR:");
-  console.error(error);
-
-  if (error instanceof Error) {
-    console.error(error.message);
-    console.error(error.stack);
-  }
-
-  return NextResponse.json(
-    {
-      success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : String(error),
-    },
-    { status: 500 }
-  );
-}
+    return NextResponse.json({
+      success: true,
+      booking,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("BOOKING CREATE ERROR:", error);
 
     return NextResponse.json(
       {
         success: false,
-        message: "Internal Server Error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Unable to create booking.",
       },
       { status: 500 }
     );

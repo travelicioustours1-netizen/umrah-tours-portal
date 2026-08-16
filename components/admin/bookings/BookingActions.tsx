@@ -14,29 +14,43 @@ export default function BookingActions({
 
   const [loading, setLoading] = useState(false);
 
-  async function updateBooking(data: object) {
+  async function updateBooking(status: "CONFIRMED" | "CANCELLED") {
     setLoading(true);
 
     try {
       const res = await fetch(
-        `/api/admin/bookings/${bookingId}`,
+        `/api/bookings/${bookingId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            status,
+          }),
         }
       );
 
-      if (!res.ok) {
-        throw new Error("Update failed");
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(
+          data.message || "Unable to update booking"
+        );
       }
 
       router.refresh();
-    } catch (err) {
-      console.error(err);
-      alert("Unable to update booking.");
+    } catch (error) {
+      console.error(
+        "Booking status update error:",
+        error
+      );
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Unable to update booking."
+      );
     } finally {
       setLoading(false);
     }
@@ -45,51 +59,29 @@ export default function BookingActions({
   return (
     <div className="flex flex-wrap gap-3">
       <button
+        type="button"
         disabled={loading}
         onClick={() =>
-          updateBooking({
-            status: "CONFIRMED",
-          })
+          updateBooking("CONFIRMED")
         }
-        className="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-50"
+        className="rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Confirm Booking
+        {loading
+          ? "Updating..."
+          : "Confirm Booking"}
       </button>
 
       <button
+        type="button"
         disabled={loading}
         onClick={() =>
-          updateBooking({
-            status: "CANCELLED",
-          })
+          updateBooking("CANCELLED")
         }
-        className="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50"
+        className="rounded-lg bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Cancel Booking
-      </button>
-
-      <button
-        disabled={loading}
-        onClick={() =>
-          updateBooking({
-            paymentStatus: "PAID",
-          })
-        }
-        className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-      >
-        Mark Paid
-      </button>
-
-      <button
-        disabled={loading}
-        onClick={() =>
-          updateBooking({
-            paymentStatus: "PARTIAL",
-          })
-        }
-        className="rounded-lg bg-yellow-500 px-4 py-2 text-white hover:bg-yellow-600 disabled:opacity-50"
-      >
-        Partial Payment
+        {loading
+          ? "Updating..."
+          : "Cancel Booking"}
       </button>
     </div>
   );

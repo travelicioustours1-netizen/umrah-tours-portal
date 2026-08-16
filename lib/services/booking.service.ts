@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { sendBookingConfirmationEmail } from "@/lib/services/email.service";
+import {
+  sendBookingConfirmationEmail,
+  sendBookingReceivedEmail,
+} from "@/lib/services/email.service";
 
 // ==========================
 // GET ALL BOOKINGS
@@ -78,15 +81,94 @@ export async function updateBookingStatus(
   id: string,
   status: "PENDING" | "CONFIRMED" | "CANCELLED"
 ) {
-  return prisma.booking.update({
+  const existingBooking = await prisma.booking.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!existingBooking) {
+    throw new Error("Booking not found.");
+  }
+
+  console.log(
+    "EXISTING BOOKING STATUS:",
+    existingBooking.status
+  );
+
+  console.log(
+    "REQUESTED BOOKING STATUS:",
+    status
+  );
+
+  const booking = await prisma.booking.update({
     where: {
       id,
     },
     data: {
       status,
     },
+    include: {
+      package: true,
+      payments: true,
+    },
   });
+
+  console.log(
+    "BOOKING UPDATED:",
+    booking.status
+  );
+
+  if (
+    status === "CONFIRMED" &&
+    existingBooking.status !== "CONFIRMED"
+  ) {
+    console.log(
+      "CONFIRMATION EMAIL FUNCTION CALLED:"
+    );
+
+    try {
+      await sendBookingConfirmationEmail({
+        customerName: booking.customerName,
+        email: booking.email,
+        bookingNumber: booking.bookingNumber,
+        totalAmount: booking.totalAmount,
+        package: booking.package,
+        travelDate: booking.travelDate,
+        adults: booking.adults,
+        children: booking.children,
+        infants: booking.infants,
+        paymentStatus: booking.paymentStatus,
+        status: booking.status,
+      });
+
+      console.log(
+        "CONFIRMATION EMAIL COMPLETED SUCCESSFULLY"
+      );
+    } catch (emailError) {
+      console.error(
+        "CONFIRMATION EMAIL FAILED:",
+        emailError
+      );
+
+      // Do not undo the booking confirmation
+      // just because email delivery failed.
+    }
+  } else {
+    console.log(
+      "CONFIRMATION EMAIL NOT SENT. Condition:",
+      {
+        requestedStatus: status,
+        previousStatus: existingBooking.status,
+      }
+    );
+  }
+
+  return booking;
 }
+// ==========================
+// CREATE BOOKING
+// ==========================
 
 // ==========================
 // CREATE BOOKING
@@ -206,7 +288,7 @@ export async function createBooking(data: {
   // SEND CONFIRMATION EMAIL
   // ==========================
 
-  await sendBookingConfirmationEmail({
+  await sendBookingReceivedEmail({
     customerName: booking.customerName,
 
     email: booking.email,
@@ -242,3 +324,4 @@ export async function updatePaymentStatus(
     },
   });
 }
+

@@ -16,30 +16,22 @@ export default function BookingForm({ pkg }: Props) {
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-  customerName: "",
-  email: "",
-  phone: "",
-  adults: 1,
-  children: 0,
-  infants: 0,
-  travelDate: "",
-});
-
-console.log("INITIAL FORM:", form);
-
-  function updateField(
-  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-) {
-  const { name, value } = e.target;
-
-  console.log("CHANGE:", {
-    name,
-    value,
-    type: typeof value,
+    customerName: "",
+    email: "",
+    phone: "",
+    adults: 1,
+    children: 0,
+    infants: 0,
+    roomType: "QUAD",
+    travelDate: "",
   });
 
-  setForm((prev) => {
-    const updated = {
+  function updateField(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
       ...prev,
       [name]:
         name === "adults" ||
@@ -47,56 +39,57 @@ console.log("INITIAL FORM:", form);
         name === "infants"
           ? Number(value)
           : value,
-    };
-
-    console.log("UPDATED FORM:", updated);
-
-    return updated;
-  });
-}
-
- async function handleSubmit(
-  e: React.FormEvent<HTMLFormElement>
-) {
-  e.preventDefault();
-
-  setLoading(true);
-
-  try {
-    const payload = {
-      ...form,
-      packageId: pkg.id,
-    };
-
-    console.log("FORM STATE:", form);
-    console.log("CLIENT PAYLOAD:", payload);
-    console.log("JSON:", JSON.stringify(payload));
-
-    const res = await fetch("/api/bookings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.message || "Booking failed.");
-      return;
-    }
-
-    router.push(
-      `/booking/success?booking=${data.booking.bookingNumber}`
-    );
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong.");
-  } finally {
-    setLoading(false);
+    }));
   }
-}
+
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ) {
+    e.preventDefault();
+
+    setLoading(true);
+
+    try {
+      const payload = {
+        ...form,
+        packageId: pkg.id,
+      };
+
+      console.log("BOOKING FORM:", form);
+      console.log("BOOKING PAYLOAD:", payload);
+
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      console.log("BOOKING RESPONSE:", data);
+
+      if (!res.ok) {
+        alert(data.message || "Booking failed.");
+        return;
+      }
+
+      if (!data.booking?.bookingNumber) {
+        alert("Booking was created but no booking number was returned.");
+        return;
+      }
+
+      router.push(
+        `/booking/success?booking=${data.booking.bookingNumber}`
+      );
+    } catch (error) {
+      console.error("BOOKING SUBMISSION ERROR:", error);
+      alert("Something went wrong while creating the booking.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <form
@@ -108,6 +101,7 @@ console.log("INITIAL FORM:", form);
       </h2>
 
       <div className="grid gap-6 md:grid-cols-2">
+        {/* Full Name */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Full Name *
@@ -122,6 +116,7 @@ console.log("INITIAL FORM:", form);
           />
         </div>
 
+        {/* Email */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Email *
@@ -137,6 +132,7 @@ console.log("INITIAL FORM:", form);
           />
         </div>
 
+        {/* Phone */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Phone *
@@ -151,6 +147,7 @@ console.log("INITIAL FORM:", form);
           />
         </div>
 
+        {/* Travel Date */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Travel Date
@@ -165,12 +162,14 @@ console.log("INITIAL FORM:", form);
           />
         </div>
 
+        {/* Adults */}
         <div>
           <label className="mb-2 block text-sm font-medium">
-            Adults
+            Adults *
           </label>
 
           <input
+            required
             type="number"
             min={1}
             name="adults"
@@ -180,6 +179,7 @@ console.log("INITIAL FORM:", form);
           />
         </div>
 
+        {/* Children */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Children
@@ -194,29 +194,69 @@ console.log("INITIAL FORM:", form);
             className="w-full rounded-lg border p-3"
           />
         </div>
+
+        {/* Infants */}
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            Infants
+          </label>
+
+          <input
+            type="number"
+            min={0}
+            name="infants"
+            value={form.infants}
+            onChange={updateField}
+            className="w-full rounded-lg border p-3"
+          />
+        </div>
+
+        {/* Room Type */}
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            Room Type *
+          </label>
+
+          <select
+            required
+            name="roomType"
+            value={form.roomType}
+            onChange={(e) =>
+              setForm((prev) => ({
+                ...prev,
+                roomType: e.target.value,
+              }))
+            }
+            className="w-full rounded-lg border p-3"
+          >
+            <option value="QUAD">
+              Quad Sharing
+            </option>
+
+            <option value="TRIPLE">
+              Triple Sharing
+            </option>
+
+            <option value="DOUBLE">
+              Double Sharing
+            </option>
+
+            <option value="SINGLE">
+              Single Sharing
+            </option>
+          </select>
+        </div>
       </div>
 
-<div>
-  <label className="mb-2 block text-sm font-medium">
-    Infants
-  </label>
-
-  <input
-    type="number"
-    min={0}
-    name="infants"
-    value={form.infants}
-    onChange={updateField}
-    className="w-full rounded-lg border p-3"
-  />
-</div>
-      
-
+      {/* Submit */}
       <button
+        type="submit"
         disabled={loading}
         className="mt-8 w-full rounded-xl bg-emerald-600 py-4 font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {loading ? "Submitting..." : "Confirm Booking"}
+        {loading
+          ? "Submitting..."
+          : "Confirm Booking"}
       </button>
     </form>
   );

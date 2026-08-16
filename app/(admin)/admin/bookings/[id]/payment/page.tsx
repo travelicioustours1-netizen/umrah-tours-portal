@@ -36,6 +36,7 @@ export default function AddPaymentPage() {
     useState<PaymentSummary | null>(null);
 
   const [amount, setAmount] = useState("");
+
   const [provider, setProvider] =
     useState<PaymentProvider>("PAYTABS");
 
@@ -49,10 +50,54 @@ export default function AddPaymentPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  function formatAED(value: number) {
+    return value.toLocaleString("en-AE", {
+      style: "currency",
+      currency: "AED",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
+
+  function getStatusLabel(status: string) {
+    switch (status) {
+      case "PAID":
+        return "PAID";
+
+      case "PARTIAL":
+        return "PARTIAL";
+
+      case "REFUNDED":
+        return "REFUNDED";
+
+      case "UNPAID":
+      default:
+        return "UNPAID";
+    }
+  }
+
+  function getStatusClasses(status: string) {
+    switch (status) {
+      case "PAID":
+        return "bg-green-100 text-green-700";
+
+      case "PARTIAL":
+        return "bg-yellow-100 text-yellow-700";
+
+      case "REFUNDED":
+        return "bg-purple-100 text-purple-700";
+
+      case "UNPAID":
+      default:
+        return "bg-red-100 text-red-700";
+    }
+  }
+
   useEffect(() => {
     async function loadPaymentSummary() {
       try {
         setLoading(true);
+        setError("");
 
         const response = await fetch(
           `/api/payments?bookingId=${bookingId}`
@@ -106,12 +151,8 @@ export default function AddPaymentPage() {
       paymentAmount > summary.balance
     ) {
       setError(
-        `Maximum payment allowed is ${summary.balance.toLocaleString(
-          "en-US",
-          {
-            style: "currency",
-            currency: "USD",
-          }
+        `Maximum payment allowed is ${formatAED(
+          summary.balance
         )}.`
       );
       return;
@@ -170,6 +211,7 @@ export default function AddPaymentPage() {
         router.push(
           `/admin/bookings/${bookingId}`
         );
+
         router.refresh();
       }, 800);
     } catch (error) {
@@ -204,8 +246,17 @@ export default function AddPaymentPage() {
     );
   }
 
+  const paymentStatus =
+    getStatusLabel(summary.paymentStatus);
+
+  const isFullyPaid =
+    summary.balance <= 0 ||
+    paymentStatus === "PAID";
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-8">
+
+      {/* Header */}
 
       <div>
         <Link
@@ -224,6 +275,32 @@ export default function AddPaymentPage() {
         </p>
       </div>
 
+      {/* Payment Status */}
+
+      <div className="rounded-xl border bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+          <div>
+            <p className="text-sm text-gray-500">
+              Payment Status
+            </p>
+
+            <p className="mt-1 text-sm text-gray-600">
+              Payment status is calculated from
+              recorded payments.
+            </p>
+          </div>
+
+          <span
+            className={`inline-flex w-fit rounded-full px-4 py-2 text-sm font-semibold ${getStatusClasses(
+              paymentStatus
+            )}`}
+          >
+            {paymentStatus}
+          </span>
+
+        </div>
+      </div>
 
       {/* Payment Summary */}
 
@@ -234,14 +311,8 @@ export default function AddPaymentPage() {
             Total Amount
           </p>
 
-          <p className="mt-2 text-2xl font-bold">
-            {summary.totalAmount.toLocaleString(
-              "en-US",
-              {
-                style: "currency",
-                currency: "USD",
-              }
-            )}
+          <p className="mt-2 text-2xl font-bold text-gray-900">
+            {formatAED(summary.totalAmount)}
           </p>
         </div>
 
@@ -251,13 +322,7 @@ export default function AddPaymentPage() {
           </p>
 
           <p className="mt-2 text-2xl font-bold text-green-600">
-            {summary.paidAmount.toLocaleString(
-              "en-US",
-              {
-                style: "currency",
-                currency: "USD",
-              }
-            )}
+            {formatAED(summary.paidAmount)}
           </p>
         </div>
 
@@ -267,18 +332,51 @@ export default function AddPaymentPage() {
           </p>
 
           <p className="mt-2 text-2xl font-bold text-red-600">
-            {summary.balance.toLocaleString(
-              "en-US",
-              {
-                style: "currency",
-                currency: "USD",
-              }
-            )}
+            {formatAED(summary.balance)}
           </p>
         </div>
 
       </div>
 
+      {/* Payment Status Explanation */}
+
+      <div className="rounded-xl border bg-gray-50 p-5">
+
+        <div className="grid gap-4 sm:grid-cols-3">
+
+          <div>
+            <p className="text-sm font-medium text-gray-700">
+              UNPAID
+            </p>
+
+            <p className="mt-1 text-sm text-gray-500">
+              No payment has been recorded.
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm font-medium text-gray-700">
+              PARTIAL
+            </p>
+
+            <p className="mt-1 text-sm text-gray-500">
+              Payment received, but balance remains.
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm font-medium text-gray-700">
+              PAID
+            </p>
+
+            <p className="mt-1 text-sm text-gray-500">
+              Full booking amount has been received.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
 
       {/* Add Payment */}
 
@@ -288,141 +386,161 @@ export default function AddPaymentPage() {
           Record Payment
         </h2>
 
-        <form
-          onSubmit={handleSubmit}
-          className="mt-6 space-y-5"
-        >
+        {isFullyPaid ? (
+          <div className="mt-5 rounded-lg border border-green-200 bg-green-50 p-5 text-green-700">
+            <p className="font-semibold">
+              Fully Paid
+            </p>
 
-          <div>
-            <label
-              htmlFor="amount"
-              className="mb-2 block text-sm font-medium text-gray-700"
-            >
-              Payment Amount
-            </label>
-
-            <input
-              id="amount"
-              type="number"
-              min="0.01"
-              step="0.01"
-              max={summary.balance}
-              value={amount}
-              onChange={(event) =>
-                setAmount(event.target.value)
-              }
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500"
-              placeholder="Enter payment amount"
-              required
-            />
+            <p className="mt-1 text-sm">
+              This booking has no remaining payment
+              balance.
+            </p>
           </div>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            className="mt-6 space-y-5"
+          >
 
+            {/* Payment Amount */}
 
-          <div>
-            <label
-              htmlFor="provider"
-              className="mb-2 block text-sm font-medium text-gray-700"
-            >
-              Payment Provider
-            </label>
+            <div>
+              <label
+                htmlFor="amount"
+                className="mb-2 block text-sm font-medium text-gray-700"
+              >
+                Payment Amount
+              </label>
 
-            <select
-              id="provider"
-              value={provider}
-              onChange={(event) =>
-                setProvider(
-                  event.target
-                    .value as PaymentProvider
-                )
-              }
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500"
-            >
-              <option value="PAYTABS">
-                PayTabs
-              </option>
+              <input
+                id="amount"
+                type="number"
+                min="0.01"
+                step="0.01"
+                max={summary.balance}
+                value={amount}
+                onChange={(event) =>
+                  setAmount(event.target.value)
+                }
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500"
+                placeholder="Enter payment amount"
+                required
+              />
 
-              <option value="RAZORPAY">
-                Razorpay
-              </option>
-
-              <option value="STRIPE">
-                Stripe
-              </option>
-
-              <option value="TELR">
-                Telr
-              </option>
-            </select>
-          </div>
-
-
-          <div>
-            <label
-              htmlFor="transactionId"
-              className="mb-2 block text-sm font-medium text-gray-700"
-            >
-              Transaction ID
-            </label>
-
-            <input
-              id="transactionId"
-              type="text"
-              value={transactionId}
-              onChange={(event) =>
-                setTransactionId(
-                  event.target.value
-                )
-              }
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500"
-              placeholder="Optional transaction/reference ID"
-            />
-          </div>
-
-
-          {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-              {error}
+              <p className="mt-2 text-sm text-gray-500">
+                Maximum payment:
+                {" "}
+                {formatAED(summary.balance)}
+              </p>
             </div>
-          )}
 
+            {/* Provider */}
 
-          {success && (
-            <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
-              {success}
+            <div>
+              <label
+                htmlFor="provider"
+                className="mb-2 block text-sm font-medium text-gray-700"
+              >
+                Payment Provider
+              </label>
+
+              <select
+                id="provider"
+                value={provider}
+                onChange={(event) =>
+                  setProvider(
+                    event.target
+                      .value as PaymentProvider
+                  )
+                }
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500"
+              >
+                <option value="PAYTABS">
+                  PayTabs
+                </option>
+
+                <option value="RAZORPAY">
+                  Razorpay
+                </option>
+
+                <option value="STRIPE">
+                  Stripe
+                </option>
+
+                <option value="TELR">
+                  Telr
+                </option>
+              </select>
             </div>
-          )}
 
+            {/* Transaction ID */}
 
-          <div className="flex gap-3">
+            <div>
+              <label
+                htmlFor="transactionId"
+                className="mb-2 block text-sm font-medium text-gray-700"
+              >
+                Transaction ID
+              </label>
 
-            <Link
-              href={`/admin/bookings/${bookingId}`}
-              className="rounded-lg border border-gray-300 px-5 py-3 text-gray-700 hover:bg-gray-50"
-            >
-              Cancel
-            </Link>
+              <input
+                id="transactionId"
+                type="text"
+                value={transactionId}
+                onChange={(event) =>
+                  setTransactionId(
+                    event.target.value
+                  )
+                }
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500"
+                placeholder="Optional transaction/reference ID"
+              />
+            </div>
 
-            <button
-              type="submit"
-              disabled={
-                submitting ||
-                summary.balance <= 0
-              }
-              className="rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {submitting
-                ? "Recording..."
-                : summary.balance <= 0
-                  ? "Fully Paid"
+            {/* Errors */}
+
+            {error && (
+              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                {error}
+              </div>
+            )}
+
+            {/* Success */}
+
+            {success && (
+              <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+                {success}
+              </div>
+            )}
+
+            {/* Buttons */}
+
+            <div className="flex gap-3">
+
+              <Link
+                href={`/admin/bookings/${bookingId}`}
+                className="rounded-lg border border-gray-300 px-5 py-3 text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </Link>
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {submitting
+                  ? "Recording..."
                   : "Record Payment"}
-            </button>
+              </button>
 
-          </div>
+            </div>
 
-        </form>
+          </form>
+        )}
 
       </div>
-
 
       {/* Payment History */}
 
@@ -433,13 +551,10 @@ export default function AddPaymentPage() {
         </h2>
 
         {summary.payments.length === 0 ? (
-
           <p className="mt-4 text-gray-500">
             No payments recorded yet.
           </p>
-
         ) : (
-
           <div className="mt-4 overflow-x-auto">
 
             <table className="w-full text-sm">
@@ -486,18 +601,11 @@ export default function AddPaymentPage() {
                       </td>
 
                       <td className="px-3 py-3">
-                        {payment.transactionId ||
-                          "—"}
+                        {payment.transactionId || "—"}
                       </td>
 
                       <td className="px-3 py-3 text-right font-semibold">
-                        {payment.amount.toLocaleString(
-                          "en-US",
-                          {
-                            style: "currency",
-                            currency: "USD",
-                          }
-                        )}
+                        {formatAED(payment.amount)}
                       </td>
 
                     </tr>
@@ -509,7 +617,6 @@ export default function AddPaymentPage() {
             </table>
 
           </div>
-
         )}
 
       </div>

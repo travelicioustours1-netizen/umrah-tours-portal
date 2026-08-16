@@ -18,16 +18,26 @@ export default async function PackagesPage() {
     id: pkg.id,
     packageCode: pkg.packageCode,
     title: pkg.title,
+    category: pkg.category ?? "-",
+hotel3Price: pkg.hotel3Price,
+hotel4Price: pkg.hotel4Price,
+hotel5Price: pkg.hotel5Price,
     airline: pkg.airline?.name ?? "-",
+
     makkahHotel: pkg.makkahHotel?.name ?? "-",
     madinahHotel: pkg.madinahHotel?.name ?? "-",
+
     duration: pkg.duration,
     departureCity: pkg.departureCity ?? "-",
+
     price: pkg.price,
+
     quadPrice: pkg.quadPrice,
     triplePrice: pkg.triplePrice,
     doublePrice: pkg.doublePrice,
     singlePrice: pkg.singlePrice,
+
+   
     status: pkg.status,
     featured: pkg.featured,
     createdAt: pkg.createdAt,
@@ -36,7 +46,8 @@ export default async function PackagesPage() {
   return (
     <div className="space-y-6">
 
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
         <div>
           <h1 className="text-3xl font-bold">
@@ -57,16 +68,47 @@ export default async function PackagesPage() {
 
       </div>
 
-      <div className="flex items-center justify-between">
+      {/* Filters */}
+      <div className="flex flex-col gap-4 rounded-xl border bg-white p-4 md:flex-row md:items-center">
 
         <input
           type="search"
           placeholder="Search packages..."
-          className="w-80 rounded-lg border p-3"
+          className="w-full rounded-lg border p-3 md:w-80"
         />
+
+        <select
+          className="rounded-lg border p-3"
+          defaultValue="ALL"
+        >
+          <option value="ALL">
+            All Categories
+          </option>
+
+          <option value="UMRAH">
+            Umrah
+          </option>
+
+          <option value="HOLIDAY">
+            Holiday
+          </option>
+
+          <option value="VISA">
+            Visa
+          </option>
+
+          <option value="HOTEL">
+            Hotel
+          </option>
+
+          <option value="FLIGHT">
+            Flight
+          </option>
+        </select>
 
       </div>
 
+      {/* Package Table */}
       <PackageTable packages={rows} />
 
     </div>

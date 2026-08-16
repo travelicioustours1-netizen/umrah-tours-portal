@@ -1,6 +1,7 @@
-"use client";
-
-import { createPackage, updatePackage } from "@/lib/actions/package";
+import {
+  createPackage,
+  updatePackage,
+} from "@/lib/actions/package";
 
 import BasicInfoSection from "@/components/admin/package/BasicInfoSection";
 import TravelSection from "@/components/admin/package/TravelSection";
@@ -24,7 +25,8 @@ export default function PackageForm({
     : createPackage;
 
   return (
-    <form action={action}>
+    <form action={action} className="space-y-6">
+
       <BasicInfoSection
         initialData={initialData}
         airlines={airlines}
@@ -47,14 +49,17 @@ export default function PackageForm({
         initialData={initialData}
       />
 
-      <div className="flex justify-end">
+      <div className="flex justify-end border-t pt-6">
         <button
           type="submit"
-          className="rounded-lg bg-emerald-600 px-6 py-3 font-medium text-white hover:bg-emerald-700"
+          className="rounded-lg bg-emerald-600 px-6 py-3 font-medium text-white transition hover:bg-emerald-700"
         >
-          {initialData ? "Update Package" : "Create Package"}
+          {initialData
+            ? "Update Package"
+            : "Create Package"}
         </button>
       </div>
+
     </form>
   );
 }

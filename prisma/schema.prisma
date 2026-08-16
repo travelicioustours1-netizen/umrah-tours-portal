@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -83,6 +82,12 @@ model Package {
   brochure        String?
   childBedPrice   Float?
   childNoBedPrice Float?
+
+  // Holiday hotel-category pricing
+  hotel3Price     Float?
+  hotel4Price     Float?
+  hotel5Price     Float?
+
   departureDate   DateTime?
   doublePrice     Float?
   flightNumber    String?
@@ -95,6 +100,7 @@ model Package {
   triplePrice     Float?
   bookings        Booking[]
   enquiries       Enquiry[]
+  quotes          Quote[]
   airline         Airline?       @relation(fields: [airlineId], references: [id])
   madinahHotel    Hotel?         @relation("MadinahHotel", fields: [madinahHotelId], references: [id])
   makkahHotel     Hotel?         @relation("MakkahHotel", fields: [makkahHotelId], references: [id])
@@ -152,17 +158,66 @@ model Payment {
 }
 
 model Enquiry {
-  id        String        @id @default(cuid())
-  name      String
-  email     String
-  phone     String?
-  subject   String?
-  message   String
+  id         String        @id @default(cuid())
+  name       String
+  email      String
+  phone      String?
+  subject    String?
+  message    String
+  service    String?
+  travelDate DateTime?
+  travellers Int?
+  source     String?
+  packageId  String?
+  status     EnquiryStatus @default(NEW)
+
+  assignedTo     String?
+  estimatedValue Float?
+  nextFollowUpAt DateTime?
+  lostReason     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  package Package? @relation(fields: [packageId], references: [id])
+  quotes  Quote[]
+}
+
+model Quote {
+  id          String @id @default(cuid())
+  quoteNumber String @unique
+
+  enquiryId String
   packageId String?
-  status    EnquiryStatus @default(NEW)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  package   Package?      @relation(fields: [packageId], references: [id])
+
+  customerName String
+  email        String
+  phone        String?
+
+  adults   Int @default(1)
+  children Int @default(0)
+  infants  Int @default(0)
+
+  roomType   String?
+  travelDate DateTime?
+
+  subtotal    Float
+  discount    Float @default(0)
+  totalAmount Float
+
+  validUntil DateTime?
+  status     QuoteStatus @default(DRAFT)
+  notes      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  enquiry Enquiry  @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  package Package? @relation(fields: [packageId], references: [id])
+
+  @@index([enquiryId])
+  @@index([packageId])
+  @@index([status])
 }
 
 enum Role {
@@ -172,6 +227,14 @@ enum Role {
   OPERATIONS
   ACCOUNTANT
   CUSTOMER
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
 }
 
 enum BookingStatus {
@@ -200,6 +263,13 @@ enum PaymentProvider {
 enum EnquiryStatus {
   NEW
   CONTACTED
+  QUALIFIED
+  QUOTE_SENT
+  FOLLOW_UP
+  WON
+  LOST
+
+  // Legacy statuses kept temporarily
   CONVERTED
   CLOSED
 }

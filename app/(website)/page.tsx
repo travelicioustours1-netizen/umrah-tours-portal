@@ -1,5 +1,6 @@
 import Hero from "@/components/home/Hero";
 import SearchBox from "@/components/home/SearchBox";
+import AwwalPromo from "@/components/home/AwwalPromo";
 import Services from "@/components/home/Services";
 import FeaturedPackages from "@/components/home/FeaturedPackages";
 import Destinations from "@/components/home/Destinations";
@@ -15,7 +16,9 @@ export default function Home() {
 
       <SearchBox />
 
-      <Services />
+<AwwalPromo />
+
+<Services />
 
       <FeaturedPackages />
 

@@ -1,11 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import {
   CheckCircle,
   Download,
   MessageCircle,
+  FileText,
+  CalendarCheck,
+  ShieldCheck,
+  Headphones,
 } from "lucide-react";
+
+import GetQuoteModal from "@/components/common/GetQuoteModal";
 
 interface Props {
   pkg: {
@@ -13,6 +20,7 @@ interface Props {
     title: string;
     price: number;
     brochure?: string | null;
+    category?: string | null;
 
     visa: boolean;
     meals: boolean;
@@ -21,87 +29,220 @@ interface Props {
 }
 
 export default function PackageSidebar({ pkg }: Props) {
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+
   const whatsappNumber = "919797127500";
+
+  const isHoliday =
+    pkg.category?.toUpperCase() === "HOLIDAY";
 
   const whatsappMessage = encodeURIComponent(
     `Assalamu Alaikum,
 
-I'm interested in the package:
+I'm interested in the ${pkg.title}.
 
-${pkg.title}
+Please share the availability, travel dates, complete package details, inclusions, exclusions and booking procedure.
 
-Please send me more information.`
+Thank you.`
   );
 
+  const whatsappUrl =
+    `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
   return (
-    <aside className="lg:sticky lg:top-24">
+    <aside className="lg:sticky lg:top-6">
+      <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg">
 
-      <div className="bg-white rounded-2xl shadow-lg border p-6 space-y-6">
-
-        <div>
-
-          <p className="text-gray-500 text-sm">
-            Starting From
+        {/* Header */}
+        <div className="border-b bg-gray-50 p-6">
+          <p className="text-xs font-semibold uppercase tracking-[2px] text-emerald-600">
+            {isHoliday
+              ? "International Holiday"
+              : "Umrah Package"}
           </p>
 
-          <h2 className="text-4xl font-bold text-emerald-600">
-            ₹{pkg.price.toLocaleString("en-IN")}
+          <h2 className="mt-2 text-xl font-bold leading-tight text-gray-900">
+            {pkg.title}
           </h2>
-
-          <p className="text-sm text-gray-500">
-            Per Person
-          </p>
-
         </div>
 
-        <Link
-  href={`/booking/${pkg.slug}`}
-  className="block w-full rounded-xl bg-emerald-600 py-4 text-center font-semibold text-white hover:bg-emerald-700 transition"
->
-  Book Now
-</Link>
+        <div className="space-y-6 p-6">
 
-        <Link
-  href={`/booking/${pkg.slug}`}
->
-          <MessageCircle size={20} />
+          {/* Price */}
+          <div>
+            <p className="text-sm text-gray-500">
+              Starting From
+            </p>
 
-          WhatsApp Enquiry
-        </Link>
+            <div className="mt-1 flex items-end gap-2">
+              <span className="text-4xl font-bold text-emerald-600">
+                AED {pkg.price.toLocaleString("en-AE")}
+              </span>
+            </div>
 
-        {pkg.brochure && (
-          <Link
-            href={pkg.brochure}
-            target="_blank"
-            className="flex justify-center items-center gap-2 border rounded-xl py-3 hover:bg-gray-50 transition"
+            <p className="mt-1 text-sm text-gray-500">
+              Per person
+            </p>
+          </div>
+
+          {/* Primary WhatsApp CTA */}
+          <div>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-4 font-semibold text-white shadow-sm transition hover:bg-green-700"
+            >
+              <MessageCircle size={21} />
+              Check Availability
+            </a>
+
+            <p className="mt-2 text-center text-xs text-gray-500">
+              Quick response from our travel team
+            </p>
+          </div>
+
+          {/* Quote CTA */}
+          <button
+            type="button"
+            onClick={() => setIsQuoteModalOpen(true)}
+            className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-emerald-600 px-5 py-3.5 font-semibold text-emerald-700 transition hover:bg-emerald-50"
           >
-            <Download size={18} />
+            <FileText size={19} />
+            Get a Quote
+          </button>
 
-            Download Brochure
+          {/* Get Quote Modal */}
+          <GetQuoteModal
+  isOpen={isQuoteModalOpen}
+  service={pkg.title}
+  onClose={() => setIsQuoteModalOpen(false)}
+/>
+
+          {/* Book Now */}
+          <Link
+            href={`/booking/${pkg.slug}`}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3.5 font-semibold text-white transition hover:bg-emerald-700"
+          >
+            <CalendarCheck size={19} />
+            Book Now
           </Link>
-        )}
 
-        <div className="border-t pt-5 space-y-3">
+          {/* Trust message for holidays */}
+          {isHoliday && (
+            <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+              <div className="flex items-start gap-3">
+                <ShieldCheck
+                  size={21}
+                  className="mt-0.5 shrink-0 text-emerald-600"
+                />
 
-          <Feature
-            enabled={pkg.visa}
-            title="Visa Included"
-          />
+                <div>
+                  <p className="font-semibold text-gray-900">
+                    Travel Support Included
+                  </p>
 
-          <Feature
-            enabled={pkg.transport}
-            title="Transport Included"
-          />
+                  <p className="mt-1 text-xs leading-5 text-gray-600">
+                    Our team can assist with your holiday
+                    arrangements, flights, hotels, transfers and
+                    travel requirements.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
-          <Feature
-            enabled={pkg.meals}
-            title="Meals Included"
-          />
+          {/* Package Includes */}
+          <div className="border-t pt-5">
+            <p className="mb-4 text-sm font-semibold text-gray-900">
+              Package Includes
+            </p>
+
+            <div className="space-y-3">
+              <Feature
+                enabled={pkg.visa}
+                title={
+                  isHoliday
+                    ? "Visa Assistance"
+                    : "Visa Included"
+                }
+              />
+
+              <Feature
+                enabled={pkg.transport}
+                title="Airport & Local Transport"
+              />
+
+              <Feature
+                enabled={pkg.meals}
+                title="Meals Included"
+              />
+            </div>
+          </div>
+
+          {/* Brochure */}
+          {pkg.brochure && (
+            <Link
+              href={pkg.brochure}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 px-5 py-3 font-medium text-gray-700 transition hover:bg-gray-50"
+            >
+              <Download size={18} />
+              Download Brochure
+            </Link>
+          )}
+
+          {/* Customized Holiday */}
+          {isHoliday && (
+            <div className="rounded-xl bg-gray-50 p-4">
+              <div className="flex items-start gap-3">
+                <Headphones
+                  size={20}
+                  className="mt-0.5 shrink-0 text-emerald-600"
+                />
+
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">
+                    Need a Customized Holiday?
+                  </p>
+
+                  <p className="mt-1 text-xs leading-5 text-gray-500">
+                    Tell us your preferred dates, flights,
+                    hotels or sightseeing requirements and
+                    we'll help create a suitable option.
+                  </p>
+
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex text-xs font-semibold text-emerald-700 hover:underline"
+                  >
+                    Chat with our team →
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Company */}
+          <div className="border-t pt-5 text-center">
+            <p className="text-sm font-semibold text-gray-800">
+              AL AFEEF TRAVELS AND TOURS
+            </p>
+
+            <p className="mt-1 text-xs text-gray-500">
+              Premium Umrah & Holiday Experiences
+            </p>
+
+            <p className="mt-3 text-sm text-gray-600">
+              +91 7977127500
+            </p>
+          </div>
 
         </div>
-
       </div>
-
     </aside>
   );
 }
@@ -115,18 +256,24 @@ function Feature({
 }) {
   return (
     <div className="flex items-center gap-3">
-
       <CheckCircle
+        size={19}
         className={
           enabled
             ? "text-green-600"
             : "text-gray-300"
         }
-        size={20}
       />
 
-      <span>{title}</span>
-
+      <span
+        className={
+          enabled
+            ? "text-sm text-gray-700"
+            : "text-sm text-gray-400"
+        }
+      >
+        {title}
+      </span>
     </div>
   );
 }

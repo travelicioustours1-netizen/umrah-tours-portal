@@ -13,19 +13,44 @@ export async function PATCH(
 
     const body = await request.json();
 
+    console.log("BOOKING PATCH BODY:", body);
+    console.log("BOOKING PATCH ID:", id);
+
     let booking;
 
     if (body.status) {
+      console.log(
+        "CALLING updateBookingStatus:",
+        id,
+        body.status
+      );
+
       booking = await updateBookingStatus(
         id,
         body.status
       );
+
+      console.log(
+        "BOOKING STATUS UPDATED:",
+        booking?.status
+      );
     }
 
     if (body.paymentStatus) {
+      console.log(
+        "CALLING updatePaymentStatus:",
+        id,
+        body.paymentStatus
+      );
+
       booking = await updatePaymentStatus(
         id,
         body.paymentStatus
+      );
+
+      console.log(
+        "PAYMENT STATUS UPDATED:",
+        booking?.paymentStatus
       );
     }
 
@@ -34,12 +59,18 @@ export async function PATCH(
       booking,
     });
   } catch (error) {
-    console.error(error);
+    console.error(
+      "PATCH /api/bookings/[id] ERROR:",
+      error
+    );
 
     return NextResponse.json(
       {
         success: false,
-        message: "Unable to update booking",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Unable to update booking",
       },
       {
         status: 500,

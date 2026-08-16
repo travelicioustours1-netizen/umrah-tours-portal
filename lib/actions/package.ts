@@ -4,21 +4,43 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+function numberOrNull(value: FormDataEntryValue | null) {
+  if (value === null || String(value).trim() === "") {
+    return null;
+  }
+
+  const number = parseFloat(String(value));
+
+  return Number.isFinite(number) ? number : null;
+}
+
+function numberOrZero(value: FormDataEntryValue | null) {
+  if (value === null || String(value).trim() === "") {
+    return 0;
+  }
+
+  const number = parseFloat(String(value));
+
+  return Number.isFinite(number) ? number : 0;
+}
+
 function packageData(formData: FormData) {
   const title = String(formData.get("title") || "").trim();
+
+  const slug =
+    String(formData.get("slug") || "").trim() ||
+    title
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
 
   return {
     title,
 
-    slug:
-      String(formData.get("slug") || "").trim() ||
-      title
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, ""),
+    slug,
 
     packageCode:
-      String(formData.get("packageCode") || "") || null,
+      String(formData.get("packageCode") || "").trim() || null,
 
     status:
       String(formData.get("status") || "ACTIVE"),
@@ -30,10 +52,10 @@ function packageData(formData: FormData) {
       String(formData.get("duration") || ""),
 
     category:
-      String(formData.get("category") || "") || null,
+      String(formData.get("category") || "").trim() || null,
 
     departureCity:
-      String(formData.get("departureCity") || "") || null,
+      String(formData.get("departureCity") || "").trim() || null,
 
     departureDate: formData.get("departureDate")
       ? new Date(String(formData.get("departureDate")))
@@ -44,16 +66,22 @@ function packageData(formData: FormData) {
       : null,
 
     flightNumber:
-      String(formData.get("flightNumber") || "") || null,
+      String(formData.get("flightNumber") || "").trim() || null,
 
     airlineId:
-      String(formData.get("airlineId") || "") || null,
+      String(formData.get("airlineId") || "").trim() || null,
 
+    /*
+     * Existing Umrah hotel relations.
+     *
+     * For now these remain unchanged so existing
+     * Umrah packages continue working.
+     */
     makkahHotelId:
-      String(formData.get("makkahHotelId") || "") || null,
+      String(formData.get("makkahHotelId") || "").trim() || null,
 
     madinahHotelId:
-      String(formData.get("madinahHotelId") || "") || null,
+      String(formData.get("madinahHotelId") || "").trim() || null,
 
     makkahNights: parseInt(
       String(formData.get("makkahNights") || "0"),
@@ -65,38 +93,62 @@ function packageData(formData: FormData) {
       10
     ),
 
-    price: parseFloat(
-      String(formData.get("price") || "0")
+    /*
+     * Main advertised price
+     */
+    price: numberOrZero(
+      formData.get("price")
     ),
 
-    quadPrice: parseFloat(
-      String(formData.get("quadPrice") || "0")
+    /*
+     * Umrah room pricing
+     */
+    quadPrice: numberOrNull(
+      formData.get("quadPrice")
     ),
 
-    triplePrice: parseFloat(
-      String(formData.get("triplePrice") || "0")
+    triplePrice: numberOrNull(
+      formData.get("triplePrice")
     ),
 
-    doublePrice: parseFloat(
-      String(formData.get("doublePrice") || "0")
+    doublePrice: numberOrNull(
+      formData.get("doublePrice")
     ),
 
-    singlePrice: parseFloat(
-      String(formData.get("singlePrice") || "0")
+    singlePrice: numberOrNull(
+      formData.get("singlePrice")
     ),
 
-    childBedPrice: parseFloat(
-      String(formData.get("childBedPrice") || "0")
+    childBedPrice: numberOrNull(
+      formData.get("childBedPrice")
     ),
 
-    childNoBedPrice: parseFloat(
-      String(formData.get("childNoBedPrice") || "0")
+    childNoBedPrice: numberOrNull(
+      formData.get("childNoBedPrice")
     ),
 
-    infantPrice: parseFloat(
-      String(formData.get("infantPrice") || "0")
+    infantPrice: numberOrNull(
+      formData.get("infantPrice")
     ),
 
+    /*
+     * Holiday hotel-category pricing
+     */
+    hotel3Price: numberOrNull(
+      formData.get("hotel3Price")
+    ),
+
+    hotel4Price: numberOrNull(
+      formData.get("hotel4Price")
+    ),
+
+    hotel5Price: numberOrNull(
+      formData.get("hotel5Price")
+    ),
+
+    /*
+     * Package options
+     */
     featured:
       formData.get("featured") === "true",
 
@@ -109,28 +161,45 @@ function packageData(formData: FormData) {
     meals:
       formData.get("meals") !== "false",
 
+    /*
+     * Content
+     */
     itinerary:
-      String(formData.get("itinerary") || "") || null,
+      String(formData.get("itinerary") || "").trim() || null,
 
     inclusions:
-      String(formData.get("inclusions") || "") || null,
+      String(formData.get("inclusions") || "").trim() || null,
 
     exclusions:
-      String(formData.get("exclusions") || "") || null,
+      String(formData.get("exclusions") || "").trim() || null,
 
     brochure:
-      String(formData.get("brochure") || "") || null,
+      String(formData.get("brochure") || "").trim() || null,
   };
 }
 
 export async function createPackage(formData: FormData) {
+  const data = packageData(formData);
+
   const created = await prisma.package.create({
-    data: packageData(formData),
+    data,
   });
 
-  const images = JSON.parse(
-    String(formData.get("images") || "[]")
+  const rawImages = String(
+    formData.get("images") || "[]"
   );
+
+  let images: string[] = [];
+
+  try {
+    images = JSON.parse(rawImages);
+
+    if (!Array.isArray(images)) {
+      images = [];
+    }
+  } catch {
+    images = [];
+  }
 
   if (images.length > 0) {
     await prisma.packageImage.createMany({
@@ -145,6 +214,9 @@ export async function createPackage(formData: FormData) {
   }
 
   revalidatePath("/dashboard/packages");
+  revalidatePath("/umrah");
+  revalidatePath("/holidays");
+
   redirect("/dashboard/packages");
 }
 
@@ -152,14 +224,30 @@ export async function updatePackage(
   id: string,
   formData: FormData
 ) {
+  const data = packageData(formData);
+
   await prisma.package.update({
-    where: { id },
-    data: packageData(formData),
+    where: {
+      id,
+    },
+    data,
   });
 
-  const images = JSON.parse(
-    String(formData.get("images") || "[]")
+  const rawImages = String(
+    formData.get("images") || "[]"
   );
+
+  let images: string[] = [];
+
+  try {
+    images = JSON.parse(rawImages);
+
+    if (!Array.isArray(images)) {
+      images = [];
+    }
+  } catch {
+    images = [];
+  }
 
   await prisma.packageImage.deleteMany({
     where: {
@@ -180,6 +268,9 @@ export async function updatePackage(
   }
 
   revalidatePath("/dashboard/packages");
+  revalidatePath("/umrah");
+  revalidatePath("/holidays");
+
   redirect("/dashboard/packages");
 }
 
@@ -191,4 +282,6 @@ export async function deletePackage(id: string) {
   });
 
   revalidatePath("/dashboard/packages");
+  revalidatePath("/umrah");
+  revalidatePath("/holidays");
 }

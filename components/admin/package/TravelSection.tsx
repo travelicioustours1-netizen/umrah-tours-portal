@@ -1,11 +1,18 @@
 interface Props {
   initialData?: {
-    departureDate?: Date | null;
-    returnDate?: Date | null;
+    category?: string | null;
+
+    departureDate?: Date | string | null;
+    returnDate?: Date | string | null;
+
     departureCity?: string | null;
     flightNumber?: string | null;
+
     makkahHotelId?: string | null;
     madinahHotelId?: string | null;
+
+    makkahNights?: number | null;
+    madinahNights?: number | null;
   };
 
   hotels: {
@@ -18,9 +25,11 @@ export default function TravelSection({
   initialData,
   hotels,
 }: Props) {
+  const isHoliday =
+    initialData?.category === "HOLIDAY";
+
   return (
     <div className="rounded-xl border bg-white p-6">
-
       <h2 className="mb-6 text-xl font-semibold">
         Travel Details
       </h2>
@@ -35,21 +44,27 @@ export default function TravelSection({
 
           <input
             name="departureCity"
-            defaultValue={initialData?.departureCity ?? ""}
-            className="w-full rounded border p-3"
+            defaultValue={
+              initialData?.departureCity ?? ""
+            }
+            placeholder="Sharjah"
+            className="w-full rounded-lg border p-3"
           />
         </div>
 
-        {/* Flight Number */}
+        {/* Flight */}
         <div>
           <label className="mb-2 block text-sm font-medium">
-            Flight Number
+            Flight / Airline
           </label>
 
           <input
             name="flightNumber"
-            defaultValue={initialData?.flightNumber ?? ""}
-            className="w-full rounded border p-3"
+            defaultValue={
+              initialData?.flightNumber ?? ""
+            }
+            placeholder="Air Arabia"
+            className="w-full rounded-lg border p-3"
           />
         </div>
 
@@ -64,12 +79,14 @@ export default function TravelSection({
             name="departureDate"
             defaultValue={
               initialData?.departureDate
-                ? new Date(initialData.departureDate)
+                ? new Date(
+                    initialData.departureDate
+                  )
                     .toISOString()
                     .split("T")[0]
                 : ""
             }
-            className="w-full rounded border p-3"
+            className="w-full rounded-lg border p-3"
           />
         </div>
 
@@ -84,28 +101,36 @@ export default function TravelSection({
             name="returnDate"
             defaultValue={
               initialData?.returnDate
-                ? new Date(initialData.returnDate)
+                ? new Date(
+                    initialData.returnDate
+                  )
                     .toISOString()
                     .split("T")[0]
                 : ""
             }
-            className="w-full rounded border p-3"
+            className="w-full rounded-lg border p-3"
           />
         </div>
 
-        {/* Makkah Hotel */}
+        {/* Hotel 1 */}
         <div>
           <label className="mb-2 block text-sm font-medium">
-            Makkah Hotel
+            {isHoliday
+              ? "Primary Destination Hotel"
+              : "Makkah Hotel"}
           </label>
 
           <select
             name="makkahHotelId"
-            defaultValue={initialData?.makkahHotelId ?? ""}
-            className="w-full rounded border p-3"
+            defaultValue={
+              initialData?.makkahHotelId ?? ""
+            }
+            className="w-full rounded-lg border p-3"
           >
             <option value="">
-              Select Makkah Hotel
+              {isHoliday
+                ? "Select Primary Hotel"
+                : "Select Makkah Hotel"}
             </option>
 
             {hotels.map((hotel) => (
@@ -119,19 +144,25 @@ export default function TravelSection({
           </select>
         </div>
 
-        {/* Madinah Hotel */}
+        {/* Hotel 2 */}
         <div>
           <label className="mb-2 block text-sm font-medium">
-            Madinah Hotel
+            {isHoliday
+              ? "Secondary Destination Hotel"
+              : "Madinah Hotel"}
           </label>
 
           <select
             name="madinahHotelId"
-            defaultValue={initialData?.madinahHotelId ?? ""}
-            className="w-full rounded border p-3"
+            defaultValue={
+              initialData?.madinahHotelId ?? ""
+            }
+            className="w-full rounded-lg border p-3"
           >
             <option value="">
-              Select Madinah Hotel
+              {isHoliday
+                ? "Select Secondary Hotel"
+                : "Select Madinah Hotel"}
             </option>
 
             {hotels.map((hotel) => (
@@ -145,8 +176,58 @@ export default function TravelSection({
           </select>
         </div>
 
+        {/* Nights */}
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            {isHoliday
+              ? "Primary Destination Nights"
+              : "Makkah Nights"}
+          </label>
+
+          <input
+            type="number"
+            name="makkahNights"
+            min="0"
+            defaultValue={
+              initialData?.makkahNights ?? 0
+            }
+            className="w-full rounded-lg border p-3"
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            {isHoliday
+              ? "Secondary Destination Nights"
+              : "Madinah Nights"}
+          </label>
+
+          <input
+            type="number"
+            name="madinahNights"
+            min="0"
+            defaultValue={
+              initialData?.madinahNights ?? 0
+            }
+            className="w-full rounded-lg border p-3"
+          />
+        </div>
+
       </div>
 
+      {isHoliday && (
+        <div className="mt-6 rounded-lg border border-blue-200 bg-blue-50 p-4">
+          <p className="text-sm font-medium text-blue-900">
+            Holiday package
+          </p>
+
+          <p className="mt-1 text-sm text-blue-700">
+            Use the two hotel fields for the destinations included
+            in this holiday. For example, Azerbaijan can use Baku
+            and Quba.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
