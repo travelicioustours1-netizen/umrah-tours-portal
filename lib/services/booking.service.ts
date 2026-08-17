@@ -35,7 +35,7 @@ export async function getBookingById(id: string) {
     },
     include: {
       package: true,
-      payments: true,
+      payment: true,
     },
   });
 }
@@ -51,7 +51,7 @@ export async function getBookingByNumber(bookingNumber: string) {
     },
     include: {
       package: true,
-      payments: true,
+      payment: true,
     },
   });
 }
@@ -64,7 +64,7 @@ export async function getRecentBookings(limit = 10) {
   return prisma.booking.findMany({
     include: {
       package: true,
-      payments: true,
+      payment: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -110,7 +110,7 @@ export async function updateBookingStatus(
     },
     include: {
       package: true,
-      payments: true,
+      payment: true,
     },
   });
 

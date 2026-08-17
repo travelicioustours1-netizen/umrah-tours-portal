@@ -43,7 +43,7 @@ export async function createPayment(data: CreatePaymentInput) {
         },
         include: {
           package: true,
-          payments: true,
+          payment: true,
         },
       });
 
@@ -65,7 +65,7 @@ export async function createPayment(data: CreatePaymentInput) {
       // CALCULATE CURRENTLY PAID
       // ==========================
 
-      const alreadyPaid = booking.payments.reduce(
+      const alreadyPaid = booking.payment.reduce(
         (total, payment) => total + payment.amount,
         0
       );
@@ -257,7 +257,7 @@ export async function getPaymentSummary(
       id: bookingId,
     },
     include: {
-      payments: true,
+      payment: true,
     },
   });
 
@@ -265,7 +265,7 @@ export async function getPaymentSummary(
     throw new Error("Booking not found");
   }
 
-  const paidAmount = booking.payments.reduce(
+  const paidAmount = booking.payment.reduce(
     (total, payment) => total + payment.amount,
     0
   );
@@ -281,6 +281,6 @@ export async function getPaymentSummary(
     balance,
     paymentStatus: booking.paymentStatus,
     bookingStatus: booking.status,
-    payments: booking.payments,
+    payments: booking.payment,
   };
 }

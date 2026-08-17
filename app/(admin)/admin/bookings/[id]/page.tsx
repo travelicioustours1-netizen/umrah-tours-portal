@@ -203,7 +203,7 @@ export default async function BookingDetailsPage({
 
           <DetailRow
             label="Payments Recorded"
-            value={booking.payments.length}
+            value={booking.payment.length}
           />
 
         </AdminCard>
@@ -213,7 +213,7 @@ export default async function BookingDetailsPage({
 
         <AdminCard title="Payment History">
 
-          {booking.payments.length === 0 ? (
+          {booking.payment.length === 0 ? (
 
             <p className="text-gray-500">
               No payments recorded.
@@ -245,7 +245,7 @@ export default async function BookingDetailsPage({
 
               <tbody>
 
-                {booking.payments.map((payment) => (
+                {booking.payment.map((payment) => (
 
                   <tr
                     key={payment.id}

@@ -57,7 +57,7 @@ export default function EnquirySalesControl({
     initialLostReason ?? ""
   );
 
-  const [status] = useState(initialStatus);
+  const [status, setStatus] = useState(initialStatus);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 

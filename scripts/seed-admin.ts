@@ -12,7 +12,7 @@ async function main() {
   });
 
   if (existing) {
-    console.log("✅ Admin already exists.");
+    console.log("Admin already exists.");
     return;
   }
 
@@ -20,14 +20,16 @@ async function main() {
 
   await prisma.user.create({
     data: {
+      id: crypto.randomUUID(),
       name: "Administrator",
       email,
       password: hashedPassword,
       role: "ADMIN",
+      updatedAt: new Date(),
     },
   });
 
-  console.log("✅ Admin created successfully!");
+  console.log("Admin created successfully!");
   console.log("----------------------------");
   console.log("Email:", email);
   console.log("Password:", password);
