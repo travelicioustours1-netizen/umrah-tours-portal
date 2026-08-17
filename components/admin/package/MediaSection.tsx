@@ -2,6 +2,12 @@
 
 import { useState, useTransition } from "react";
 import { uploadFile } from "@/lib/actions/upload";
+import { deletePackageImage } from "@/lib/actions/package";
+
+interface PackageImage {
+  id: string;
+  url: string;
+}
 
 export default function MediaSection({
   initialData,
@@ -12,8 +18,8 @@ export default function MediaSection({
     initialData?.brochure || ""
   );
 
-  const [images, setImages] = useState<string[]>(
-    initialData?.images?.map((img: any) => img.url) || []
+  const [images, setImages] = useState<PackageImage[]>(
+    initialData?.images || []
   );
 
   const [isPending, startTransition] = useTransition();
@@ -31,6 +37,7 @@ export default function MediaSection({
         setBrochure(url);
       } catch (err: any) {
         console.error("BROCHURE UPLOAD ERROR:", err);
+
         alert(
           `Brochure upload failed: ${
             err?.message || "Unknown error"
@@ -49,9 +56,8 @@ export default function MediaSection({
 
     startTransition(async () => {
       try {
-        const uploaded: string[] = [];
+        const uploaded: PackageImage[] = [];
 
-        // Upload one image at a time.
         for (const file of Array.from(files)) {
           console.log(
             "Uploading:",
@@ -65,7 +71,10 @@ export default function MediaSection({
             "package-images"
           );
 
-          uploaded.push(url);
+          uploaded.push({
+            id: `new-${crypto.randomUUID()}`,
+            url,
+          });
         }
 
         setImages((prev) => [...prev, ...uploaded]);
@@ -75,6 +84,43 @@ export default function MediaSection({
         alert(
           `Image upload failed:\n\n${
             err?.message || "Unknown upload error"
+          }`
+        );
+      }
+    });
+  }
+
+  function handleDeleteImage(image: PackageImage) {
+    if (image.id.startsWith("new-")) {
+      setImages((prev) =>
+        prev.filter((img) => img.id !== image.id)
+      );
+
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this image?"
+    );
+
+    if (!confirmed) return;
+
+    startTransition(async () => {
+      try {
+        await deletePackageImage(image.id);
+
+        setImages((prev) =>
+          prev.filter((img) => img.id !== image.id)
+        );
+      } catch (err: any) {
+        console.error(
+          "IMAGE DELETE ERROR:",
+          err
+        );
+
+        alert(
+          `Image deletion failed:\n\n${
+            err?.message || "Unknown error"
           }`
         );
       }
@@ -129,31 +175,50 @@ export default function MediaSection({
         />
 
         <p className="mt-1 text-xs text-gray-500">
-          JPG, PNG or WebP recommended. Upload images one at a
-          time if needed.
+          JPG, PNG or WebP recommended. Upload images one at
+          a time if needed.
         </p>
 
         <input
           type="hidden"
           name="images"
-          value={JSON.stringify(images)}
+          value={JSON.stringify(
+            images.map((image) => image.url)
+          )}
         />
       </div>
 
       {isPending && (
         <p className="text-sm text-gray-500">
-          Uploading...
+          Processing...
         </p>
       )}
 
       <div className="grid grid-cols-3 gap-4">
-        {images.map((img, index) => (
-          <img
-            key={index}
-            src={img}
-            alt={`Package image ${index + 1}`}
-            className="rounded-lg border"
-          />
+        {images.map((image, index) => (
+          <div
+            key={image.id}
+            className="overflow-hidden rounded-lg border bg-white"
+          >
+            <img
+              src={image.url}
+              alt={`Package image ${index + 1}`}
+              className="h-40 w-full object-cover"
+            />
+
+            <div className="p-2">
+              <button
+                type="button"
+                onClick={() =>
+                  handleDeleteImage(image)
+                }
+                disabled={isPending}
+                className="w-full rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         ))}
       </div>
     </div>

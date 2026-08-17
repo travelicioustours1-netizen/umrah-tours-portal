@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -280,6 +281,59 @@ export async function deletePackage(id: string) {
       id,
     },
   });
+
+  revalidatePath("/dashboard/packages");
+  revalidatePath("/umrah");
+  revalidatePath("/holidays");
+}
+
+export async function deletePackageImage(imageId: string) {
+  const image = await prisma.packageImage.findUnique({
+    where: {
+      id: imageId,
+    },
+  });
+
+  if (!image) {
+    throw new Error("Package image not found.");
+  }
+
+  // Delete database record
+  await prisma.packageImage.delete({
+    where: {
+      id: imageId,
+    },
+  });
+
+  // Delete actual file from Supabase Storage
+  try {
+    const marker =
+      "/storage/v1/object/public/package-images/";
+
+    const index = image.url.indexOf(marker);
+
+    if (index !== -1) {
+      const filePath = image.url.substring(
+        index + marker.length
+      );
+
+      const { error } = await supabaseAdmin.storage
+        .from("package-images")
+        .remove([filePath]);
+
+      if (error) {
+        console.error(
+          "SUPABASE IMAGE DELETE ERROR:",
+          error
+        );
+      }
+    }
+  } catch (error) {
+    console.error(
+      "PACKAGE IMAGE STORAGE DELETE ERROR:",
+      error
+    );
+  }
 
   revalidatePath("/dashboard/packages");
   revalidatePath("/umrah");
