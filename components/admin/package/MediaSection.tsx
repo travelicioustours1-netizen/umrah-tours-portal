@@ -29,9 +29,13 @@ export default function MediaSection({
       try {
         const url = await uploadFile(file, "brochures");
         setBrochure(url);
-      } catch (err) {
-        console.error(err);
-        alert("Brochure upload failed.");
+      } catch (err: any) {
+        console.error("BROCHURE UPLOAD ERROR:", err);
+        alert(
+          `Brochure upload failed: ${
+            err?.message || "Unknown error"
+          }`
+        );
       }
     });
   }
@@ -41,32 +45,50 @@ export default function MediaSection({
   ) {
     const files = e.target.files;
 
-    if (!files) return;
+    if (!files || files.length === 0) return;
 
     startTransition(async () => {
       try {
-        const uploaded = await Promise.all(
-          Array.from(files).map((file) =>
-            uploadFile(file, "package-images")
-          )
-        );
+        const uploaded: string[] = [];
+
+        // Upload one image at a time.
+        for (const file of Array.from(files)) {
+          console.log(
+            "Uploading:",
+            file.name,
+            file.type,
+            `${(file.size / 1024 / 1024).toFixed(2)} MB`
+          );
+
+          const url = await uploadFile(
+            file,
+            "package-images"
+          );
+
+          uploaded.push(url);
+        }
 
         setImages((prev) => [...prev, ...uploaded]);
-      } catch (err) {
-        console.error(err);
-        alert("Image upload failed.");
+      } catch (err: any) {
+        console.error("IMAGE UPLOAD ERROR:", err);
+
+        alert(
+          `Image upload failed:\n\n${
+            err?.message || "Unknown upload error"
+          }`
+        );
       }
     });
   }
 
   return (
-    <div className="rounded-lg border bg-white p-6 space-y-6">
+    <div className="space-y-6 rounded-lg border bg-white p-6">
       <h2 className="text-lg font-semibold">
         Package Media
       </h2>
 
       <div>
-        <label className="block mb-2 font-medium">
+        <label className="mb-2 block font-medium">
           Brochure PDF
         </label>
 
@@ -95,16 +117,21 @@ export default function MediaSection({
       </div>
 
       <div>
-        <label className="block mb-2 font-medium">
+        <label className="mb-2 block font-medium">
           Package Images
         </label>
 
         <input
           type="file"
           multiple
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp,image/jpg"
           onChange={handleImagesUpload}
         />
+
+        <p className="mt-1 text-xs text-gray-500">
+          JPG, PNG or WebP recommended. Upload images one at a
+          time if needed.
+        </p>
 
         <input
           type="hidden"
@@ -124,7 +151,7 @@ export default function MediaSection({
           <img
             key={index}
             src={img}
-            alt="Package"
+            alt={`Package image ${index + 1}`}
             className="rounded-lg border"
           />
         ))}
