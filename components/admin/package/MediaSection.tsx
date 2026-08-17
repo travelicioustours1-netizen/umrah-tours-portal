@@ -1,12 +1,112 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import {
+  useState,
+  useTransition,
+} from "react";
+
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+
+import { CSS } from "@dnd-kit/utilities";
+
 import { uploadFile } from "@/lib/actions/upload";
 import { deletePackageImage } from "@/lib/actions/package";
 
 interface PackageImage {
   id: string;
   url: string;
+  alt?: string | null;
+}
+
+function SortableImage({
+  image,
+  index,
+  onDelete,
+  disabled,
+}: {
+  image: PackageImage;
+  index: number;
+  onDelete: (image: PackageImage) => void;
+  disabled: boolean;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: image.id,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`overflow-hidden rounded-lg border bg-white ${
+        isDragging
+          ? "z-50 opacity-70 shadow-2xl"
+          : ""
+      }`}
+    >
+      <button
+        type="button"
+        {...attributes}
+        {...listeners}
+        className="block w-full cursor-grab touch-none active:cursor-grabbing"
+        title="Drag to reorder"
+      >
+        <div className="relative">
+          <img
+            src={image.url}
+            alt={
+              image.alt ||
+              `Package image ${index + 1}`
+            }
+            className="h-40 w-full object-cover"
+          />
+
+          <div className="absolute left-2 top-2 rounded-full bg-black/70 px-2 py-1 text-xs font-bold text-white">
+            {index + 1}
+          </div>
+
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-md bg-black/70 px-3 py-1 text-xs text-white">
+            Drag
+          </div>
+        </div>
+      </button>
+
+      <div className="p-2">
+        <button
+          type="button"
+          onClick={() => onDelete(image)}
+          disabled={disabled}
+          className="w-full rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default function MediaSection({
@@ -18,11 +118,22 @@ export default function MediaSection({
     initialData?.brochure || ""
   );
 
-  const [images, setImages] = useState<PackageImage[]>(
+  const [images, setImages] = useState<
+    PackageImage[]
+  >(
     initialData?.images || []
   );
 
-  const [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] =
+    useTransition();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
 
   function handleBrochureUpload(
     e: React.ChangeEvent<HTMLInputElement>
@@ -33,14 +144,22 @@ export default function MediaSection({
 
     startTransition(async () => {
       try {
-        const url = await uploadFile(file, "brochures");
+        const url = await uploadFile(
+          file,
+          "brochures"
+        );
+
         setBrochure(url);
       } catch (err: any) {
-        console.error("BROCHURE UPLOAD ERROR:", err);
+        console.error(
+          "BROCHURE UPLOAD ERROR:",
+          err
+        );
 
         alert(
-          `Brochure upload failed: ${
-            err?.message || "Unknown error"
+          `Brochure upload failed:\n\n${
+            err?.message ||
+            "Unknown error"
           }`
         );
       }
@@ -52,18 +171,25 @@ export default function MediaSection({
   ) {
     const files = e.target.files;
 
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {
+      return;
+    }
 
     startTransition(async () => {
       try {
-        const uploaded: PackageImage[] = [];
+        const uploaded: PackageImage[] =
+          [];
 
         for (const file of Array.from(files)) {
           console.log(
             "Uploading:",
             file.name,
             file.type,
-            `${(file.size / 1024 / 1024).toFixed(2)} MB`
+            `${(
+              file.size /
+              1024 /
+              1024
+            ).toFixed(2)} MB`
           );
 
           const url = await uploadFile(
@@ -77,23 +203,70 @@ export default function MediaSection({
           });
         }
 
-        setImages((prev) => [...prev, ...uploaded]);
+        setImages((prev) => [
+          ...prev,
+          ...uploaded,
+        ]);
+
+        // Allow selecting the same file again.
+        e.target.value = "";
       } catch (err: any) {
-        console.error("IMAGE UPLOAD ERROR:", err);
+        console.error(
+          "IMAGE UPLOAD ERROR:",
+          err
+        );
 
         alert(
           `Image upload failed:\n\n${
-            err?.message || "Unknown upload error"
+            err?.message ||
+            "Unknown upload error"
           }`
         );
       }
     });
   }
 
-  function handleDeleteImage(image: PackageImage) {
+  function handleDragEnd(event: any) {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    setImages((items) => {
+      const oldIndex = items.findIndex(
+        (item) => item.id === active.id
+      );
+
+      const newIndex = items.findIndex(
+        (item) => item.id === over.id
+      );
+
+      if (
+        oldIndex === -1 ||
+        newIndex === -1
+      ) {
+        return items;
+      }
+
+      return arrayMove(
+        items,
+        oldIndex,
+        newIndex
+      );
+    });
+  }
+
+  function handleDeleteImage(
+    image: PackageImage
+  ) {
+    // Newly uploaded image that has not
+    // been saved to the database yet.
     if (image.id.startsWith("new-")) {
       setImages((prev) =>
-        prev.filter((img) => img.id !== image.id)
+        prev.filter(
+          (img) => img.id !== image.id
+        )
       );
 
       return;
@@ -103,14 +276,20 @@ export default function MediaSection({
       "Are you sure you want to delete this image?"
     );
 
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     startTransition(async () => {
       try {
-        await deletePackageImage(image.id);
+        await deletePackageImage(
+          image.id
+        );
 
         setImages((prev) =>
-          prev.filter((img) => img.id !== image.id)
+          prev.filter(
+            (img) => img.id !== image.id
+          )
         );
       } catch (err: any) {
         console.error(
@@ -120,7 +299,8 @@ export default function MediaSection({
 
         alert(
           `Image deletion failed:\n\n${
-            err?.message || "Unknown error"
+            err?.message ||
+            "Unknown error"
           }`
         );
       }
@@ -133,6 +313,7 @@ export default function MediaSection({
         Package Media
       </h2>
 
+      {/* Brochure */}
       <div>
         <label className="mb-2 block font-medium">
           Brochure PDF
@@ -141,7 +322,9 @@ export default function MediaSection({
         <input
           type="file"
           accept=".pdf"
-          onChange={handleBrochureUpload}
+          onChange={
+            handleBrochureUpload
+          }
         />
 
         <input
@@ -162,6 +345,7 @@ export default function MediaSection({
         )}
       </div>
 
+      {/* Package Images */}
       <div>
         <label className="mb-2 block font-medium">
           Package Images
@@ -171,56 +355,70 @@ export default function MediaSection({
           type="file"
           multiple
           accept="image/jpeg,image/png,image/webp,image/jpg"
-          onChange={handleImagesUpload}
+          onChange={
+            handleImagesUpload
+          }
         />
 
         <p className="mt-1 text-xs text-gray-500">
-          JPG, PNG or WebP recommended. Upload images one at
-          a time if needed.
+          Upload JPG, PNG or WebP images.
+          Drag images to change their order.
         </p>
 
         <input
           type="hidden"
           name="images"
           value={JSON.stringify(
-            images.map((image) => image.url)
+            images.map(
+              (image) => image.url
+            )
           )}
         />
       </div>
 
       {isPending && (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm font-medium text-gray-500">
           Processing...
         </p>
       )}
 
-      <div className="grid grid-cols-3 gap-4">
-        {images.map((image, index) => (
-          <div
-            key={image.id}
-            className="overflow-hidden rounded-lg border bg-white"
+      {/* Image Gallery */}
+      {images.length > 0 && (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={images.map(
+              (image) => image.id
+            )}
+            strategy={rectSortingStrategy}
           >
-            <img
-              src={image.url}
-              alt={`Package image ${index + 1}`}
-              className="h-40 w-full object-cover"
-            />
-
-            <div className="p-2">
-              <button
-                type="button"
-                onClick={() =>
-                  handleDeleteImage(image)
-                }
-                disabled={isPending}
-                className="w-full rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
-              >
-                Delete
-              </button>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {images.map(
+                (image, index) => (
+                  <SortableImage
+                    key={image.id}
+                    image={image}
+                    index={index}
+                    onDelete={
+                      handleDeleteImage
+                    }
+                    disabled={isPending}
+                  />
+                )
+              )}
             </div>
-          </div>
-        ))}
-      </div>
+          </SortableContext>
+        </DndContext>
+      )}
+
+      {images.length === 0 && (
+        <div className="rounded-lg border border-dashed p-8 text-center text-sm text-gray-500">
+          No package images uploaded yet.
+        </div>
+      )}
     </div>
   );
 }
