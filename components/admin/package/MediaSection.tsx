@@ -58,11 +58,17 @@ function SortableImage({
     transition,
   };
 
+  const isCover = index === 0;
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       className={`overflow-hidden rounded-lg border bg-white ${
+        isCover
+          ? "border-emerald-500 ring-2 ring-emerald-100"
+          : "border-gray-200"
+      } ${
         isDragging
           ? "z-50 opacity-70 shadow-2xl"
           : ""
@@ -85,17 +91,32 @@ function SortableImage({
             className="h-40 w-full object-cover"
           />
 
+          {/* Image number */}
           <div className="absolute left-2 top-2 rounded-full bg-black/70 px-2 py-1 text-xs font-bold text-white">
             {index + 1}
           </div>
 
+          {/* Cover badge */}
+          {isCover && (
+            <div className="absolute right-2 top-2 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow">
+              Cover Image
+            </div>
+          )}
+
+          {/* Drag indicator */}
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-md bg-black/70 px-3 py-1 text-xs text-white">
-            Drag
+            Drag to reorder
           </div>
         </div>
       </button>
 
-      <div className="p-2">
+      <div className="space-y-2 p-2">
+        {isCover && (
+          <div className="rounded-md bg-emerald-50 px-3 py-2 text-center text-xs font-semibold text-emerald-700">
+            ★ This image is the package cover
+          </div>
+        )}
+
         <button
           type="button"
           onClick={() => onDelete(image)}
