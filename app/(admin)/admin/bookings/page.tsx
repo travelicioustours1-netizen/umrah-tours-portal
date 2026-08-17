@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getAllBookings } from "@/lib/services/booking.service";
 
-
+export const dynamic = "force-dynamic";
 export default async function AdminBookingsPage() {
 
 
