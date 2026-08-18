@@ -13,7 +13,7 @@ import {
   getRelatedPackages,
 } from "@/lib/package-service";
 
-const baseUrl = "https://umrahtours.co";
+const SITE_URL = "https://umrahtours.co";
 
 interface Props {
   params: Promise<{
@@ -47,7 +47,7 @@ export async function generateMetadata({
 
   const image =
     pkg.images?.[0]?.url ||
-    `${baseUrl}/images/hero/umrah-hero.jpg`;
+    `${SITE_URL}/images/hero/umrah-hero.jpg`;
 
   return {
     title,
@@ -65,13 +65,13 @@ export async function generateMetadata({
     ],
 
     alternates: {
-      canonical: `${baseUrl}/umrah/${pkg.slug}`,
+      canonical: `${SITE_URL}/umrah/${pkg.slug}`,
     },
 
     openGraph: {
       title,
       description,
-      url: `${baseUrl}/umrah/${pkg.slug}`,
+      url: `${SITE_URL}/umrah/${pkg.slug}`,
       siteName: "Umrah Tours",
       locale: "en_AE",
       type: "website",
@@ -113,16 +113,16 @@ export default async function PackageDetails({
     pkg.id
   );
 
-  const packageUrl = `${baseUrl}/umrah/${pkg.slug}`;
+  const packageUrl = `${SITE_URL}/umrah/${pkg.slug}`;
 
-  const image =
+  const packageImage =
     pkg.images?.[0]?.url ||
-    `${baseUrl}/images/hero/umrah-hero.jpg`;
+    `${SITE_URL}/images/hero/umrah-hero.jpg`;
 
-  const price =
-    typeof pkg.price === "number" && pkg.price > 0
-      ? pkg.price
-      : undefined;
+  const packagePrice =
+    pkg.quadPrice ??
+    pkg.price ??
+    undefined;
 
   const productSchema = {
     "@context": "https://schema.org",
@@ -131,9 +131,9 @@ export default async function PackageDetails({
     name: pkg.title,
     description:
       pkg.description ||
-      `Umrah package from the UAE with Umrah Tours.`,
+      `Book ${pkg.title} with Umrah Tours. Explore package pricing, hotels and complete Umrah travel arrangements.`,
+    image: [packageImage],
     url: packageUrl,
-    image: [image],
 
     brand: {
       "@type": "Brand",
@@ -142,19 +142,18 @@ export default async function PackageDetails({
 
     category: "Umrah Travel Package",
 
-    ...(price
+    ...(packagePrice && Number(packagePrice) > 0
       ? {
           offers: {
             "@type": "Offer",
             url: packageUrl,
             priceCurrency: "AED",
-            price: price.toString(),
-            availability:
-              "https://schema.org/InStock",
+            price: String(packagePrice),
+            availability: "https://schema.org/InStock",
             seller: {
               "@type": "TravelAgency",
               name: "Umrah Tours",
-              url: baseUrl,
+              url: SITE_URL,
             },
           },
         }
@@ -169,13 +168,13 @@ export default async function PackageDetails({
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: baseUrl,
+        item: SITE_URL,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Umrah Packages",
-        item: `${baseUrl}/umrah`,
+        item: `${SITE_URL}/umrah`,
       },
       {
         "@type": "ListItem",
@@ -202,7 +201,7 @@ export default async function PackageDetails({
         }}
       />
 
-      <main className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8">
         {/* Hero */}
         <PackageHero
           title={pkg.title}
@@ -288,7 +287,7 @@ export default async function PackageDetails({
             </div>
           </section>
         )}
-      </main>
+      </div>
     </>
   );
 }
