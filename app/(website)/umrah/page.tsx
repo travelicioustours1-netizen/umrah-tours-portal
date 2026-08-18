@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { getPackageFilters } from "@/lib/filter-service";
 import { getPackages } from "@/lib/package-service";
 import PackageCard from "@/components/packages/PackageCard";
@@ -16,6 +18,77 @@ interface Props {
     page?: string;
   }>;
 }
+
+const baseUrl = "https://umrahtours.co";
+
+export const metadata: Metadata = {
+  title: "Umrah Packages UAE | Umrah Packages Dubai & Sharjah",
+
+  description:
+    "Explore Umrah packages from the UAE with Umrah Tours. Compare Umrah packages from Dubai and Sharjah with hotel, flight, visa assistance and complete pilgrimage travel services.",
+
+  keywords: [
+    "Umrah packages UAE",
+    "Umrah packages Dubai",
+    "Umrah packages Sharjah",
+    "Umrah packages from UAE",
+    "Umrah travel agency UAE",
+    "Umrah travel agency Dubai",
+    "Umrah travel agency Sharjah",
+    "Umrah visa UAE",
+    "Umrah hotels Makkah",
+    "Umrah hotels Madinah",
+    "Umrah tours UAE",
+    "Umrah packages 2026",
+  ],
+
+  alternates: {
+    canonical: `${baseUrl}/umrah`,
+  },
+
+  openGraph: {
+    title: "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
+
+    description:
+      "Explore Umrah packages from Dubai and Sharjah with Umrah Tours, including hotels, flights, visa assistance and complete pilgrimage travel services.",
+
+    url: `${baseUrl}/umrah`,
+
+    siteName: "Umrah Tours",
+
+    locale: "en_AE",
+
+    type: "website",
+
+    images: [
+      {
+        url: `${baseUrl}/images/hero/umrah-hero.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Umrah Packages from UAE",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title:
+      "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
+
+    description:
+      "Explore Umrah packages from the UAE with Umrah Tours.",
+
+    images: [
+      `${baseUrl}/images/hero/umrah-hero.jpg`,
+    ],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default async function UmrahPackagesPage({
   searchParams,
@@ -44,63 +117,179 @@ export default async function UmrahPackagesPage({
     getPackageFilters(),
   ]);
 
+  const schema = {
+    "@context": "https://schema.org",
+
+    "@type": "CollectionPage",
+
+    name: "Umrah Packages UAE",
+
+    description:
+      "Explore Umrah packages from the UAE with Umrah Tours, including packages from Dubai and Sharjah.",
+
+    url: `${baseUrl}/umrah`,
+
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Umrah Tours",
+      url: baseUrl,
+    },
+
+    about: {
+      "@type": "Thing",
+      name: "Umrah Packages",
+    },
+
+    provider: {
+      "@type": "TravelAgency",
+      name: "Umrah Tours",
+      url: baseUrl,
+    },
+
+    areaServed: {
+      "@type": "Country",
+      name: "United Arab Emirates",
+    },
+  };
+
   return (
-    <main className="bg-gray-50">
-      <section className="border-b bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <h1 className="text-4xl font-bold">
-            Umrah Packages
-          </h1>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema),
+        }}
+      />
 
-          <p className="mt-2 text-gray-600">
-            Discover our premium Umrah packages with
-            flights, hotels and guided services.
-          </p>
-        </div>
-      </section>
+      <main className="bg-gray-50">
 
-      <section className="mx-auto max-w-7xl px-4 py-10">
-        <PackageFilters filters={filters} />
+        {/* SEO Hero */}
+        <section className="border-b bg-white">
+          <div className="mx-auto max-w-7xl px-4 py-12">
 
-        <div className="mb-6 mt-8 flex items-center justify-between">
-          <p className="text-sm text-gray-600">
-            Showing{" "}
-            <span className="font-semibold">
-              {result.packages.length}
-            </span>{" "}
-            of{" "}
-            <span className="font-semibold">
-              {result.total}
-            </span>{" "}
-            packages
-          </p>
-        </div>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
+              Umrah Travel from UAE
+            </p>
 
-        {result.packages.length === 0 ? (
-          <EmptyState
-            title="No packages found"
-            description="Try adjusting your search or filters."
-            actionHref="/umrah"
-            actionLabel="Clear Filters"
-          />
-        ) : (
-          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {result.packages.map((pkg) => (
-              <PackageCard
-                key={pkg.id}
-                package={pkg}
-              />
-            ))}
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
+              Umrah Packages UAE
+            </h1>
+
+            <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
+              Explore Umrah packages from Dubai, Sharjah and across
+              the UAE. Compare available packages with accommodation,
+              flights, Makkah and Madinah hotels, visa assistance and
+              complete pilgrimage travel services.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3 text-sm">
+              <span className="rounded-full bg-gray-100 px-4 py-2 text-gray-700">
+                Umrah Packages Dubai
+              </span>
+
+              <span className="rounded-full bg-gray-100 px-4 py-2 text-gray-700">
+                Umrah Packages Sharjah
+              </span>
+
+              <span className="rounded-full bg-gray-100 px-4 py-2 text-gray-700">
+                Makkah Hotels
+              </span>
+
+              <span className="rounded-full bg-gray-100 px-4 py-2 text-gray-700">
+                Madinah Hotels
+              </span>
+            </div>
+
           </div>
-        )}
+        </section>
 
-        <div className="mt-10">
-          <Pagination
-            page={result.page}
-            totalPages={result.totalPages}
-          />
-        </div>
-      </section>
-    </main>
+        {/* Package Listing */}
+        <section className="mx-auto max-w-7xl px-4 py-10">
+
+          <PackageFilters filters={filters} />
+
+          <div className="mb-6 mt-8 flex items-center justify-between">
+            <p className="text-sm text-gray-600">
+              Showing{" "}
+              <span className="font-semibold">
+                {result.packages.length}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold">
+                {result.total}
+              </span>{" "}
+              packages
+            </p>
+          </div>
+
+          {result.packages.length === 0 ? (
+            <EmptyState
+              title="No Umrah packages found"
+              description="Try adjusting your search or filters."
+              actionHref="/umrah"
+              actionLabel="Clear Filters"
+            />
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+              {result.packages.map((pkg) => (
+                <PackageCard
+                  key={pkg.id}
+                  package={pkg}
+                />
+              ))}
+            </div>
+          )}
+
+          <div className="mt-10">
+            <Pagination
+              page={result.page}
+              totalPages={result.totalPages}
+            />
+          </div>
+
+        </section>
+
+        {/* SEO Content */}
+        <section className="border-t bg-white">
+          <div className="mx-auto max-w-5xl px-4 py-12">
+
+            <h2 className="text-3xl font-bold text-gray-900">
+              Umrah Packages from Dubai & Sharjah
+            </h2>
+
+            <div className="mt-5 space-y-5 text-gray-600 leading-8">
+
+              <p>
+                Umrah Tours provides Umrah travel services for
+                pilgrims travelling from the UAE to Makkah and
+                Madinah. Explore available Umrah packages and
+                compare accommodation, travel arrangements and
+                package options according to your requirements.
+              </p>
+
+              <p>
+                Our Umrah packages are designed for travellers
+                looking for convenient pilgrimage arrangements
+                from Dubai, Sharjah and other parts of the UAE.
+                Depending on the package, services may include
+                accommodation, flights, transportation and
+                visa assistance.
+              </p>
+
+              <p>
+                Whether you are travelling individually, as a
+                couple, with family or as a group, you can browse
+                our available Umrah packages and contact our team
+                for current availability, pricing and booking
+                assistance.
+              </p>
+
+            </div>
+
+          </div>
+        </section>
+
+      </main>
+    </>
   );
 }

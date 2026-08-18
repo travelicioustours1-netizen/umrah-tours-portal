@@ -1,48 +1,56 @@
 export default function OrganizationSchema() {
+  const baseUrl = "https://umrahtours.co";
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
 
+    "@id": `${baseUrl}/#organization`,
+
     name: "Umrah Tours",
 
-    url: "https://www.umrahtours.co",
-
-    logo: "https://www.umrahtours.co/logo.png",
+    url: baseUrl,
 
     description:
-      "Umrah Tours provides premium Umrah packages, visa assistance, hotel booking and complete pilgrimage travel services.",
-
+      "Umrah Tours provides Umrah packages, visa assistance, hotel booking, flights and international holiday packages from the UAE.",
 
     contactPoint: {
       "@type": "ContactPoint",
-
       telephone: "+971-52-565-7940",
-
       contactType: "customer service",
-
       availableLanguage: [
         "English",
         "Hindi",
-        "Arabic"
-      ]
+        "Arabic",
+      ],
     },
 
-
     areaServed: [
-      "India",
-      "UAE",
-      "UK",
-      "Worldwide"
+      {
+        "@type": "Country",
+        name: "United Arab Emirates",
+      },
+      {
+        "@type": "Country",
+        name: "India",
+      },
+      {
+        "@type": "Country",
+        name: "United Kingdom",
+      },
     ],
 
-
-    sameAs: [
-      "https://www.facebook.com/",
-      "https://www.instagram.com/"
-    ]
-
+    knowsAbout: [
+      "Umrah Packages",
+      "Umrah Travel",
+      "Umrah Visa Assistance",
+      "Flights",
+      "Hotel Booking",
+      "Makkah Hotels",
+      "Madinah Hotels",
+      "International Holiday Packages",
+    ],
   };
-
 
   return (
     <script
