@@ -1,3 +1,4 @@
+import UmrahFAQ from "@/components/SEO/UmrahFAQ";
 import type { Metadata } from "next";
 
 import { getPackageFilters } from "@/lib/filter-service";
@@ -248,7 +249,7 @@ export default async function UmrahPackagesPage({
           </div>
 
         </section>
-
+<UmrahFAQ />
         {/* SEO Content */}
         <section className="border-t bg-white">
           <div className="mx-auto max-w-5xl px-4 py-12">
