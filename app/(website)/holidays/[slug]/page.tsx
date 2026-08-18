@@ -1,4 +1,4 @@
-import HolidayItinerary from "@/components/packages/HolidayItinerary";
+﻿import HolidayItinerary from "@/components/packages/HolidayItinerary";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -18,7 +18,7 @@ interface Props {
   }>;
 }
 
-const baseUrl = "https://umrahtours.co";
+const SITE_URL = "https://umrahtours.co";
 
 export async function generateMetadata({
   params,
@@ -27,24 +27,33 @@ export async function generateMetadata({
 
   const pkg = await getPackageBySlug(slug);
 
-  if (!pkg || pkg.category !== "HOLIDAY") {
+  if (
+    !pkg ||
+    pkg.category !== "HOLIDAY" ||
+    pkg.status !== "ACTIVE"
+  ) {
     return {
-      title: "Holiday Packages UAE | Umrah Tours",
+      title: "Holiday Package | Umrah Tours",
       description:
-        "Explore international holiday packages from the UAE with Umrah Tours, including flights, hotels, sightseeing and travel support.",
+        "Explore international holiday packages from the UAE with Umrah Tours.",
+      robots: {
+        index: false,
+        follow: true,
+      },
     };
   }
 
-  const canonicalUrl = `${baseUrl}/holidays/${pkg.slug}`;
-
-  const title = `${pkg.title} | Umrah Tours`;
+  const title = `${pkg.title} | Holiday Packages UAE | Umrah Tours`;
 
   const description =
+    pkg.description ||
     `Explore ${pkg.title} with Umrah Tours. Discover holiday pricing, itinerary, hotels, inclusions and complete travel support from the UAE.`;
+
+  const canonicalUrl = `${SITE_URL}/holidays/${pkg.slug}`;
 
   const imageUrl =
     pkg.images?.[0]?.url ||
-    `${baseUrl}/images/holidays/holiday-hero.jpg`;
+    `${SITE_URL}/images/holidays/holiday-hero.jpg`;
 
   return {
     title,
@@ -53,14 +62,15 @@ export async function generateMetadata({
     keywords: [
       pkg.title,
       "holiday packages UAE",
-      "holiday packages Dubai",
-      "holiday packages Sharjah",
-      "international holidays UAE",
-      "international holiday packages from UAE",
-      "UAE travel agency",
       "holiday packages from Dubai",
+      "holiday packages from Sharjah",
+      "international holiday packages UAE",
+      "international holidays from UAE",
+      "Dubai travel agency",
+      "Sharjah travel agency",
       "family holiday packages UAE",
-      "travel packages UAE",
+      "international tour packages",
+      "travel packages from UAE",
     ],
 
     alternates: {
@@ -118,27 +128,65 @@ export default async function HolidayDetails({
     pkg.id
   );
 
-  const canonicalUrl = `${baseUrl}/holidays/${pkg.slug}`;
+  const packageUrl = `${SITE_URL}/holidays/${pkg.slug}`;
 
-  const imageUrl =
+  const packageImage =
     pkg.images?.[0]?.url ||
-    `${baseUrl}/images/holidays/holiday-hero.jpg`;
+    `${SITE_URL}/images/holidays/holiday-hero.jpg`;
 
-  const schema = {
+  const price =
+    typeof pkg.price === "number" && pkg.price > 0
+      ? pkg.price
+      : pkg.quadPrice && pkg.quadPrice > 0
+        ? pkg.quadPrice
+        : undefined;
+
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${packageUrl}#product`,
+    name: pkg.title,
+    description:
+      pkg.description ||
+      `Book ${pkg.title} with Umrah Tours. Explore holiday itinerary, accommodation and travel arrangements from the UAE.`,
+    url: packageUrl,
+    image: [packageImage],
+
+    brand: {
+      "@type": "Brand",
+      name: "Umrah Tours",
+    },
+
+    category: "Holiday Travel Package",
+
+    ...(price
+      ? {
+          offers: {
+            "@type": "Offer",
+            url: packageUrl,
+            priceCurrency: "AED",
+            price: price.toString(),
+            availability: "https://schema.org/InStock",
+            seller: {
+              "@type": "TravelAgency",
+              name: "Umrah Tours",
+              url: SITE_URL,
+            },
+          },
+        }
+      : {}),
+  };
+
+  const touristTripSchema = {
     "@context": "https://schema.org",
     "@type": "TouristTrip",
-
-    "@id": `${canonicalUrl}#tour`,
-
+    "@id": `${packageUrl}#trip`,
     name: pkg.title,
-
     description:
       pkg.description ||
       `Explore ${pkg.title} with Umrah Tours, including holiday travel services from the UAE.`,
-
-    url: canonicalUrl,
-
-    image: [imageUrl],
+    url: packageUrl,
+    image: [packageImage],
 
     touristType: [
       "Leisure Travelers",
@@ -149,7 +197,7 @@ export default async function HolidayDetails({
     provider: {
       "@type": "TravelAgency",
       name: "Umrah Tours",
-      url: baseUrl,
+      url: SITE_URL,
     },
 
     areaServed: {
@@ -164,17 +212,55 @@ export default async function HolidayDetails({
       : {}),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Holiday Packages",
+        item: `${SITE_URL}/holidays`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: pkg.title,
+        item: packageUrl,
+      },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(schema),
+          __html: JSON.stringify(productSchema),
+        }}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(touristTripSchema),
+        }}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
         }}
       />
 
       <main className="bg-gray-50">
-
         {/* Hero */}
         <PackageHero
           title={pkg.title}
@@ -183,25 +269,19 @@ export default async function HolidayDetails({
         />
 
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-6">
-
           <div className="grid gap-8 lg:grid-cols-3">
-
             {/* Main Content */}
             <div className="space-y-8 lg:col-span-2">
-
-              {/* Holiday Itinerary */}
               <HolidayItinerary
                 itinerary={pkg.itinerary}
                 title={pkg.title}
               />
 
-              {/* Holiday Inclusions / Exclusions */}
               <HolidayInclusions
                 inclusions={pkg.inclusions}
                 exclusions={pkg.exclusions}
                 destination={pkg.title}
               />
-
             </div>
 
             {/* Sidebar */}
@@ -213,13 +293,11 @@ export default async function HolidayDetails({
                 }}
               />
             </div>
-
           </div>
 
           {/* Related Holidays */}
           {relatedPackages.length > 0 && (
             <section className="mt-16">
-
               <div className="mb-7">
                 <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
                   Explore More
@@ -238,12 +316,9 @@ export default async function HolidayDetails({
                   />
                 ))}
               </div>
-
             </section>
           )}
-
         </div>
-
       </main>
     </>
   );
