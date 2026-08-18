@@ -33,9 +33,9 @@ export async function generateMetadata({
     pkg.status !== "ACTIVE"
   ) {
     return {
-      title: "Holiday Package | Umrah Tours",
+      title: "Holiday Packages from UAE | Umrah Tours",
       description:
-        "Explore international holiday packages from the UAE with Umrah Tours.",
+        "Explore international holiday packages from the UAE with Umrah Tours, including family holidays, tours, hotels and complete travel assistance.",
       robots: {
         index: false,
         follow: true,
@@ -43,44 +43,70 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${pkg.title} | Holiday Packages UAE | Umrah Tours`;
-
-  const description =
-    pkg.description ||
-    `Explore ${pkg.title} with Umrah Tours. Discover holiday pricing, itinerary, hotels, inclusions and complete travel support from the UAE.`;
-
-  const canonicalUrl = `${SITE_URL}/holidays/${pkg.slug}`;
+  const packageUrl = `${SITE_URL}/holidays/${pkg.slug}`;
 
   const imageUrl =
     pkg.images?.[0]?.url ||
     `${SITE_URL}/images/holidays/holiday-hero.jpg`;
 
+  /*
+   * Keep SEO title concise and keyword-focused.
+   */
+  const title = `${pkg.title} | Holiday Package from UAE`;
+
+  /*
+   * Use package description when available, but keep it
+   * suitable for search-engine snippets.
+   */
+  const rawDescription =
+    pkg.description?.trim() ||
+    `Explore ${pkg.title} with Umrah Tours. Discover holiday itinerary, hotels, pricing and complete travel support from the UAE.`;
+
+  const description =
+    rawDescription.length > 160
+      ? `${rawDescription.substring(0, 157).trim()}...`
+      : rawDescription;
+
+  /*
+   * Destination-specific keywords based on package title.
+   */
+  const keywords = [
+    pkg.title,
+    "holiday packages UAE",
+    "holiday packages from UAE",
+    "holiday packages Dubai",
+    "holiday packages Sharjah",
+    "international holiday packages UAE",
+    "international tours from UAE",
+    "family holiday packages UAE",
+    "tour packages from UAE",
+    "travel packages UAE",
+    "Umrah Tours",
+  ];
+
   return {
     title,
     description,
 
-    keywords: [
-      pkg.title,
-      "holiday packages UAE",
-      "holiday packages from Dubai",
-      "holiday packages from Sharjah",
-      "international holiday packages UAE",
-      "international holidays from UAE",
-      "Dubai travel agency",
-      "Sharjah travel agency",
-      "family holiday packages UAE",
-      "international tour packages",
-      "travel packages from UAE",
+    keywords,
+
+    authors: [
+      {
+        name: "Umrah Tours",
+      },
     ],
 
+    creator: "Umrah Tours",
+    publisher: "Umrah Tours",
+
     alternates: {
-      canonical: canonicalUrl,
+      canonical: packageUrl,
     },
 
     openGraph: {
       title,
       description,
-      url: canonicalUrl,
+      url: packageUrl,
       siteName: "Umrah Tours",
       locale: "en_AE",
       type: "website",
@@ -89,7 +115,7 @@ export async function generateMetadata({
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: pkg.title,
+          alt: `${pkg.title} - Umrah Tours`,
         },
       ],
     },
@@ -104,6 +130,13 @@ export async function generateMetadata({
     robots: {
       index: true,
       follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
   };
 }

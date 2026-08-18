@@ -23,10 +23,10 @@ interface Props {
 const baseUrl = "https://umrahtours.co";
 
 export const metadata: Metadata = {
-  title: "Umrah Packages UAE | Umrah Packages Dubai & Sharjah",
+  title: "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
 
   description:
-    "Explore Umrah packages from the UAE with Umrah Tours. Compare Umrah packages from Dubai and Sharjah with hotel, flight, visa assistance and complete pilgrimage travel services.",
+    "Explore Umrah packages from Dubai, Sharjah and across the UAE with Umrah Tours. Compare Makkah and Madinah hotels, flights, visa assistance and complete Umrah travel services.",
 
   keywords: [
     "Umrah packages UAE",
@@ -37,11 +37,20 @@ export const metadata: Metadata = {
     "Umrah travel agency Dubai",
     "Umrah travel agency Sharjah",
     "Umrah visa UAE",
-    "Umrah hotels Makkah",
-    "Umrah hotels Madinah",
     "Umrah tours UAE",
-    "Umrah packages 2026",
+    "Makkah Umrah packages",
+    "Madinah Umrah packages",
+    "Makkah Madinah Umrah packages",
   ],
+
+  authors: [
+    {
+      name: "Umrah Tours",
+    },
+  ],
+
+  creator: "Umrah Tours",
+  publisher: "Umrah Tours",
 
   alternates: {
     canonical: `${baseUrl}/umrah`,
@@ -51,7 +60,7 @@ export const metadata: Metadata = {
     title: "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
 
     description:
-      "Explore Umrah packages from Dubai and Sharjah with Umrah Tours, including hotels, flights, visa assistance and complete pilgrimage travel services.",
+      "Find Umrah packages from Dubai, Sharjah and across the UAE with Makkah and Madinah hotels, flights, visa assistance and pilgrimage travel support.",
 
     url: `${baseUrl}/umrah`,
 
@@ -66,7 +75,7 @@ export const metadata: Metadata = {
         url: `${baseUrl}/images/hero/umrah-hero.jpg`,
         width: 1200,
         height: 630,
-        alt: "Umrah Packages from UAE",
+        alt: "Umrah Packages from UAE - Umrah Tours",
       },
     ],
   },
@@ -74,20 +83,25 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title:
-      "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
+    title: "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
 
     description:
-      "Explore Umrah packages from the UAE with Umrah Tours.",
+      "Explore Umrah packages from Dubai, Sharjah and across the UAE with Umrah Tours.",
 
-    images: [
-      `${baseUrl}/images/hero/umrah-hero.jpg`,
-    ],
+    images: [`${baseUrl}/images/hero/umrah-hero.jpg`],
   },
 
   robots: {
     index: true,
     follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -99,19 +113,27 @@ export default async function UmrahPackagesPage({
   const [result, filters] = await Promise.all([
     getPackages({
       search: params.search,
-      category: "economy",
+
+      // Show both existing Umrah categories:
+      // UMRAH and economy
+      category: "UMRAH_ALL",
+
       departureCity: params.departureCity,
+
       airlineId: params.airline,
+
       featured:
         params.featured === "true"
           ? true
           : undefined,
+
       sort: params.sort as
         | "departure"
         | "price-low"
         | "price-high"
         | "newest"
         | undefined,
+
       page: Number(params.page ?? 1),
     }),
 
@@ -120,13 +142,12 @@ export default async function UmrahPackagesPage({
 
   const schema = {
     "@context": "https://schema.org",
-
     "@type": "CollectionPage",
 
-    name: "Umrah Packages UAE",
+    name: "Umrah Packages UAE | Dubai & Sharjah",
 
     description:
-      "Explore Umrah packages from the UAE with Umrah Tours, including packages from Dubai and Sharjah.",
+      "Explore Umrah packages from Dubai, Sharjah and across the UAE with Makkah and Madinah hotels, flights, visa assistance and pilgrimage travel services.",
 
     url: `${baseUrl}/umrah`,
 
@@ -151,10 +172,29 @@ export default async function UmrahPackagesPage({
       "@type": "Country",
       name: "United Arab Emirates",
     },
+
+    mainEntity: {
+      "@type": "ItemList",
+
+      name: "Umrah Packages from UAE",
+
+      numberOfItems: result.total,
+
+      itemListElement: result.packages.map((pkg, index) => ({
+        "@type": "ListItem",
+
+        position: index + 1,
+
+        url: `${baseUrl}/umrah/${pkg.slug}`,
+
+        name: pkg.title,
+      })),
+    },
   };
 
   return (
     <>
+      {/* SEO Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -163,11 +203,9 @@ export default async function UmrahPackagesPage({
       />
 
       <main className="bg-gray-50">
-
         {/* SEO Hero */}
         <section className="border-b bg-white">
           <div className="mx-auto max-w-7xl px-4 py-12">
-
             <p className="mb-3 text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
               Umrah Travel from UAE
             </p>
@@ -200,13 +238,11 @@ export default async function UmrahPackagesPage({
                 Madinah Hotels
               </span>
             </div>
-
           </div>
         </section>
 
         {/* Package Listing */}
         <section className="mx-auto max-w-7xl px-4 py-10">
-
           <PackageFilters filters={filters} />
 
           <div className="mb-6 mt-8 flex items-center justify-between">
@@ -247,19 +283,19 @@ export default async function UmrahPackagesPage({
               totalPages={result.totalPages}
             />
           </div>
-
         </section>
-<UmrahFAQ />
+
+        {/* FAQ */}
+        <UmrahFAQ />
+
         {/* SEO Content */}
         <section className="border-t bg-white">
           <div className="mx-auto max-w-5xl px-4 py-12">
-
             <h2 className="text-3xl font-bold text-gray-900">
               Umrah Packages from Dubai & Sharjah
             </h2>
 
-            <div className="mt-5 space-y-5 text-gray-600 leading-8">
-
+            <div className="mt-5 space-y-5 leading-8 text-gray-600">
               <p>
                 Umrah Tours provides Umrah travel services for
                 pilgrims travelling from the UAE to Makkah and
@@ -284,12 +320,9 @@ export default async function UmrahPackagesPage({
                 for current availability, pricing and booking
                 assistance.
               </p>
-
             </div>
-
           </div>
         </section>
-
       </main>
     </>
   );

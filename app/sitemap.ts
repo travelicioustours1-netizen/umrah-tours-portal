@@ -1,11 +1,23 @@
 import type { MetadataRoute } from "next";
+import { prisma } from "@/lib/prisma";
 
 const baseUrl = "https://umrahtours.co";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  return [
+  const packages = await prisma.package.findMany({
+    where: {
+      status: "ACTIVE",
+    },
+    select: {
+      slug: true,
+      category: true,
+      updatedAt: true,
+    },
+  });
+
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: now,
@@ -43,4 +55,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
   ];
+
+  const packagePages: MetadataRoute.Sitemap = packages
+    .filter((pkg) => pkg.category)
+    .map((pkg) => {
+      const isHoliday =
+        pkg.category?.toUpperCase() === "HOLIDAY";
+
+      return {
+        url: `${baseUrl}/${isHoliday ? "holidays" : "umrah"}/${pkg.slug}`,
+        lastModified: pkg.updatedAt,
+        changeFrequency: "weekly",
+        priority: 0.8,
+      };
+    });
+
+  return [...staticPages, ...packagePages];
 }

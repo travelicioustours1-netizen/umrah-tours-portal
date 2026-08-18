@@ -27,15 +27,15 @@ export async function getPackages(
   filters: PackageFilters = {}
 ) {
   const {
-    search,
-    category,
-    departureCity,
-    airlineId,
-    featured,
-    page = 1,
-    limit = 9,
-    sort = "departure",
-  } = filters;
+  search,
+  category,
+  departureCity,
+  airlineId,
+  featured,
+  page = 1,
+  limit = 9,
+  sort = "departure",
+} = filters;
 
   const where: Prisma.PackageWhereInput = {
     status: "ACTIVE",
@@ -58,7 +58,11 @@ export async function getPackages(
     ];
   }
 
-  if (category) {
+  if (category === "UMRAH_ALL") {
+  where.category = {
+    in: ["UMRAH", "economy"],
+  };
+} else if (category) {
   where.category = {
     equals: category,
     mode: "insensitive",

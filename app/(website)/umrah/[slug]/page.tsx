@@ -32,7 +32,7 @@ export async function generateMetadata({
     return {
       title: "Umrah Package | Umrah Tours",
       description:
-        "Explore Umrah packages, hotels, flights and visa assistance with Umrah Tours from the UAE.",
+        "Explore Umrah packages from the UAE with Umrah Tours, including Makkah and Madinah hotels, flights, visa assistance and travel support.",
       robots: {
         index: false,
         follow: true,
@@ -43,11 +43,14 @@ export async function generateMetadata({
   const title = `${pkg.title} | Umrah Tours`;
 
   const description =
-    `Book ${pkg.title} with Umrah Tours. Explore Umrah package pricing, Makkah and Madinah hotels, itinerary, flights and travel assistance from the UAE.`;
+    pkg.description?.trim() ||
+    `Book ${pkg.title} with Umrah Tours. Explore Makkah and Madinah hotels, Umrah itinerary, package pricing and travel arrangements from the UAE.`;
 
   const image =
     pkg.images?.[0]?.url ||
     `${SITE_URL}/images/hero/umrah-hero.jpg`;
+
+  const packageUrl = `${SITE_URL}/umrah/${pkg.slug}`;
 
   return {
     title,
@@ -55,29 +58,30 @@ export async function generateMetadata({
 
     keywords: [
       pkg.title,
-      "Umrah packages UAE",
+      "Umrah package UAE",
+      "Umrah packages from UAE",
       "Umrah packages Dubai",
       "Umrah packages Sharjah",
-      "Umrah package from UAE",
       "Umrah travel agency UAE",
-      "Umrah visa UAE",
       "Makkah Madinah Umrah package",
     ],
 
     alternates: {
-      canonical: `${SITE_URL}/umrah/${pkg.slug}`,
+      canonical: packageUrl,
     },
 
     openGraph: {
       title,
       description,
-      url: `${SITE_URL}/umrah/${pkg.slug}`,
+      url: packageUrl,
       siteName: "Umrah Tours",
       locale: "en_AE",
       type: "website",
       images: [
         {
           url: image,
+          width: 1200,
+          height: 630,
           alt: pkg.title,
         },
       ],
@@ -93,6 +97,13 @@ export async function generateMetadata({
     robots: {
       index: true,
       follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
   };
 }
