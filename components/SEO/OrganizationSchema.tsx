@@ -21,10 +21,12 @@ export default function OrganizationSchema() {
       "Umrah Tours provides Umrah packages, visa assistance, hotel booking, flights and international holiday packages from the UAE.",
 
     address: {
-      "@type": "PostalAddress",
-      addressLocality: "Sharjah",
-      addressCountry: "AE",
-    },
+  "@type": "PostalAddress",
+  streetAddress: "Beside Ministry of Health, Al Ghubaiba",
+  addressLocality: "Sharjah",
+  addressCountry: "AE",
+  postOfficeBoxNumber: "28569",
+},
 
     contactPoint: {
       "@type": "ContactPoint",
