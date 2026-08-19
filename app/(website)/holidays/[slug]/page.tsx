@@ -167,12 +167,15 @@ export default async function HolidayDetails({
     pkg.images?.[0]?.url ||
     `${SITE_URL}/images/holidays/holiday-hero.jpg`;
 
-  const price =
-    typeof pkg.price === "number" && pkg.price > 0
-      ? pkg.price
-      : pkg.quadPrice && pkg.quadPrice > 0
-        ? pkg.quadPrice
-        : undefined;
+  const packagePrice = Number(pkg.price);
+const quadPrice = Number(pkg.quadPrice);
+
+const price =
+  Number.isFinite(packagePrice) && packagePrice > 0
+    ? packagePrice
+    : Number.isFinite(quadPrice) && quadPrice > 0
+      ? quadPrice
+      : undefined;
 
   
   const touristTripSchema = {
