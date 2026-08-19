@@ -53,10 +53,8 @@ export default function ProductSchema({
             availability: "https://schema.org/InStock",
 
             seller: {
-              "@type": "Organization",
-              name: brand,
-              url: "https://umrahtours.co",
-            },
+  "@id": "https://umrahtours.co/#organization",
+},
           },
         }
       : {}),
