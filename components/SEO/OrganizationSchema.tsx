@@ -11,8 +11,20 @@ export default function OrganizationSchema() {
 
     url: baseUrl,
 
+    image: `${baseUrl}/images/hero/umrah-hero.jpg`,
+
+    telephone: "+971-52-565-7940",
+
+    priceRange: "$$",
+
     description:
       "Umrah Tours provides Umrah packages, visa assistance, hotel booking, flights and international holiday packages from the UAE.",
+
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Sharjah",
+      addressCountry: "AE",
+    },
 
     contactPoint: {
       "@type": "ContactPoint",
