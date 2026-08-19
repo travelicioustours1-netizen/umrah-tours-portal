@@ -1,0 +1,73 @@
+interface ProductSchemaProps {
+  name: string;
+  description: string;
+  url: string;
+  image: string;
+  price?: number;
+  currency?: string;
+  sku?: string;
+  brand?: string;
+}
+
+export default function ProductSchema({
+  name,
+  description,
+  url,
+  image,
+  price,
+  currency = "AED",
+  sku,
+  brand = "Umrah Tours",
+}: ProductSchemaProps) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${url}#product`,
+
+    name,
+    description,
+    url,
+
+    image: [image],
+
+    brand: {
+      "@type": "Brand",
+      name: brand,
+    },
+
+    category: "Holiday Travel Package",
+
+    ...(sku
+      ? {
+          sku,
+        }
+      : {}),
+
+    ...(typeof price === "number" && price > 0
+      ? {
+          offers: {
+            "@type": "Offer",
+            url,
+            priceCurrency: currency,
+            price: price.toFixed(2),
+            availability: "https://schema.org/InStock",
+
+            seller: {
+              "@type": "Organization",
+              name: brand,
+              url: "https://umrahtours.co",
+            },
+          },
+        }
+      : {}),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(schema),
+      }}
+    />
+  );
+}

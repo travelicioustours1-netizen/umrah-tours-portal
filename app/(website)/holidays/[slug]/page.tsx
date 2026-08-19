@@ -1,7 +1,7 @@
 ﻿import HolidayItinerary from "@/components/packages/HolidayItinerary";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-
+import ProductSchema from "@/components/SEO/ProductSchema";
 import PackageHero from "@/components/packages/PackageHero";
 import PackageSidebar from "@/components/packages/PackageSidebar";
 import PackageCard from "@/components/packages/PackageCard";
@@ -174,42 +174,7 @@ export default async function HolidayDetails({
         ? pkg.quadPrice
         : undefined;
 
-  const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "@id": `${packageUrl}#product`,
-    name: pkg.title,
-    description:
-      pkg.description ||
-      `Book ${pkg.title} with Umrah Tours. Explore holiday itinerary, accommodation and travel arrangements from the UAE.`,
-    url: packageUrl,
-    image: [packageImage],
-
-    brand: {
-      "@type": "Brand",
-      name: "Umrah Tours",
-    },
-
-    category: "Holiday Travel Package",
-
-    ...(price
-      ? {
-          offers: {
-            "@type": "Offer",
-            url: packageUrl,
-            priceCurrency: "AED",
-            price: price.toString(),
-            availability: "https://schema.org/InStock",
-            seller: {
-              "@type": "TravelAgency",
-              name: "Umrah Tours",
-              url: SITE_URL,
-            },
-          },
-        }
-      : {}),
-  };
-
+  
   const touristTripSchema = {
     "@context": "https://schema.org",
     "@type": "TouristTrip",
@@ -272,12 +237,18 @@ export default async function HolidayDetails({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productSchema),
-        }}
-      />
+      <ProductSchema
+  name={pkg.title}
+  description={
+    pkg.description ||
+    `Book ${pkg.title} with Umrah Tours. Explore holiday itinerary, accommodation and travel arrangements from the UAE.`
+  }
+  url={packageUrl}
+  image={packageImage}
+  price={price}
+  currency="AED"
+  sku={pkg.slug}
+/>
 
       <script
         type="application/ld+json"
