@@ -21,14 +21,23 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Umrah Packages & Holiday Packages from UAE | Umrah Tours",
-    description:
-      "Discover Umrah packages, flights, hotels, visa assistance and international holidays from the UAE with Umrah Tours.",
-    url: "https://umrahtours.co/",
-    siteName: "Umrah Tours",
-    locale: "en_AE",
-    type: "website",
-  },
+  title: "Umrah Packages & Holiday Packages from UAE | Umrah Tours",
+  description:
+    "Discover Umrah packages, flights, hotels, visa assistance and international holidays from the UAE with Umrah Tours.",
+  url: "https://umrahtours.co/",
+  siteName: "Umrah Tours",
+  locale: "en_AE",
+  type: "website",
+
+  images: [
+    {
+      url: "/images/hero/umrah-hero.jpg",
+      width: 1200,
+      height: 630,
+      alt: "Umrah Tours - Umrah Packages and International Holidays from UAE",
+    },
+  ],
+},
 
   twitter: {
     card: "summary_large_image",
