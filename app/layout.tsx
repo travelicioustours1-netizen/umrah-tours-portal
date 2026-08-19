@@ -50,8 +50,10 @@ export const metadata: Metadata = {
   openGraph: {
     title:
       "Umrah Packages & International Holidays from UAE | Umrah Tours",
+
     description:
       "Explore premium Umrah packages, visa assistance, flights, hotels and international holiday experiences from the UAE.",
+
     url: baseUrl,
     siteName: "Umrah Tours",
     locale: "en_AE",
@@ -69,6 +71,7 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
