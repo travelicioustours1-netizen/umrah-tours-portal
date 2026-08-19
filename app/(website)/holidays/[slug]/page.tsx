@@ -193,10 +193,8 @@ export default async function HolidayDetails({
     ],
 
     provider: {
-      "@type": "TravelAgency",
-      name: "Umrah Tours",
-      url: SITE_URL,
-    },
+  "@id": `${SITE_URL}/#organization`,
+},
 
     areaServed: {
       "@type": "Country",

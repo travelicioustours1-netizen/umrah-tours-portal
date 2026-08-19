@@ -162,10 +162,8 @@ export default async function PackageDetails({
             price: String(packagePrice),
             availability: "https://schema.org/InStock",
             seller: {
-              "@type": "TravelAgency",
-              name: "Umrah Tours",
-              url: SITE_URL,
-            },
+  "@id": `${SITE_URL}/#organization`,
+},
           },
         }
       : {}),

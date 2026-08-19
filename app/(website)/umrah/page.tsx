@@ -163,10 +163,8 @@ export default async function UmrahPackagesPage({
     },
 
     provider: {
-      "@type": "TravelAgency",
-      name: "Umrah Tours",
-      url: baseUrl,
-    },
+  "@id": `${baseUrl}/#organization`,
+},
 
     areaServed: {
       "@type": "Country",
