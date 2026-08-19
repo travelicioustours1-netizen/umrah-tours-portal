@@ -3,7 +3,7 @@ interface ProductSchemaProps {
   description: string;
   url: string;
   image: string;
-  price?: number;
+  price?: number | string | { toString(): string };
   currency?: string;
   sku?: string;
   brand?: string;
@@ -19,6 +19,8 @@ export default function ProductSchema({
   sku,
   brand = "Umrah Tours",
 }: ProductSchemaProps) {
+  const numericPrice = Number(price);
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -43,18 +45,18 @@ export default function ProductSchema({
         }
       : {}),
 
-    ...(typeof price === "number" && price > 0
+    ...(Number.isFinite(numericPrice) && numericPrice > 0
       ? {
           offers: {
             "@type": "Offer",
             url,
             priceCurrency: currency,
-            price: price.toFixed(2),
+            price: numericPrice.toFixed(2),
             availability: "https://schema.org/InStock",
 
             seller: {
-  "@id": "https://umrahtours.co/#organization",
-},
+              "@id": "https://umrahtours.co/#organization",
+            },
           },
         }
       : {}),
