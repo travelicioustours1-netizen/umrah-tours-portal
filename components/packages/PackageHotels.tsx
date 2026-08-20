@@ -1,17 +1,19 @@
 import Image from "next/image";
 import { Building2, MapPin, Star } from "lucide-react";
 
+interface HotelImage {
+  id?: string;
+  url: string;
+}
+
 interface Hotel {
   id: string;
   name: string;
   city: string;
   stars: number;
-  distance: string | null;
-  thumbnail: string | null;
-  images: {
-    id: string;
-    url: string;
-  }[];
+  distance?: string | null;
+  thumbnail?: string | null;
+  images?: HotelImage[];
 }
 
 interface Props {
@@ -24,14 +26,12 @@ export default function PackageHotels({
   madinahHotel,
 }: Props) {
   return (
-    <section className="bg-white rounded-2xl shadow-sm p-8">
-
-      <h2 className="text-2xl font-bold mb-8">
+    <section className="rounded-2xl bg-white p-8 shadow-sm">
+      <h2 className="mb-8 text-2xl font-bold">
         Accommodation
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-6">
-
+      <div className="grid gap-6 md:grid-cols-2">
         <HotelCard
           title="Makkah"
           hotel={makkahHotel}
@@ -41,9 +41,7 @@ export default function PackageHotels({
           title="Madinah"
           hotel={madinahHotel}
         />
-
       </div>
-
     </section>
   );
 }
@@ -55,11 +53,10 @@ function HotelCard({
   title: string;
   hotel: Hotel | null;
 }) {
-
   if (!hotel) {
     return (
-      <div className="border rounded-xl p-6 bg-gray-50">
-        <h3 className="font-semibold text-lg mb-2">
+      <div className="rounded-xl border bg-gray-50 p-6">
+        <h3 className="mb-2 text-lg font-semibold">
           {title}
         </h3>
 
@@ -72,30 +69,24 @@ function HotelCard({
 
   const image =
     hotel.thumbnail ||
-    hotel.images[0]?.url ||
+    hotel.images?.[0]?.url ||
     "/images/hotel-placeholder.jpg";
 
   return (
     <div className="overflow-hidden rounded-xl border bg-white">
-
       <div className="relative h-56">
-
         <Image
           src={image}
           alt={hotel.name}
           fill
           className="object-cover"
-          sizes="(max-width:768px)100vw,50vw"
+          sizes="(max-width: 768px) 100vw, 50vw"
         />
-
       </div>
 
-      <div className="p-5 space-y-3">
-
-        <div className="flex justify-between items-start">
-
+      <div className="space-y-3 p-5">
+        <div className="flex items-start justify-between">
           <div>
-
             <h3 className="text-xl font-semibold">
               {hotel.name}
             </h3>
@@ -103,7 +94,6 @@ function HotelCard({
             <p className="text-gray-500">
               {hotel.city}
             </p>
-
           </div>
 
           <div className="flex">
@@ -117,29 +107,20 @@ function HotelCard({
               />
             ))}
           </div>
-
         </div>
 
         {hotel.distance && (
           <div className="flex items-center gap-2 text-sm text-gray-600">
-
             <MapPin size={16} />
-
-            {hotel.distance}
-
+            <span>{hotel.distance}</span>
           </div>
         )}
 
         <div className="flex items-center gap-2 text-sm text-emerald-600">
-
           <Building2 size={16} />
-
-          {title} Accommodation
-
+          <span>{title} Accommodation</span>
         </div>
-
       </div>
-
     </div>
   );
 }

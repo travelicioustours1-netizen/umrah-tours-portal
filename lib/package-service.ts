@@ -18,8 +18,11 @@ const packageInclude = {
       sortOrder: "asc",
     },
   },
+
   airline: true,
+
   makkahHotel: true,
+
   madinahHotel: true,
 } satisfies Prisma.PackageInclude;
 
@@ -27,20 +30,21 @@ export async function getPackages(
   filters: PackageFilters = {}
 ) {
   const {
-  search,
-  category,
-  departureCity,
-  airlineId,
-  featured,
-  page = 1,
-  limit = 9,
-  sort = "departure",
-} = filters;
+    search,
+    category,
+    departureCity,
+    airlineId,
+    featured,
+    page = 1,
+    limit = 9,
+    sort = "departure",
+  } = filters;
 
   const where: Prisma.PackageWhereInput = {
     status: "ACTIVE",
   };
 
+  /* SEARCH */
   if (search) {
     where.OR = [
       {
@@ -58,29 +62,39 @@ export async function getPackages(
     ];
   }
 
-  if (category === "UMRAH_ALL") {
-  where.category = {
-    in: ["UMRAH", "economy"],
-  };
-} else if (category) {
-  where.category = {
-    equals: category,
-    mode: "insensitive",
-  };
-}
-
-  if (departureCity) {
-    where.departureCity = departureCity;
+  /* CATEGORY */
+  if (category) {
+    if (category === "UMRAH_ALL") {
+      where.category = {
+        in: ["UMRAH", "economy"],
+      };
+    } else {
+      where.category = {
+        equals: category,
+        mode: "insensitive",
+      };
+    }
   }
 
+  /* DEPARTURE CITY */
+  if (departureCity) {
+    where.departureCity = {
+      equals: departureCity,
+      mode: "insensitive",
+    };
+  }
+
+  /* AIRLINE */
   if (airlineId) {
     where.airlineId = airlineId;
   }
 
+  /* FEATURED */
   if (featured !== undefined) {
     where.featured = featured;
   }
 
+  /* SORT */
   let orderBy: Prisma.PackageOrderByWithRelationInput;
 
   switch (sort) {
@@ -102,6 +116,7 @@ export async function getPackages(
       };
       break;
 
+    case "departure":
     default:
       orderBy = {
         departureDate: "asc",
@@ -127,24 +142,31 @@ export async function getPackages(
     packages,
     total,
     page,
-    totalPages: Math.ceil(total / limit),
+    totalPages: Math.max(1, Math.ceil(total / limit)),
   };
 }
 
-export async function getFeaturedPackages(category?: string) {
+/* =========================================================
+   FEATURED PACKAGES
+========================================================= */
+
+export async function getFeaturedPackages(
+  category?: string
+) {
+  const where: Prisma.PackageWhereInput = {
+    status: "ACTIVE",
+    featured: true,
+  };
+
+  if (category) {
+    where.category = {
+      equals: category,
+      mode: "insensitive",
+    };
+  }
+
   return prisma.package.findMany({
-    where: {
-      featured: true,
-      status: "ACTIVE",
-      ...(category
-        ? {
-            category: {
-              equals: category,
-              mode: "insensitive",
-            },
-          }
-        : {}),
-    },
+    where,
     include: packageInclude,
     take: 6,
     orderBy: {
@@ -153,34 +175,35 @@ export async function getFeaturedPackages(category?: string) {
   });
 }
 
+/* =========================================================
+   PACKAGE BY ID
+========================================================= */
+
+export async function getPackageById(id: string) {
+  return prisma.package.findUnique({
+    where: {
+      id,
+    },
+    include: packageInclude,
+  });
+}
+
+/* =========================================================
+   PACKAGE BY SLUG
+========================================================= */
+
 export async function getPackageBySlug(slug: string) {
   return prisma.package.findUnique({
     where: {
       slug,
     },
-    include: {
-      airline: true,
-
-      images: {
-        orderBy: {
-          sortOrder: "asc",
-        },
-      },
-
-      makkahHotel: {
-        include: {
-          images: true,
-        },
-      },
-
-      madinahHotel: {
-        include: {
-          images: true,
-        },
-      },
-    },
+    include: packageInclude,
   });
 }
+
+/* =========================================================
+   RELATED PACKAGES
+========================================================= */
 
 export async function getRelatedPackages(
   category: string,
@@ -189,29 +212,65 @@ export async function getRelatedPackages(
   return prisma.package.findMany({
     where: {
       status: "ACTIVE",
-      category,
+
+      category: {
+        equals: category,
+        mode: "insensitive",
+      },
+
       NOT: {
         id: currentPackageId,
       },
     },
 
-    include: {
-      images: {
-        take: 1,
-        orderBy: {
-          sortOrder: "asc",
-        },
-      },
-
-      airline: true,
-
-      makkahHotel: true,
-    },
+    include: packageInclude,
 
     take: 3,
 
     orderBy: {
       createdAt: "desc",
+    },
+  });
+}
+
+/* =========================================================
+   CREATE PACKAGE
+========================================================= */
+
+export async function createPackage(
+  data: Prisma.PackageCreateInput
+) {
+  return prisma.package.create({
+    data,
+    include: packageInclude,
+  });
+}
+
+/* =========================================================
+   UPDATE PACKAGE
+========================================================= */
+
+export async function updatePackage(
+  id: string,
+  data: Prisma.PackageUpdateInput
+) {
+  return prisma.package.update({
+    where: {
+      id,
+    },
+    data,
+    include: packageInclude,
+  });
+}
+
+/* =========================================================
+   DELETE PACKAGE
+========================================================= */
+
+export async function deletePackage(id: string) {
+  return prisma.package.delete({
+    where: {
+      id,
     },
   });
 }

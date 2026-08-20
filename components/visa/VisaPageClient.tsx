@@ -1,36 +1,70 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import {
   ArrowRight,
   CheckCircle2,
+  Clock3,
   FileText,
   Globe2,
   Headphones,
+  Plane,
   ShieldCheck,
 } from "lucide-react";
 
+import GetQuoteModal from "@/components/common/GetQuoteModal";
 import PackageCard from "@/components/packages/PackageCard";
-import {
-  getPackages,
-} from "@/lib/package-service";
+
+interface VisaPageClientProps {
+  visaPackages: any[];
+}
+
+const visaServices = [
+  {
+    title: "UAE Tourist Visa",
+    description:
+      "Tourist visa assistance for visitors planning to explore the UAE.",
+    icon: Globe2,
+  },
+  {
+    title: "Saudi Tourist Visa",
+    description:
+      "Assistance with Saudi tourist visa applications and travel preparation.",
+    icon: Plane,
+  },
+  {
+    title: "Umrah Visa Assistance",
+    description:
+      "Visa assistance for pilgrims planning their Umrah journey to Saudi Arabia.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "International Visas",
+    description:
+      "Visa assistance for selected international destinations and tourist travel.",
+    icon: Globe2,
+  },
+];
 
 const process = [
   {
     number: "01",
     title: "Send Your Enquiry",
     description:
-      "Tell us your nationality, destination, travel dates and number of travellers.",
+      "Tell us your destination, nationality, travel dates and number of travellers.",
   },
   {
     number: "02",
     title: "Document Assessment",
     description:
-      "Our team reviews your requirements and advises you on the documents needed.",
+      "Our team reviews the basic requirements and advises you on the documents needed.",
   },
   {
     number: "03",
     title: "Application Processing",
     description:
-      "We assist with the visa application process and keep you updated.",
+      "We assist with the application process and keep you updated on its progress.",
   },
   {
     number: "04",
@@ -48,32 +82,28 @@ const documents = [
   "Additional documents depending on visa type and nationality",
 ];
 
-export default async function VisaPage() {
-  /*
-   * Fetch VISA packages from Prisma.
-   *
-   * IMPORTANT:
-   * The category stored in your Package table should be:
-   *
-   * VISA
-   */
-  const visaPackagesResult = await getPackages({
-    category: "VISA",
-    page: 1,
-    limit: 12,
-    sort: "newest",
-  });
+export default function VisaPageClient({
+  visaPackages,
+}: VisaPageClientProps) {
+  const [quoteOpen, setQuoteOpen] = useState(false);
+  const [selectedService, setSelectedService] =
+    useState("Visa Assistance");
 
-  const visaPackages = visaPackagesResult.packages;
+  function openQuote(service = "Visa Assistance") {
+    setSelectedService(service);
+    setQuoteOpen(true);
+  }
+
+  function closeQuote() {
+    setQuoteOpen(false);
+  }
 
   return (
     <main className="bg-white">
-
-      {/* =====================================================
+      {/* =========================================================
           HERO
-      ===================================================== */}
+      ========================================================= */}
       <section className="relative min-h-[560px] overflow-hidden">
-
         <Image
           src="/images/hero/umrah-hero.jpg"
           alt="Visa assistance services"
@@ -87,204 +117,203 @@ export default async function VisaPage() {
 
         <div className="relative z-10 flex min-h-[560px] items-center">
           <div className="mx-auto w-full max-w-7xl px-6 py-16">
-
             <div className="max-w-3xl text-white">
-
               <p className="font-semibold uppercase tracking-[5px] text-emerald-300">
-                Visa Services
+                Visa Assistance
               </p>
 
               <h1 className="mt-5 text-5xl font-bold leading-tight md:text-6xl">
-                Visa Services Made Simple
+                Travel With Confidence
               </h1>
 
               <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-200 md:text-xl">
-                Explore visa services for travellers from the UAE with
-                professional document guidance and application assistance.
+                Professional visa assistance for UAE, Saudi Arabia and
+                selected international destinations.
               </p>
 
-              <a
-                href="https://wa.me/971525657940"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => openQuote("Visa Assistance")}
                 className="mt-8 inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-7 py-4 font-semibold text-white transition hover:bg-emerald-700"
               >
-                Get Visa Assistance
+                Get a Visa Quote
                 <ArrowRight size={18} />
-              </a>
-
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* =====================================================
-          VISA PACKAGES
-      ===================================================== */}
+      {/* =========================================================
+          VISA SERVICES
+      ========================================================= */}
       <section className="py-16 md:py-20">
-
         <div className="mx-auto max-w-7xl px-6">
-
           <div className="mx-auto max-w-3xl text-center">
-
             <p className="font-semibold uppercase tracking-[4px] text-emerald-600">
-              Visa Packages
+              Visa Services
             </p>
 
             <h2 className="mt-3 text-4xl font-bold text-gray-900 md:text-5xl">
-              Choose Your Visa Service
+              Visa Assistance Made Simple
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-gray-600">
-              Select the visa service that suits your travel requirements.
-              Our team will assist you with the application process and
-              required documentation.
+              From document guidance to application support, our travel team
+              helps make the visa process easier and more convenient.
             </p>
-
           </div>
 
-          {visaPackages.length > 0 ? (
-            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {visaServices.map((service) => {
+              const Icon = service.icon;
 
+              return (
+                <div
+                  key={service.title}
+                  className="rounded-2xl border bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                    <Icon size={28} />
+                  </div>
+
+                  <h3 className="mt-6 text-xl font-bold text-gray-900">
+                    {service.title}
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-gray-600">
+                    {service.description}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => openQuote(service.title)}
+                    className="mt-5 inline-flex items-center gap-2 font-semibold text-emerald-700 hover:text-emerald-800"
+                  >
+                    Get a Quote
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          VISA PACKAGES
+      ========================================================= */}
+      {visaPackages.length > 0 && (
+        <section className="bg-gray-50 py-16 md:py-20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="font-semibold uppercase tracking-[4px] text-emerald-600">
+                Visa Packages
+              </p>
+
+              <h2 className="mt-3 text-4xl font-bold text-gray-900 md:text-5xl">
+                Available Visa Services
+              </h2>
+
+              <p className="mt-5 text-lg leading-8 text-gray-600">
+                Explore our available visa services and choose the option
+                that best suits your travel requirements.
+              </p>
+            </div>
+
+            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {visaPackages.map((pkg) => (
                 <PackageCard
                   key={pkg.id}
                   package={pkg}
                 />
               ))}
-
             </div>
-          ) : (
-            <div className="mt-12 rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-12 text-center">
+          </div>
+        </section>
+      )}
 
-              <FileText
-                size={42}
-                className="mx-auto text-gray-400"
-              />
-
-              <h3 className="mt-5 text-2xl font-bold text-gray-900">
-                Visa Packages Coming Soon
-              </h3>
-
-              <p className="mx-auto mt-3 max-w-xl text-gray-600">
-                Our latest visa services are being updated. Contact our
-                travel team for current visa availability, requirements
-                and pricing.
-              </p>
-
-              <a
-                href="https://wa.me/971525657940"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white transition hover:bg-emerald-700"
-              >
-                <Headphones size={18} />
-                Contact Us
-              </a>
-
-            </div>
-          )}
-
-        </div>
-      </section>
-
-      {/* =====================================================
-          VISA SERVICE INTRO
-      ===================================================== */}
-      <section className="bg-gray-50 py-16 md:py-20">
-
+      {/* =========================================================
+          WHY CHOOSE US
+      ========================================================= */}
+      <section className="bg-white py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-6">
-
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-
             <div>
-
               <p className="font-semibold uppercase tracking-[4px] text-emerald-600">
-                Visa Assistance
+                Why Choose Us
               </p>
 
               <h2 className="mt-3 text-4xl font-bold text-gray-900">
-                Support From Application To Travel
+                Support From Enquiry To Travel
               </h2>
 
               <p className="mt-5 text-lg leading-8 text-gray-600">
-                Our team provides practical assistance throughout your visa
-                application journey, helping you understand the requirements
-                and prepare the necessary documents.
+                Our team provides practical guidance throughout the visa
+                process so you know what information and documents are
+                required.
               </p>
 
               <div className="mt-8 space-y-5">
-
                 <div className="flex gap-4">
-
                   <CheckCircle2
                     className="mt-1 shrink-0 text-emerald-600"
                     size={22}
                   />
 
                   <div>
-
                     <h3 className="font-bold text-gray-900">
-                      Clear Document Guidance
+                      Clear document guidance
                     </h3>
 
                     <p className="mt-1 text-gray-600">
-                      Understand the documents required before starting
+                      Understand the basic documents required before starting
                       your application.
                     </p>
-
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-
                   <CheckCircle2
                     className="mt-1 shrink-0 text-emerald-600"
                     size={22}
                   />
 
                   <div>
-
                     <h3 className="font-bold text-gray-900">
-                      Application Assistance
+                      Application assistance
                     </h3>
 
                     <p className="mt-1 text-gray-600">
-                      Get support with the application process and required
+                      Get assistance with the application process and
                       supporting information.
                     </p>
-
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-
                   <CheckCircle2
                     className="mt-1 shrink-0 text-emerald-600"
                     size={22}
                   />
 
                   <div>
-
                     <h3 className="font-bold text-gray-900">
-                      Travel-Focused Support
+                      Travel-focused support
                     </h3>
 
                     <p className="mt-1 text-gray-600">
-                      We can also assist with flights, hotels and other
-                      travel arrangements.
+                      Combine visa assistance with flights, hotels, holidays
+                      and Umrah travel arrangements.
                     </p>
-
                   </div>
                 </div>
-
               </div>
             </div>
 
             <div className="rounded-3xl bg-emerald-800 p-8 text-white shadow-xl md:p-10">
-
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/10">
-                <ShieldCheck size={28} />
+                <Headphones size={28} />
               </div>
 
               <h3 className="mt-7 text-3xl font-bold">
@@ -293,34 +322,28 @@ export default async function VisaPage() {
 
               <p className="mt-4 leading-8 text-emerald-50">
                 Tell us your nationality, destination and intended travel
-                dates. Our team will guide you through the next steps.
+                dates. Our team can guide you on the next steps.
               </p>
 
-              <a
-                href="https://wa.me/971525657940"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => openQuote("Visa Assistance")}
                 className="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-emerald-800 transition hover:bg-gray-100"
               >
-                Get Visa Assistance
+                Get a Visa Quote
                 <ArrowRight size={18} />
-              </a>
-
+              </button>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* =====================================================
+      {/* =========================================================
           PROCESS
-      ===================================================== */}
+      ========================================================= */}
       <section className="py-16 md:py-20">
-
         <div className="mx-auto max-w-7xl px-6">
-
           <div className="text-center">
-
             <p className="font-semibold uppercase tracking-[4px] text-emerald-600">
               Simple Process
             </p>
@@ -328,17 +351,14 @@ export default async function VisaPage() {
             <h2 className="mt-3 text-4xl font-bold text-gray-900">
               How It Works
             </h2>
-
           </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-
             {process.map((item) => (
               <div
                 key={item.number}
                 className="rounded-2xl border bg-white p-7 shadow-sm"
               >
-
                 <div className="text-4xl font-bold text-emerald-600">
                   {item.number}
                 </div>
@@ -350,31 +370,24 @@ export default async function VisaPage() {
                 <p className="mt-3 leading-7 text-gray-600">
                   {item.description}
                 </p>
-
               </div>
             ))}
-
           </div>
         </div>
       </section>
 
-      {/* =====================================================
+      {/* =========================================================
           DOCUMENTS
-      ===================================================== */}
+      ========================================================= */}
       <section className="bg-emerald-50 py-16 md:py-20">
-
         <div className="mx-auto max-w-4xl px-6">
-
           <div className="rounded-3xl bg-white p-8 shadow-sm md:p-10">
-
             <div className="flex items-center gap-4">
-
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
                 <FileText size={28} />
               </div>
 
               <div>
-
                 <p className="text-sm font-semibold uppercase tracking-wider text-emerald-600">
                   Preparation
                 </p>
@@ -382,9 +395,7 @@ export default async function VisaPage() {
                 <h2 className="text-3xl font-bold text-gray-900">
                   Common Documents
                 </h2>
-
               </div>
-
             </div>
 
             <p className="mt-6 text-gray-600">
@@ -393,13 +404,11 @@ export default async function VisaPage() {
             </p>
 
             <div className="mt-7 space-y-4">
-
               {documents.map((document) => (
                 <div
                   key={document}
                   className="flex items-start gap-3"
                 >
-
                   <CheckCircle2
                     className="mt-0.5 shrink-0 text-emerald-600"
                     size={20}
@@ -408,46 +417,67 @@ export default async function VisaPage() {
                   <span className="text-gray-700">
                     {document}
                   </span>
-
                 </div>
               ))}
-
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* =====================================================
-          FINAL CTA
-      ===================================================== */}
-      <section className="bg-emerald-800 py-16 text-center text-white">
+      {/* =========================================================
+          DISCLAIMER
+      ========================================================= */}
+      <section className="py-10">
+        <div className="mx-auto max-w-4xl px-6 text-center">
+          <div className="flex items-center justify-center gap-2 text-gray-700">
+            <Clock3 size={18} />
 
-        <div className="mx-auto max-w-3xl px-6">
+            <span className="font-semibold">
+              Processing times and requirements vary
+            </span>
+          </div>
 
-          <h2 className="text-4xl font-bold md:text-5xl">
-            Ready To Apply For Your Visa?
-          </h2>
-
-          <p className="mt-5 text-lg leading-8 text-emerald-50">
-            Send us your travel details and our team will help you with
-            the visa application process.
+          <p className="mt-3 text-sm leading-6 text-gray-500">
+            Visa approval is subject to the relevant immigration, embassy or
+            government authority. Requirements, fees and processing times may
+            vary by destination, nationality and visa type.
           </p>
-
-          <a
-            href="https://wa.me/971525657940"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 font-semibold text-emerald-800 transition hover:bg-gray-100"
-          >
-            <Globe2 size={19} />
-            Contact Visa Team
-            <ArrowRight size={18} />
-          </a>
-
         </div>
       </section>
 
+      {/* =========================================================
+          FINAL CTA
+      ========================================================= */}
+      <section className="bg-emerald-800 py-16 text-center text-white">
+        <div className="mx-auto max-w-3xl px-6">
+          <h2 className="text-4xl font-bold md:text-5xl">
+            Ready To Start Your Visa Application?
+          </h2>
+
+          <p className="mt-5 text-lg leading-8 text-emerald-50">
+            Send us your travel details and our team will help you with the
+            next step.
+          </p>
+
+          <button
+            type="button"
+            onClick={() => openQuote("Visa Assistance")}
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 font-semibold text-emerald-800 transition hover:bg-gray-100"
+          >
+            Get a Visa Quote
+            <ArrowRight size={18} />
+          </button>
+        </div>
+      </section>
+
+      {/* =========================================================
+          GET A QUOTE MODAL
+      ========================================================= */}
+      <GetQuoteModal
+        isOpen={quoteOpen}
+        onClose={closeQuote}
+        service={selectedService}
+      />
     </main>
   );
 }

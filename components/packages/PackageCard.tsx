@@ -6,6 +6,7 @@ import {
   Building2,
   MapPin,
   MessageCircle,
+  FileText,
 } from "lucide-react";
 
 interface PackageCardProps {
@@ -48,15 +49,19 @@ export default function PackageCard({
   package: pkg,
 }: PackageCardProps) {
   const image =
-    pkg.images[0]?.url ||
+    pkg.images?.[0]?.url ||
     "/images/package-placeholder.jpg";
 
-  const isHoliday =
-    pkg.category?.toLowerCase() === "holiday";
+  const category = pkg.category?.toUpperCase();
+
+  const isHoliday = category === "HOLIDAY";
+  const isVisa = category === "VISA";
 
   const href = isHoliday
     ? `/holidays/${pkg.slug}`
-    : `/umrah/${pkg.slug}`;
+    : isVisa
+      ? `/visa/${pkg.slug}`
+      : `/umrah/${pkg.slug}`;
 
   const destination = isHoliday
     ? getDestination(pkg.title)
@@ -69,7 +74,7 @@ export default function PackageCard({
 
 I'm interested in the ${pkg.title}.
 
-Please share the availability, travel dates, complete package details and booking procedure.
+Please share the availability, travel dates, complete package details, inclusions, exclusions and booking procedure.
 
 Thank you.`
   );
@@ -78,7 +83,7 @@ Thank you.`
     `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
-    <div className="group flex flex-col rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
 
       {/* Image */}
       <Link href={href}>
@@ -92,17 +97,25 @@ Thank you.`
             className="object-cover transition duration-500 group-hover:scale-105"
           />
 
-          {/* Image overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+          {/* Category badge */}
+          <div className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-gray-800 shadow">
+            {isHoliday
+              ? "Holiday"
+              : isVisa
+                ? "Visa Service"
+                : "Umrah"}
+          </div>
 
           {/* Featured */}
           {pkg.featured && (
-            <div className="absolute left-4 top-4 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white shadow">
+            <div className="absolute right-4 top-4 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white shadow">
               Featured
             </div>
           )}
 
-          {/* Destination */}
+          {/* Holiday destination */}
           {isHoliday && destination && (
             <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-sm font-semibold text-gray-800 shadow">
               <MapPin
@@ -129,21 +142,29 @@ Thank you.`
               International holiday experience
             </p>
           )}
+
+          {isVisa && (
+            <p className="mt-2 text-sm text-gray-500">
+              Professional visa assistance from the UAE
+            </p>
+          )}
         </div>
 
-        {/* Package information */}
+        {/* Information */}
         <div className="space-y-2 text-sm text-gray-600">
 
-          <div className="flex items-center gap-2">
-            <CalendarDays
-              size={17}
-              className="shrink-0 text-emerald-600"
-            />
-            <span>{pkg.duration}</span>
-          </div>
+          {pkg.duration && (
+            <div className="flex items-center gap-2">
+              <CalendarDays
+                size={17}
+                className="shrink-0 text-emerald-600"
+              />
+              <span>{pkg.duration}</span>
+            </div>
+          )}
 
           {/* Umrah only */}
-          {!isHoliday && pkg.airline && (
+          {!isHoliday && !isVisa && pkg.airline && (
             <div className="flex items-center gap-2">
               <Plane
                 size={17}
@@ -153,7 +174,7 @@ Thank you.`
             </div>
           )}
 
-          {!isHoliday && pkg.makkahHotel && (
+          {!isHoliday && !isVisa && pkg.makkahHotel && (
             <div className="flex items-center gap-2">
               <Building2
                 size={17}
@@ -165,15 +186,27 @@ Thank you.`
             </div>
           )}
 
-          {!isHoliday && pkg.departureDate && (
-            <div className="text-gray-500">
-              Departure:{" "}
-              {new Date(
-                pkg.departureDate
-              ).toLocaleDateString("en-AE")}
+          {!isHoliday &&
+            !isVisa &&
+            pkg.departureDate && (
+              <div className="text-gray-500">
+                Departure:{" "}
+                {new Date(
+                  pkg.departureDate
+                ).toLocaleDateString("en-AE")}
+              </div>
+            )}
+
+          {/* Visa information */}
+          {isVisa && (
+            <div className="flex items-center gap-2">
+              <FileText
+                size={17}
+                className="shrink-0 text-emerald-600"
+              />
+              <span>Visa assistance included</span>
             </div>
           )}
-
         </div>
 
         {/* Price */}
@@ -184,11 +217,11 @@ Thank you.`
           </p>
 
           <p className="mt-1 text-2xl font-bold text-emerald-600">
-            AED {pkg.price.toLocaleString("en-AE")}
+            AED {Number(pkg.price).toLocaleString("en-AE")}
           </p>
 
           <p className="text-xs text-gray-400">
-            Per person
+            {isVisa ? "Per applicant" : "Per person"}
           </p>
 
         </div>
@@ -196,7 +229,7 @@ Thank you.`
         {/* Actions */}
         <div className="mt-auto pt-1">
 
-          {isHoliday ? (
+          {isHoliday || isVisa ? (
             <div className="grid grid-cols-2 gap-3">
 
               <Link
@@ -227,7 +260,6 @@ Thank you.`
           )}
 
         </div>
-
       </div>
     </div>
   );

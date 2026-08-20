@@ -29,12 +29,21 @@ interface Props {
 }
 
 export default function PackageSidebar({ pkg }: Props) {
-  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] =
+    useState(false);
 
   const whatsappNumber = "971525657940";
 
-  const isHoliday =
-    pkg.category?.toUpperCase() === "HOLIDAY";
+  const category = pkg.category?.toUpperCase();
+
+  const isHoliday = category === "HOLIDAY";
+  const isVisa = category === "VISA";
+
+  const serviceLabel = isHoliday
+    ? "International Holiday"
+    : isVisa
+      ? "Visa Service"
+      : "Umrah Package";
 
   const whatsappMessage = encodeURIComponent(
     `Assalamu Alaikum,
@@ -55,15 +64,15 @@ Thank you.`
 
         {/* Header */}
         <div className="border-b bg-gray-50 p-6">
+
           <p className="text-xs font-semibold uppercase tracking-[2px] text-emerald-600">
-            {isHoliday
-              ? "International Holiday"
-              : "Umrah Package"}
+            {serviceLabel}
           </p>
 
           <h2 className="mt-2 text-xl font-bold leading-tight text-gray-900">
             {pkg.title}
           </h2>
+
         </div>
 
         <div className="space-y-6 p-6">
@@ -76,16 +85,16 @@ Thank you.`
 
             <div className="mt-1 flex items-end gap-2">
               <span className="text-4xl font-bold text-emerald-600">
-                AED {pkg.price.toLocaleString("en-AE")}
+                AED {Number(pkg.price).toLocaleString("en-AE")}
               </span>
             </div>
 
             <p className="mt-1 text-sm text-gray-500">
-              Per person
+              {isVisa ? "Per applicant" : "Per person"}
             </p>
           </div>
 
-          {/* Primary WhatsApp CTA */}
+          {/* WhatsApp */}
           <div>
             <a
               href={whatsappUrl}
@@ -102,7 +111,7 @@ Thank you.`
             </p>
           </div>
 
-          {/* Quote CTA */}
+          {/* Quote */}
           <button
             type="button"
             onClick={() => setIsQuoteModalOpen(true)}
@@ -112,12 +121,11 @@ Thank you.`
             Get a Quote
           </button>
 
-          {/* Get Quote Modal */}
           <GetQuoteModal
-  isOpen={isQuoteModalOpen}
-  service={pkg.title}
-  onClose={() => setIsQuoteModalOpen(false)}
-/>
+            isOpen={isQuoteModalOpen}
+            service={pkg.title}
+            onClose={() => setIsQuoteModalOpen(false)}
+          />
 
           {/* Book Now */}
           <Link
@@ -128,10 +136,11 @@ Thank you.`
             Book Now
           </Link>
 
-          {/* Trust message for holidays */}
+          {/* Holiday trust */}
           {isHoliday && (
             <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
               <div className="flex items-start gap-3">
+
                 <ShieldCheck
                   size={21}
                   className="mt-0.5 shrink-0 text-emerald-600"
@@ -143,28 +152,57 @@ Thank you.`
                   </p>
 
                   <p className="mt-1 text-xs leading-5 text-gray-600">
-                    Our team can assist with your holiday
-                    arrangements, flights, hotels, transfers and
-                    travel requirements.
+                    Our team can assist with flights, hotels,
+                    transfers and travel requirements.
                   </p>
                 </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* Visa trust */}
+          {isVisa && (
+            <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+              <div className="flex items-start gap-3">
+
+                <ShieldCheck
+                  size={21}
+                  className="mt-0.5 shrink-0 text-emerald-600"
+                />
+
+                <div>
+                  <p className="font-semibold text-gray-900">
+                    Visa Assistance
+                  </p>
+
+                  <p className="mt-1 text-xs leading-5 text-gray-600">
+                    Get guidance with visa requirements,
+                    documentation and application procedures.
+                  </p>
+                </div>
+
               </div>
             </div>
           )}
 
           {/* Package Includes */}
           <div className="border-t pt-5">
+
             <p className="mb-4 text-sm font-semibold text-gray-900">
-              Package Includes
+              Service Includes
             </p>
 
             <div className="space-y-3">
+
               <Feature
                 enabled={pkg.visa}
                 title={
-                  isHoliday
+                  isVisa
                     ? "Visa Assistance"
-                    : "Visa Included"
+                    : isHoliday
+                      ? "Visa Assistance"
+                      : "Visa Included"
                 }
               />
 
@@ -177,6 +215,7 @@ Thank you.`
                 enabled={pkg.meals}
                 title="Meals Included"
               />
+
             </div>
           </div>
 
@@ -193,24 +232,26 @@ Thank you.`
             </Link>
           )}
 
-          {/* Customized Holiday */}
+          {/* Customized holiday */}
           {isHoliday && (
             <div className="rounded-xl bg-gray-50 p-4">
+
               <div className="flex items-start gap-3">
+
                 <Headphones
                   size={20}
                   className="mt-0.5 shrink-0 text-emerald-600"
                 />
 
                 <div>
+
                   <p className="text-sm font-semibold text-gray-900">
                     Need a Customized Holiday?
                   </p>
 
                   <p className="mt-1 text-xs leading-5 text-gray-500">
                     Tell us your preferred dates, flights,
-                    hotels or sightseeing requirements and
-                    we'll help create a suitable option.
+                    hotels or sightseeing requirements.
                   </p>
 
                   <a
@@ -221,6 +262,7 @@ Thank you.`
                   >
                     Chat with our team →
                   </a>
+
                 </div>
               </div>
             </div>
@@ -228,6 +270,7 @@ Thank you.`
 
           {/* Company */}
           <div className="border-t pt-5 text-center">
+
             <p className="text-sm font-semibold text-gray-800">
               AL AFEEF TRAVELS AND TOURS
             </p>
@@ -239,6 +282,7 @@ Thank you.`
             <p className="mt-3 text-sm text-gray-600">
               +971 52 565 7940
             </p>
+
           </div>
 
         </div>
@@ -256,6 +300,7 @@ function Feature({
 }) {
   return (
     <div className="flex items-center gap-3">
+
       <CheckCircle
         size={19}
         className={
@@ -274,6 +319,7 @@ function Feature({
       >
         {title}
       </span>
+
     </div>
   );
 }
