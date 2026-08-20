@@ -27,29 +27,172 @@ Thank you.`
   return `https://wa.me/${whatsappNumber}?text=${message}`;
 }
 
+/*
+|--------------------------------------------------------------------------
+| Region Configuration
+|--------------------------------------------------------------------------
+| These are the regions displayed on the public Holidays page.
+| The value must match the region saved in the Package database.
+|--------------------------------------------------------------------------
+*/
+
+const REGION_CONFIG = [
+  {
+    key: "CIS",
+    title: "CIS Holiday Packages",
+    subtitle: "Explore Central Asia & CIS",
+    description:
+      "Discover beautiful destinations across Central Asia and the CIS region, including Kazakhstan, Georgia, Azerbaijan and more.",
+    icon: "🌍",
+  },
+  {
+    key: "EUROPE",
+    title: "Europe Holiday Packages",
+    subtitle: "Discover Europe",
+    description:
+      "Experience iconic European cities, scenic landscapes, cultural attractions and unforgettable holidays.",
+    icon: "🏰",
+  },
+  {
+    key: "MIDDLE_EAST",
+    title: "Middle East Holiday Packages",
+    subtitle: "Explore the Middle East",
+    description:
+      "Discover fascinating destinations, luxury experiences and rich cultural heritage across the Middle East.",
+    icon: "🕌",
+  },
+  {
+    key: "ASIA",
+    title: "Asia Holiday Packages",
+    subtitle: "Discover Asia",
+    description:
+      "Explore vibrant cities, beautiful beaches, rich cultures and unforgettable experiences across Asia.",
+    icon: "🌏",
+  },
+  {
+    key: "AFRICA",
+    title: "Africa Holiday Packages",
+    subtitle: "Experience Africa",
+    description:
+      "Discover incredible landscapes, wildlife, beaches and cultural experiences across Africa.",
+    icon: "🦁",
+  },
+  {
+    key: "AMERICAS",
+    title: "Americas Holiday Packages",
+    subtitle: "Explore the Americas",
+    description:
+      "Discover exciting cities, natural wonders and unforgettable experiences across North and South America.",
+    icon: "🌎",
+  },
+  {
+    key: "OTHER",
+    title: "Other Holiday Packages",
+    subtitle: "More Destinations",
+    description:
+      "Explore additional international destinations and specially curated holiday experiences.",
+    icon: "✈️",
+  },
+];
+
+/*
+|--------------------------------------------------------------------------
+| Normalize Region
+|--------------------------------------------------------------------------
+| Handles old packages where region may be empty/null.
+|--------------------------------------------------------------------------
+*/
+
+function normalizeRegion(region: unknown) {
+  if (!region) {
+    return "OTHER";
+  }
+
+  const value = String(region)
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "_")
+    .replace(/-/g, "_");
+
+  return value || "OTHER";
+}
+
+/*
+|--------------------------------------------------------------------------
+| Group Packages By Region
+|--------------------------------------------------------------------------
+*/
+
+function groupPackagesByRegion(packages: any[]) {
+  const grouped: Record<string, any[]> = {};
+
+  for (const holiday of packages) {
+    const region = normalizeRegion(holiday.region);
+
+    if (!grouped[region]) {
+      grouped[region] = [];
+    }
+
+    grouped[region].push(holiday);
+  }
+
+  return grouped;
+}
+
 export default async function HolidaysPage() {
   const { packages } = await getPackages({
     category: "HOLIDAY",
-    limit: 50,
+    limit: 100,
     sort: "newest",
   });
 
-  const featuredPackages = packages.filter(
-    (holiday) => holiday.featured
+  const groupedPackages = groupPackagesByRegion(packages);
+
+  const availableRegions = REGION_CONFIG.filter(
+    (region) => groupedPackages[region.key]?.length > 0
   );
 
-  const regularPackages = packages.filter(
-    (holiday) => !holiday.featured
+  /*
+  |--------------------------------------------------------------------------
+  | Catch any custom / unexpected region values
+  |--------------------------------------------------------------------------
+  */
+
+  const configuredKeys = new Set(
+    REGION_CONFIG.map((region) => region.key)
   );
+
+  const additionalRegions = Object.keys(groupedPackages)
+    .filter(
+      (region) =>
+        !configuredKeys.has(region) &&
+        groupedPackages[region]?.length > 0
+    )
+    .map((region) => ({
+      key: region,
+      title: `${region
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase())} Holiday Packages`,
+      subtitle: `Explore ${region
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase())}`,
+      description:
+        "Explore our carefully selected international holiday packages.",
+      icon: "🌍",
+    }));
+
+  const allRegions = [
+    ...availableRegions,
+    ...additionalRegions,
+  ];
 
   return (
     <main className="bg-gray-50">
-
       {/* =========================================================
           HERO
       ========================================================== */}
-      <section className="relative min-h-[560px] overflow-hidden">
 
+      <section className="relative min-h-[560px] overflow-hidden">
         <Image
           src="/images/hero/umrah-hero.jpg"
           alt="International holiday destinations"
@@ -62,9 +205,7 @@ export default async function HolidaysPage() {
         <div className="absolute inset-0 bg-black/60" />
 
         <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl items-center px-6 py-20">
-
           <div className="max-w-3xl text-white">
-
             <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur">
               <Globe2 size={17} />
               International Holidays
@@ -87,7 +228,6 @@ export default async function HolidaysPage() {
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-
               <a
                 href="#holiday-packages"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-7 py-4 font-semibold text-white transition hover:bg-emerald-700"
@@ -102,20 +242,17 @@ export default async function HolidaysPage() {
               >
                 Plan My Holiday
               </Link>
-
             </div>
-
           </div>
         </div>
       </section>
 
-
       {/* =========================================================
-          INTRO / TRUST BAR
+          TRUST BAR
       ========================================================== */}
+
       <section className="border-b bg-white">
         <div className="mx-auto grid max-w-7xl gap-6 px-6 py-8 md:grid-cols-3">
-
           <div className="flex items-center gap-4">
             <div className="rounded-xl bg-emerald-100 p-3 text-emerald-700">
               <Plane size={24} />
@@ -125,6 +262,7 @@ export default async function HolidaysPage() {
               <p className="font-semibold text-gray-900">
                 International Flights
               </p>
+
               <p className="text-sm text-gray-500">
                 Convenient flight options
               </p>
@@ -140,6 +278,7 @@ export default async function HolidaysPage() {
               <p className="font-semibold text-gray-900">
                 Handpicked Packages
               </p>
+
               <p className="text-sm text-gray-500">
                 Selected for quality and value
               </p>
@@ -155,51 +294,63 @@ export default async function HolidaysPage() {
               <p className="font-semibold text-gray-900">
                 Travel Assistance
               </p>
+
               <p className="text-sm text-gray-500">
                 Support throughout your journey
               </p>
             </div>
           </div>
-
         </div>
       </section>
 
+      {/* =========================================================
+          REGION NAVIGATION
+      ========================================================== */}
+
+      {allRegions.length > 0 && (
+        <section className="border-b bg-white">
+          <div className="mx-auto max-w-7xl px-6 py-8">
+            <div className="text-center">
+              <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
+                Choose Your Region
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold text-gray-900">
+                Explore Holidays By Region
+              </h2>
+            </div>
+
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              {allRegions.map((region) => (
+                <a
+                  key={region.key}
+                  href={`#region-${region.key.toLowerCase()}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700"
+                >
+                  <span>{region.icon}</span>
+                  {region.title.replace(" Holiday Packages", "")}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* =========================================================
           HOLIDAY PACKAGES
       ========================================================== */}
+
       <section
         id="holiday-packages"
         className="py-20"
       >
         <div className="mx-auto max-w-7xl px-6">
-
-          <div className="mb-12 text-center">
-
-            <div className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
-              <Sparkles size={16} />
-              Our Collection
-            </div>
-
-            <h2 className="mt-3 text-4xl font-bold text-gray-900 md:text-5xl">
-              International Holiday Packages
-            </h2>
-
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-              From relaxing escapes to exciting city adventures, find the
-              right holiday for your next journey.
-            </p>
-
-          </div>
-
-
           {/* =====================================================
               NO PACKAGES
           ====================================================== */}
+
           {packages.length === 0 ? (
-
             <div className="rounded-3xl bg-white p-12 text-center shadow-sm">
-
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
                 <Globe2 size={30} />
               </div>
@@ -221,105 +372,136 @@ export default async function HolidaysPage() {
                 Enquire Now
                 <ArrowRight size={18} />
               </Link>
-
             </div>
-
           ) : (
-
             <>
-
               {/* =================================================
-                  FEATURED PACKAGES
+                  REGION SECTIONS
               ================================================== */}
-              {featuredPackages.length > 0 && (
 
-                <div className="mb-16">
+              {allRegions.map((region) => {
+                const regionPackages =
+                  groupedPackages[region.key] || [];
 
-                  <div className="mb-7 flex items-center justify-between">
+                if (regionPackages.length === 0) {
+                  return null;
+                }
 
-                    <div>
-                      <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
-                        Featured
-                      </p>
+                const featuredPackages =
+                  regionPackages.filter(
+                    (holiday) => holiday.featured
+                  );
 
-                      <h3 className="mt-2 text-3xl font-bold text-gray-900">
-                        Recommended Holidays
-                      </h3>
+                const regularPackages =
+                  regionPackages.filter(
+                    (holiday) => !holiday.featured
+                  );
+
+                return (
+                  <section
+                    key={region.key}
+                    id={`region-${region.key.toLowerCase()}`}
+                    className="mb-20 scroll-mt-24"
+                  >
+                    {/* Region Header */}
+
+                    <div className="mb-10">
+                      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                        <div>
+                          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
+                            <span className="text-lg">
+                              {region.icon}
+                            </span>
+
+                            {region.subtitle}
+                          </div>
+
+                          <h2 className="mt-4 text-4xl font-bold text-gray-900 md:text-5xl">
+                            {region.title}
+                          </h2>
+
+                          <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
+                            {region.description}
+                          </p>
+                        </div>
+
+                        <div className="shrink-0">
+                          <span className="inline-flex items-center rounded-full border bg-white px-4 py-2 text-sm font-semibold text-gray-600 shadow-sm">
+                            {regionPackages.length}{" "}
+                            {regionPackages.length === 1
+                              ? "Package"
+                              : "Packages"}
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
-                  </div>
+                    {/* Featured */}
 
-                  <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    {featuredPackages.length > 0 && (
+                      <div className="mb-12">
+                        <div className="mb-6 flex items-center gap-2">
+                          <Sparkles
+                            size={18}
+                            className="text-emerald-600"
+                          />
 
-                    {featuredPackages.map((holiday) => (
-                      <HolidayCard
-                        key={holiday.id}
-                        holiday={holiday}
-                        featured
-                      />
-                    ))}
+                          <h3 className="text-2xl font-bold text-gray-900">
+                            Featured {region.title}
+                          </h3>
+                        </div>
 
-                  </div>
+                        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                          {featuredPackages.map((holiday) => (
+                            <HolidayCard
+                              key={holiday.id}
+                              holiday={holiday}
+                              featured
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
-                </div>
+                    {/* Regular */}
 
-              )}
+                    {regularPackages.length > 0 && (
+                      <div>
+                        {featuredPackages.length > 0 && (
+                          <div className="mb-6">
+                            <h3 className="text-2xl font-bold text-gray-900">
+                              More {region.title}
+                            </h3>
+                          </div>
+                        )}
 
-
-              {/* =================================================
-                  ALL PACKAGES
-              ================================================== */}
-              {regularPackages.length > 0 && (
-
-                <div>
-
-                  <div className="mb-7">
-
-                    <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
-                      Explore
-                    </p>
-
-                    <h3 className="mt-2 text-3xl font-bold text-gray-900">
-                      More Holiday Packages
-                    </h3>
-
-                  </div>
-
-                  <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-
-                    {regularPackages.map((holiday) => (
-                      <HolidayCard
-                        key={holiday.id}
-                        holiday={holiday}
-                      />
-                    ))}
-
-                  </div>
-
-                </div>
-
-              )}
-
+                        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                          {regularPackages.map((holiday) => (
+                            <HolidayCard
+                              key={holiday.id}
+                              holiday={holiday}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </section>
+                );
+              })}
             </>
           )}
-
         </div>
       </section>
-
 
       {/* =========================================================
           CUSTOM HOLIDAY CTA
       ========================================================== */}
+
       <section className="bg-emerald-950 py-20">
-
         <div className="mx-auto max-w-7xl px-6">
-
           <div className="overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-800 to-emerald-950 p-8 text-white shadow-2xl md:p-14">
-
             <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
-
               <div>
-
                 <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-300">
                   Can't Find What You're Looking For?
                 </p>
@@ -333,11 +515,9 @@ export default async function HolidaysPage() {
                   travellers and budget. Our travel team will create a
                   suitable holiday option for you.
                 </p>
-
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-
                 <Link
                   href="/contact"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-4 font-semibold text-emerald-900 transition hover:bg-gray-100"
@@ -347,7 +527,9 @@ export default async function HolidaysPage() {
                 </Link>
 
                 <a
-                  href={getWhatsAppUrl("a customized international holiday")}
+                  href={getWhatsAppUrl(
+                    "a customized international holiday"
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 px-7 py-4 font-semibold text-white transition hover:bg-green-700"
@@ -355,26 +537,19 @@ export default async function HolidaysPage() {
                   <MessageCircle size={19} />
                   WhatsApp Us
                 </a>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
       </section>
-
 
       {/* =========================================================
           HOLIDAY SERVICES
       ========================================================== */}
+
       <section className="bg-white py-20">
-
         <div className="mx-auto max-w-7xl px-6">
-
           <div className="text-center">
-
             <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
               Travel Support
             </p>
@@ -387,12 +562,9 @@ export default async function HolidaysPage() {
               From flights and hotels to transfers and customized tours,
               our team can help arrange your complete holiday.
             </p>
-
           </div>
 
-
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-
             <ServiceCard
               icon={<Plane size={28} />}
               title="Flight Booking"
@@ -410,20 +582,16 @@ export default async function HolidaysPage() {
               title="Custom Holidays"
               description="Flexible itineraries designed around your preferences."
             />
-
           </div>
-
         </div>
       </section>
-
 
       {/* =========================================================
           FINAL CTA
       ========================================================== */}
+
       <section className="bg-gray-100 py-16 text-center">
-
         <div className="mx-auto max-w-3xl px-6">
-
           <h2 className="text-4xl font-bold text-gray-900 md:text-5xl">
             Ready For Your Next Adventure?
           </h2>
@@ -433,7 +601,6 @@ export default async function HolidaysPage() {
           </p>
 
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-
             <Link
               href="/contact"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-8 py-4 font-semibold text-white transition hover:bg-emerald-700"
@@ -451,17 +618,12 @@ export default async function HolidaysPage() {
               <MessageCircle size={19} />
               WhatsApp Enquiry
             </a>
-
           </div>
-
         </div>
-
       </section>
-
     </main>
   );
 }
-
 
 /* ===============================================================
    HOLIDAY CARD
@@ -482,10 +644,9 @@ function HolidayCard({
 
   return (
     <article className="group overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-2xl">
-
       {/* Image */}
-      <div className="relative h-72 overflow-hidden">
 
+      <div className="relative h-72 overflow-hidden">
         <Image
           src={image}
           alt={holiday.title}
@@ -496,8 +657,8 @@ function HolidayCard({
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
-
         {/* Featured */}
+
         {featured && (
           <div className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white shadow-lg">
             <Sparkles size={13} />
@@ -505,21 +666,31 @@ function HolidayCard({
           </div>
         )}
 
+        {/* Region */}
+
+        {holiday.region && (
+          <div className="absolute right-4 top-4 rounded-full bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
+            {String(holiday.region)
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (char: string) =>
+                char.toUpperCase()
+              )}
+          </div>
+        )}
 
         {/* Duration */}
+
         {holiday.duration && (
           <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-black/50 px-3 py-2 text-sm font-medium text-white backdrop-blur">
             <CalendarDays size={15} />
             {holiday.duration}
           </div>
         )}
-
       </div>
 
-
       {/* Content */}
-      <div className="p-6">
 
+      <div className="p-6">
         <p className="text-xs font-semibold uppercase tracking-[2px] text-emerald-600">
           International Holiday
         </p>
@@ -528,45 +699,40 @@ function HolidayCard({
           {holiday.title}
         </h2>
 
-
         {/* Description */}
+
         {holiday.description && (
           <p className="mt-3 line-clamp-2 text-sm leading-6 text-gray-600">
             {holiday.description}
           </p>
         )}
 
-
         {/* Price */}
-        <div className="mt-5 border-t pt-5">
 
+        <div className="mt-5 border-t pt-5">
           <p className="text-sm text-gray-500">
             Starting From
           </p>
 
           <div className="mt-1 flex items-end justify-between gap-3">
-
             <div>
-
               <p className="text-3xl font-bold text-emerald-600">
                 AED{" "}
-                {Number(holiday.price || 0).toLocaleString("en-AE")}
+                {Number(
+                  holiday.price || 0
+                ).toLocaleString("en-AE")}
               </p>
 
               <p className="text-xs text-gray-500">
                 Per Person
               </p>
-
             </div>
-
           </div>
-
         </div>
 
-
         {/* Buttons */}
-        <div className="mt-6 grid grid-cols-2 gap-3">
 
+        <div className="mt-6 grid grid-cols-2 gap-3">
           <Link
             href={`/holidays/${holiday.slug}`}
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
@@ -584,15 +750,11 @@ function HolidayCard({
             <MessageCircle size={16} />
             WhatsApp
           </a>
-
         </div>
-
       </div>
-
     </article>
   );
 }
-
 
 /* ===============================================================
    SERVICE CARD
@@ -609,7 +771,6 @@ function ServiceCard({
 }) {
   return (
     <div className="rounded-2xl border border-gray-100 bg-gray-50 p-8 text-center transition hover:-translate-y-1 hover:bg-white hover:shadow-lg">
-
       <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
         {icon}
       </div>
@@ -621,7 +782,6 @@ function ServiceCard({
       <p className="mt-3 leading-7 text-gray-600">
         {description}
       </p>
-
     </div>
   );
 }

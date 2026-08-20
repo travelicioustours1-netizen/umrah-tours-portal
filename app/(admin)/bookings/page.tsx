@@ -7,12 +7,19 @@ import {
 import BookingStatusBadge from "@/components/bookings/BookingStatusBadge";
 import PaymentStatusBadge from "@/components/bookings/PaymentStatusBadge";
 
+// This page requires the database at request time.
+// Prevent Next.js from trying to prerender it during `next build`.
+export const dynamic = "force-dynamic";
+
 export default async function BookingsPage() {
   const bookings = await getBookings();
 
   return (
     <div className="space-y-8">
 
+      {/* =========================================================
+          PAGE HEADER
+      ========================================================== */}
       <div>
         <h1 className="text-3xl font-bold">
           Bookings
@@ -23,114 +30,140 @@ export default async function BookingsPage() {
         </p>
       </div>
 
+
+      {/* =========================================================
+          BOOKINGS TABLE
+      ========================================================== */}
       <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
 
-        <table className="w-full">
+        <div className="overflow-x-auto">
 
-          <thead className="bg-gray-50">
+          <table className="w-full min-w-[900px]">
 
-            <tr>
-
-              <th className="px-6 py-4 text-left">
-                Booking No
-              </th>
-
-              <th className="px-6 py-4 text-left">
-                Customer
-              </th>
-
-              <th className="px-6 py-4 text-left">
-                Package
-              </th>
-
-              <th className="px-6 py-4 text-left">
-                Travel Date
-              </th>
-
-              <th className="px-6 py-4 text-left">
-                Status
-              </th>
-
-              <th className="px-6 py-4 text-left">
-                Payment
-              </th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            {bookings.length === 0 ? (
+            <thead className="bg-gray-50">
 
               <tr>
 
-                <td
-                  colSpan={6}
-                  className="py-10 text-center text-gray-500"
-                >
-                  No bookings found.
-                </td>
+                <th className="px-6 py-4 text-left">
+                  Booking No
+                </th>
+
+                <th className="px-6 py-4 text-left">
+                  Customer
+                </th>
+
+                <th className="px-6 py-4 text-left">
+                  Package
+                </th>
+
+                <th className="px-6 py-4 text-left">
+                  Travel Date
+                </th>
+
+                <th className="px-6 py-4 text-left">
+                  Status
+                </th>
+
+                <th className="px-6 py-4 text-left">
+                  Payment
+                </th>
 
               </tr>
 
-            ) : (
+            </thead>
 
-              bookings.map((booking) => (
 
-                <tr
-                  key={booking.id}
-                  className="border-t hover:bg-gray-50"
-                >
+            <tbody>
 
-                  <td className="px-6 py-4">
+              {bookings.length === 0 ? (
 
-                    <Link
-                      href={`/dashboard/bookings/${booking.id}`}
-                      className="font-semibold text-emerald-600 hover:underline"
-                    >
-                      {booking.bookingNumber}
-                    </Link>
+                <tr>
 
-                  </td>
-
-                  <td className="px-6 py-4">
-                    {booking.customerName}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    {booking.package.title}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    {booking.travelDate
-                      ? new Date(
-                          booking.travelDate
-                        ).toLocaleDateString("en-IN")
-                      : "-"}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <BookingStatusBadge
-  status={booking.status}
-/>
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <PaymentStatusBadge
-                      status={booking.paymentStatus}
-                    />
+                  <td
+                    colSpan={6}
+                    className="py-10 text-center text-gray-500"
+                  >
+                    No bookings found.
                   </td>
 
                 </tr>
 
-              ))
+              ) : (
 
-            )}
+                bookings.map((booking) => (
 
-          </tbody>
+                  <tr
+                    key={booking.id}
+                    className="border-t transition hover:bg-gray-50"
+                  >
 
-        </table>
+                    {/* Booking Number */}
+                    <td className="px-6 py-4">
+
+                      <Link
+                        href={`/dashboard/bookings/${booking.id}`}
+                        className="font-semibold text-emerald-600 hover:underline"
+                      >
+                        {booking.bookingNumber}
+                      </Link>
+
+                    </td>
+
+
+                    {/* Customer */}
+                    <td className="px-6 py-4">
+                      {booking.customerName}
+                    </td>
+
+
+                    {/* Package */}
+                    <td className="px-6 py-4">
+                      {booking.package?.title ?? "-"}
+                    </td>
+
+
+                    {/* Travel Date */}
+                    <td className="px-6 py-4">
+
+                      {booking.travelDate
+                        ? new Date(
+                            booking.travelDate
+                          ).toLocaleDateString("en-IN")
+                        : "-"}
+
+                    </td>
+
+
+                    {/* Booking Status */}
+                    <td className="px-6 py-4">
+
+                      <BookingStatusBadge
+                        status={booking.status}
+                      />
+
+                    </td>
+
+
+                    {/* Payment Status */}
+                    <td className="px-6 py-4">
+
+                      <PaymentStatusBadge
+                        status={booking.paymentStatus}
+                      />
+
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )}
+
+            </tbody>
+
+          </table>
+
+        </div>
 
       </div>
 

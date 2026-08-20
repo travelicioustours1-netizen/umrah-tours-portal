@@ -35,6 +35,17 @@ function packageData(formData: FormData) {
       .replace(/\s+/g, "-")
       .replace(/[^a-z0-9-]/g, "");
 
+  const category =
+    String(formData.get("category") || "").trim() || null;
+
+  const selectedRegion =
+    String(formData.get("region") || "").trim();
+
+  const region =
+    category === "HOLIDAY" && selectedRegion
+      ? selectedRegion
+      : null;
+
   return {
     title,
 
@@ -52,8 +63,8 @@ function packageData(formData: FormData) {
     duration:
       String(formData.get("duration") || ""),
 
-    category:
-      String(formData.get("category") || "").trim() || null,
+    category,
+    region,
 
     departureCity:
       String(formData.get("departureCity") || "").trim() || null,
@@ -75,7 +86,7 @@ function packageData(formData: FormData) {
     /*
      * Existing Umrah hotel relations.
      *
-     * For now these remain unchanged so existing
+     * These remain unchanged so existing
      * Umrah packages continue working.
      */
     makkahHotelId:

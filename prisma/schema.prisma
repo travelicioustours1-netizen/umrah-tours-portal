@@ -47,6 +47,7 @@ model Package {
   hotel3Price     Float?
   hotel4Price     Float?
   hotel5Price     Float?
+  region          String?
   bookings        Booking[]
   enquiries       Enquiry[]
   airline         Airline?       @relation(fields: [airlineId], references: [id])

@@ -8,6 +8,14 @@ interface Props {
   }[];
 }
 
+const HOLIDAY_REGIONS = [
+  "CIS",
+  "Far East",
+  "Europe",
+  "USA",
+  "Australia & New Zealand",
+];
+
 export default function BasicInfoSection({
   initialData,
   airlines,
@@ -80,6 +88,30 @@ export default function BasicInfoSection({
             <option value="HOTEL">Hotel</option>
             <option value="FLIGHT">Flight</option>
           </select>
+        </div>
+
+        <div>
+          <label className="mb-2 block font-medium">
+            Holiday Region
+          </label>
+
+          <select
+            name="region"
+            defaultValue={initialData?.region ?? ""}
+            className="w-full rounded-lg border p-3"
+          >
+            <option value="">Select Region</option>
+
+            {HOLIDAY_REGIONS.map((region) => (
+              <option key={region} value={region}>
+                {region}
+              </option>
+            ))}
+          </select>
+
+          <p className="mt-1 text-sm text-gray-500">
+            Select a region for holiday packages only.
+          </p>
         </div>
 
         <div>
