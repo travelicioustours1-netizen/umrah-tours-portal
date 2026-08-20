@@ -57,18 +57,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const packagePages: MetadataRoute.Sitemap = packages
-    .filter((pkg) => pkg.category)
-    .map((pkg) => {
-      const isHoliday =
-        pkg.category?.toUpperCase() === "HOLIDAY";
+  .filter((pkg) => pkg.category && pkg.slug)
+  .map((pkg) => {
+    const category = pkg.category?.toUpperCase();
 
-      return {
-        url: `${baseUrl}/${isHoliday ? "holidays" : "umrah"}/${pkg.slug}`,
-        lastModified: pkg.updatedAt,
-        changeFrequency: "weekly",
-        priority: 0.8,
-      };
-    });
+    let prefix = "umrah";
+
+    if (category === "HOLIDAY") {
+      prefix = "holidays";
+    } else if (category === "VISA") {
+      prefix = "visa";
+    }
+
+    return {
+      url: `${baseUrl}/${prefix}/${pkg.slug}`,
+      lastModified: pkg.updatedAt,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    };
+  });
 
   return [...staticPages, ...packagePages];
 }
