@@ -47,6 +47,15 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Portugal",
   ],
 
+  Scandinavia: [
+    "Scandinavia",
+    "Iceland",
+    "Lapland",
+    "Norway",
+    "Sweden",
+    "Scotland",
+  ],
+
   USA: [
     "New York",
     "California",
@@ -272,6 +281,10 @@ export default function BasicInfoSection({
 
             <option value="Europe">
               Europe
+            </option>
+
+            <option value="Scandinavia">
+              Scandinavia
             </option>
 
             <option value="USA">
