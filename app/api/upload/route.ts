@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(req: Request) {
   try {
@@ -11,52 +11,90 @@ export async function POST(req: Request) {
 
     if (!file) {
       return NextResponse.json(
-        { error: "No file uploaded." },
-        { status: 400 }
+        {
+          error: "No file uploaded.",
+        },
+        {
+          status: 400,
+        }
       );
     }
 
     if (
-  bucket !== "package-images" &&
-  bucket !== "brochures" &&
-  bucket !== "hotel-images"
-) {
-  return NextResponse.json(
-    { error: "Invalid bucket." },
-    { status: 400 }
-  );
-}
+      bucket !== "package-images" &&
+      bucket !== "brochures" &&
+      bucket !== "hotel-images"
+    ) {
+      return NextResponse.json(
+        {
+          error: "Invalid bucket.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
 
-    const extension = file.name.split(".").pop();
+    const supabaseAdmin = getSupabaseAdmin();
+
+    const extension =
+      file.name.split(".").pop()?.toLowerCase() || "bin";
+
     const fileName = `${randomUUID()}.${extension}`;
 
     const bytes = await file.arrayBuffer();
 
-    const { error } = await supabaseAdmin.storage
-      .from(bucket)
-      .upload(fileName, Buffer.from(bytes), {
-        contentType: file.type,
-      });
+    const { error: uploadError } =
+      await supabaseAdmin.storage
+        .from(bucket)
+        .upload(
+          fileName,
+          Buffer.from(bytes),
+          {
+            contentType:
+              file.type || "application/octet-stream",
+            upsert: false,
+          }
+        );
 
-    if (error) {
+    if (uploadError) {
       return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
+        {
+          error: uploadError.message,
+        },
+        {
+          status: 500,
+        }
       );
     }
 
-    const { data } = supabaseAdmin.storage
-      .from(bucket)
-      .getPublicUrl(fileName);
+    const { data } =
+      supabaseAdmin.storage
+        .from(bucket)
+        .getPublicUrl(fileName);
 
     return NextResponse.json({
+      success: true,
       url: data.publicUrl,
+      fileName,
+      bucket,
     });
+  } catch (error) {
+    console.error(
+      "Supabase upload error:",
+      error
+    );
 
-  } catch (err: any) {
     return NextResponse.json(
-      { error: err.message },
-      { status: 500 }
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "File upload failed.",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }
