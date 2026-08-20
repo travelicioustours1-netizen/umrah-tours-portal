@@ -36,15 +36,23 @@ function packageData(formData: FormData) {
       .replace(/[^a-z0-9-]/g, "");
 
   const category =
-    String(formData.get("category") || "").trim() || null;
+  String(formData.get("category") || "").trim() || null;
 
-  const selectedRegion =
-    String(formData.get("region") || "").trim();
+const selectedRegion =
+  String(formData.get("region") || "").trim();
 
-  const region =
-    category === "HOLIDAY" && selectedRegion
-      ? selectedRegion
-      : null;
+const region =
+  category === "HOLIDAY" && selectedRegion
+    ? selectedRegion
+    : null;
+
+const selectedDestination =
+  String(formData.get("destination") || "").trim();
+
+const destination =
+  category === "HOLIDAY" && selectedDestination
+    ? selectedDestination
+    : null;
 
   return {
     title,
@@ -65,7 +73,7 @@ function packageData(formData: FormData) {
 
     category,
     region,
-
+destination,
     departureCity:
       String(formData.get("departureCity") || "").trim() || null,
 
