@@ -1,9 +1,7 @@
 "use client";
 
-import {
-  useState,
-  useTransition,
-} from "react";
+import { useState, useTransition } from "react";
+import imageCompression from "browser-image-compression";
 
 import {
   DndContext,
@@ -91,19 +89,16 @@ function SortableImage({
             className="h-40 w-full object-cover"
           />
 
-          {/* Image number */}
           <div className="absolute left-2 top-2 rounded-full bg-black/70 px-2 py-1 text-xs font-bold text-white">
             {index + 1}
           </div>
 
-          {/* Cover badge */}
           {isCover && (
             <div className="absolute right-2 top-2 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow">
               Cover Image
             </div>
           )}
 
-          {/* Drag indicator */}
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-md bg-black/70 px-3 py-1 text-xs text-white">
             Drag to reorder
           </div>
@@ -141,9 +136,7 @@ export default function MediaSection({
 
   const [images, setImages] = useState<
     PackageImage[]
-  >(
-    initialData?.images || []
-  );
+  >(initialData?.images || []);
 
   const [isPending, startTransition] =
     useTransition();
@@ -198,12 +191,11 @@ export default function MediaSection({
 
     startTransition(async () => {
       try {
-        const uploaded: PackageImage[] =
-          [];
+        const uploaded: PackageImage[] = [];
 
         for (const file of Array.from(files)) {
           console.log(
-            "Uploading:",
+            "Original image:",
             file.name,
             file.type,
             `${(
@@ -213,8 +205,29 @@ export default function MediaSection({
             ).toFixed(2)} MB`
           );
 
+          // Compress image before uploading
+          const compressedFile =
+            await imageCompression(file, {
+              maxSizeMB: 0.5,
+              maxWidthOrHeight: 1600,
+              useWebWorker: true,
+              fileType: "image/webp",
+              initialQuality: 0.82,
+            });
+
+          console.log(
+            "Compressed image:",
+            `${(
+              compressedFile.size /
+              1024 /
+              1024
+            ).toFixed(2)} MB`,
+            compressedFile.type
+          );
+
+          // Upload compressed WebP image
           const url = await uploadFile(
-            file,
+            compressedFile,
             "package-images"
           );
 
@@ -224,12 +237,14 @@ export default function MediaSection({
           });
         }
 
+        // Add all uploaded images after
+        // compression/upload is complete
         setImages((prev) => [
           ...prev,
           ...uploaded,
         ]);
 
-        // Allow selecting the same file again.
+        // Allow selecting the same file again
         e.target.value = "";
       } catch (err: any) {
         console.error(
@@ -303,9 +318,7 @@ export default function MediaSection({
 
     startTransition(async () => {
       try {
-        await deletePackageImage(
-          image.id
-        );
+        await deletePackageImage(image.id);
 
         setImages((prev) =>
           prev.filter(
@@ -343,9 +356,7 @@ export default function MediaSection({
         <input
           type="file"
           accept=".pdf"
-          onChange={
-            handleBrochureUpload
-          }
+          onChange={handleBrochureUpload}
         />
 
         <input
@@ -376,13 +387,13 @@ export default function MediaSection({
           type="file"
           multiple
           accept="image/jpeg,image/png,image/webp,image/jpg"
-          onChange={
-            handleImagesUpload
-          }
+          onChange={handleImagesUpload}
         />
 
         <p className="mt-1 text-xs text-gray-500">
           Upload JPG, PNG or WebP images.
+          Images are automatically compressed
+          to WebP before upload.
           Drag images to change their order.
         </p>
 
@@ -399,7 +410,7 @@ export default function MediaSection({
 
       {isPending && (
         <p className="text-sm font-medium text-gray-500">
-          Processing...
+          Compressing and uploading images...
         </p>
       )}
 

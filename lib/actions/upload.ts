@@ -13,7 +13,14 @@ export async function uploadFile(
 
   const bytes = await file.arrayBuffer();
 
-  const extension = file.name.split(".").pop();
+  const extension =
+    file.type === "image/webp"
+      ? "webp"
+      : file.type === "image/png"
+        ? "png"
+        : file.type === "image/jpeg"
+          ? "jpg"
+          : file.name.split(".").pop() || "bin";
 
   const fileName = `${randomUUID()}.${extension}`;
 
