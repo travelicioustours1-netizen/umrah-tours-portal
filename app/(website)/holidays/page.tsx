@@ -49,6 +49,14 @@ const REGION_CONFIG = [
       "Discover beautiful destinations across the CIS region, including Georgia, Azerbaijan, Kazakhstan and other Central Asian destinations.",
     icon: "🌍",
   },
+    {
+    key: "AFRICA",
+    title: "Africa Holiday Packages",
+    subtitle: "Explore Africa",
+    description:
+      "Experience unforgettable African adventures, from luxury Maasai Mara safaris and wildlife experiences to breathtaking beaches, cultural journeys and premium escapes across the continent.",
+    icon: "🦁",
+  },
   {
     key: "FAR_EAST",
     title: "Far East Holiday Packages",
