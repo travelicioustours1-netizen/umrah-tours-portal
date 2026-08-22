@@ -19,7 +19,8 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Uzbekistan",
     "Kyrgyzstan",
   ],
-Africa: [
+
+  AFRICA: [
     "Kenya",
     "Tanzania",
     "Zanzibar",
@@ -36,7 +37,8 @@ Africa: [
     "Zimbabwe",
     "Zambia",
   ],
-  "Far East": [
+
+  FAR_EAST: [
     "Japan",
     "South Korea",
     "Thailand",
@@ -49,7 +51,7 @@ Africa: [
     "China",
   ],
 
-  Europe: [
+  EUROPE: [
     "Turkey",
     "France",
     "Italy",
@@ -63,7 +65,7 @@ Africa: [
     "Portugal",
   ],
 
-  Scandinavia: [
+  SCANDINAVIA: [
     "Scandinavia",
     "Iceland",
     "Lapland",
@@ -84,7 +86,7 @@ Africa: [
     "Chicago",
   ],
 
-  "Australia & New Zealand": [
+  AUSTRALIA_NEW_ZEALAND: [
     "Australia",
     "Sydney",
     "Melbourne",
@@ -120,12 +122,18 @@ export default function BasicInfoSection({
     useState<string>(initialDestination);
 
   const availableDestinations = useMemo(() => {
-    if (category !== "HOLIDAY") {
-      return [];
-    }
+  if (!region) {
+    return [];
+  }
 
-    return REGION_DESTINATIONS[region] ?? [];
-  }, [category, region]);
+  const normalizedRegion = region
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "_")
+    .replace(/&/g, "");
+
+  return REGION_DESTINATIONS[normalizedRegion] ?? [];
+}, [region]);
 
   function handleCategoryChange(
     event: React.ChangeEvent<HTMLSelectElement>
@@ -291,19 +299,19 @@ export default function BasicInfoSection({
       CIS
     </option>
 
-    <option value="Africa">
+    <option value="AFRICA">
       Africa
     </option>
 
-    <option value="Far East">
+    <option value="FAR_EAST">
       Far East
     </option>
 
-    <option value="Europe">
+    <option value="EUROPE">
       Europe
     </option>
 
-    <option value="Scandinavia">
+    <option value="SCANDINAVIA">
       Scandinavia
     </option>
 
@@ -311,7 +319,7 @@ export default function BasicInfoSection({
       USA
     </option>
 
-    <option value="Australia & New Zealand">
+    <option value="AUSTRALIA_NEW_ZEALAND">
       Australia & New Zealand
     </option>
   </select>
@@ -320,6 +328,10 @@ export default function BasicInfoSection({
     Select a region for holiday packages.
   </p>
 </div>
+
+{/* =====================================================
+    DESTINATION
+====================================================== */}
 
 
         {/* =====================================================
