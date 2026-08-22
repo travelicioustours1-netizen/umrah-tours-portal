@@ -266,35 +266,38 @@ export default function BasicInfoSection({
             className="w-full rounded-lg border p-3 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
           >
             <option value="">
-              {category === "HOLIDAY"
-                ? "Select Region"
-                : "Not Applicable"}
-            </option>
+  {category === "HOLIDAY"
+    ? "Select Region"
+    : "Not Applicable"}
+</option>
 
-            <option value="CIS">
-              CIS
-            </option>
+<option value="CIS">
+  CIS
+</option>
 
-            <option value="Far East">
-              Far East
-            </option>
+<option value="Africa">
+  Africa
+</option>
 
-            <option value="Europe">
-              Europe
-            </option>
+<option value="Far East">
+  Far East
+</option>
 
-            <option value="Scandinavia">
-              Scandinavia
-            </option>
+<option value="Europe">
+  Europe
+</option>
 
-            <option value="USA">
-              USA
-            </option>
+<option value="Scandinavia">
+  Scandinavia
+</option>
 
-            <option value="Australia & New Zealand">
-              Australia & New Zealand
-            </option>
-          </select>
+<option value="USA">
+  USA
+</option>
+
+<option value="Australia & New Zealand">
+  Australia & New Zealand
+</option>
 
           <p className="mt-1 text-sm text-gray-500">
             Select a region for holiday packages.
