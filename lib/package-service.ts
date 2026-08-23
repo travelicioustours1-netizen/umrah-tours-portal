@@ -159,10 +159,16 @@ export async function getFeaturedPackages(
   };
 
   if (category) {
-    where.category = {
-      equals: category,
-      mode: "insensitive",
-    };
+    if (category === "UMRAH_ALL") {
+      where.category = {
+        in: ["UMRAH", "economy"],
+      };
+    } else {
+      where.category = {
+        equals: category,
+        mode: "insensitive",
+      };
+    }
   }
 
   return prisma.package.findMany({
