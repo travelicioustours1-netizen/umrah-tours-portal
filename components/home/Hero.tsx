@@ -70,11 +70,9 @@ export default function Hero() {
 
           {/* Trust Points */}
           <div className="mt-6 flex flex-wrap gap-8 text-sm text-gray-200">
-            <div>🕋 Trusted Umrah Experts</div>
-
-            <div>🛂 Visa Assistance</div>
-
-            <div>🏨 Hotel & Transport</div>
+            <div>✓ Trusted Umrah Experts</div>
+<div>✓ Visa Assistance</div>
+<div>✓ Hotel & Transport</div>
           </div>
         </div>
       </div>
