@@ -13,6 +13,7 @@ import PackagePricing from "@/components/packages/PackagePricing";
 import PackageHotels from "@/components/packages/PackageHotels";
 import PackageSidebar from "@/components/packages/PackageSidebar";
 import PackageCard from "@/components/packages/PackageCard";
+import HolidayItinerary from "@/components/packages/HolidayItinerary";
 
 interface PageProps {
   params: Promise<{
@@ -517,6 +518,14 @@ export default async function HolidayPackagePage({
 
               <PackageOverview
   pkg={packageData}
+/>
+{/* =============================================================
+    DAY-WISE HOLIDAY ITINERARY
+============================================================= */}
+
+<HolidayItinerary
+  itinerary={packageData.itinerary}
+  title={packageData.title}
 />
 
               {/* =============================================
