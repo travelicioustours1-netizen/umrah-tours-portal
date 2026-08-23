@@ -45,35 +45,51 @@ export default async function EditPackagePage({
   }
 
   const formData = {
-    id: packageData.id,
-    title: packageData.title,
-    slug: packageData.slug,
-    duration: packageData.duration,
-    category: packageData.category,
-    departureCity: packageData.departureCity,
+  id: packageData.id,
 
-    airlineId: packageData.airlineId,
-makkahHotelId: packageData.makkahHotelId,
-madinahHotelId: packageData.madinahHotelId,
+  // Basic information
+  title: packageData.title,
+  slug: packageData.slug,
+  duration: packageData.duration,
+  category: packageData.category,
+  departureCity: packageData.departureCity,
 
-    makkahNights: packageData.makkahNights,
-    madinahNights: packageData.madinahNights,
+  // Package status
+  status: packageData.status,
 
-    price: packageData.price,
+  // Airline / Hotels
+  airlineId: packageData.airlineId,
+  makkahHotelId: packageData.makkahHotelId,
+  madinahHotelId: packageData.madinahHotelId,
 
-    description: packageData.description,
-    itinerary: packageData.itinerary,
-    inclusions: packageData.inclusions,
-    exclusions: packageData.exclusions,
+  // Nights
+  makkahNights: packageData.makkahNights,
+  madinahNights: packageData.madinahNights,
 
-    visa: packageData.visa,
-    transport: packageData.transport,
-    meals: packageData.meals,
-    featured: packageData.featured,
+  // Pricing
+  price: packageData.price,
 
-    brochure: packageData.brochure,
-images: packageData.images,
-  };
+  // Content
+  description: packageData.description,
+  itinerary: packageData.itinerary,
+  inclusions: packageData.inclusions,
+  exclusions: packageData.exclusions,
+
+  // Services
+  visa: packageData.visa,
+  transport: packageData.transport,
+  meals: packageData.meals,
+  featured: packageData.featured,
+
+  // Media
+  brochure: packageData.brochure,
+  images: packageData.images,
+
+  // SEO
+  seoTitle: packageData.seoTitle,
+  seoDescription: packageData.seoDescription,
+  seoKeywords: packageData.seoKeywords,
+};
 
   return (
     <div className="max-w-4xl mx-auto p-8">

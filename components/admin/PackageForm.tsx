@@ -26,6 +26,7 @@ export default function PackageForm({
 
   return (
     <form action={action} className="space-y-6">
+
       {/* =========================================================
           BASIC INFORMATION
       ========================================================= */}
@@ -96,6 +97,28 @@ export default function PackageForm({
       <MediaSection
         initialData={initialData}
       />
+
+      {/* =========================================================
+          FORM ACTIONS
+      ========================================================= */}
+      <div className="flex items-center justify-end gap-3 rounded-xl border bg-white p-6 shadow-sm">
+
+        <a
+          href="/dashboard/packages"
+          className="rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+        >
+          Cancel
+        </a>
+
+        <button
+          type="submit"
+          className="rounded-lg bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+        >
+          {initialData ? "Update Package" : "Create Package"}
+        </button>
+
+      </div>
+
     </form>
   );
 }
