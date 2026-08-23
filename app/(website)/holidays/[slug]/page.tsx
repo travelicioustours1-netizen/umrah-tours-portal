@@ -10,7 +10,6 @@ import {
 import PackageHero from "@/components/packages/PackageHero";
 import PackageOverview from "@/components/packages/PackageOverview";
 import PackagePricing from "@/components/packages/PackagePricing";
-import PackageHotels from "@/components/packages/PackageHotels";
 import PackageSidebar from "@/components/packages/PackageSidebar";
 import PackageCard from "@/components/packages/PackageCard";
 import HolidayItinerary from "@/components/packages/HolidayItinerary";
@@ -54,6 +53,28 @@ function createSeoDescription(
 }
 
 /* =========================================================
+   TEXT FORMATTER
+   Converts textarea content into readable bullet/list items.
+========================================================= */
+
+function formatContentItems(
+  content: string | null | undefined
+): string[] {
+  if (!content?.trim()) {
+    return [];
+  }
+
+  return content
+    .split(/\r?\n/)
+    .map((item) =>
+      item
+        .replace(/^[\s•●▪◦*-]+/, "")
+        .trim()
+    )
+    .filter(Boolean);
+}
+
+/* =========================================================
    DYNAMIC METADATA
 ========================================================= */
 
@@ -76,29 +97,32 @@ export async function generateMetadata({
     };
   }
 
+  /*
+   * Destination and region
+   *
+   * These values should come from the Package record.
+   * They are intentionally NOT taken from the package title.
+   */
   const destination =
-    packageData.destination || "International";
+    packageData.destination?.trim() ||
+    "International";
 
   const region =
-    packageData.region || "Holiday";
+    packageData.region?.trim() ||
+    "Holiday";
 
-  /*
-   * SEO TITLE
-   *
-   * Use the manually entered SEO title first.
-   * Fall back to the automatically generated title
-   * when no SEO title has been provided.
-   */
+  /* =======================================================
+     SEO TITLE
+  ======================================================= */
+
   const title =
     packageData.seoTitle?.trim() ||
-    `${packageData.title} | ${destination} ${region} Holiday Package`;
+    `${packageData.title} | ${destination} Holiday Package`;
 
-  /*
-   * SEO DESCRIPTION
-   *
-   * Use the manually entered SEO description first.
-   * If it is empty, fall back to the package description.
-   */
+  /* =======================================================
+     SEO DESCRIPTION
+  ======================================================= */
+
   const fallbackDescription =
     `Book ${packageData.title}, a premium ${packageData.duration} ${destination} holiday package. Explore unforgettable destinations, experiences and travel services with Umrah Tours.`;
 
@@ -110,35 +134,51 @@ export async function generateMetadata({
     )
   );
 
-  const firstImage =
-    packageData.images?.[0]?.url || "";
+  /* =======================================================
+     SEO KEYWORDS
+  ======================================================= */
 
-  const canonicalUrl =
-    `${SITE_URL}/holidays/${packageData.slug}`;
-
-  return {
-    title,
-
-    description,
-
-    keywords: [
-  ...(packageData.seoKeywords
+  const customKeywords = packageData.seoKeywords
     ? packageData.seoKeywords
         .split(",")
         .map((keyword) => keyword.trim())
         .filter(Boolean)
-    : []),
+    : [];
 
-  packageData.title,
-  `${destination} holiday package`,
-  `${destination} tour package`,
-  `${region} holiday packages`,
-  `${destination} tours`,
-  "international holiday packages",
-  "holiday packages from UAE",
-  "holiday packages from Dubai",
-  "Umrah Tours holidays",
-],
+  const keywords = [
+    ...customKeywords,
+
+    packageData.title,
+
+    `${destination} holiday package`,
+    `${destination} tour package`,
+    `${region} holiday packages`,
+    `${destination} tours`,
+    `${destination} holidays`,
+    "international holiday packages",
+    "holiday packages from UAE",
+    "holiday packages from Dubai",
+    "Umrah Tours holidays",
+  ];
+
+  /* =======================================================
+     CANONICAL
+  ======================================================= */
+
+  const canonicalUrl =
+    `${SITE_URL}/holidays/${packageData.slug}`;
+
+  /* =======================================================
+     FIRST IMAGE
+  ======================================================= */
+
+  const firstImage =
+    packageData.images?.[0]?.url || "";
+
+  return {
+    title,
+    description,
+    keywords,
 
     alternates: {
       canonical: canonicalUrl,
@@ -223,27 +263,57 @@ export default async function HolidayPackagePage({
     );
 
   /* =======================================================
-     SEO VARIABLES
+     DESTINATION / REGION
   ======================================================= */
 
   const destination =
-    packageData.destination ||
+    packageData.destination?.trim() ||
     "International";
 
   const region =
-    packageData.region ||
+    packageData.region?.trim() ||
     "Holiday";
+
+  /* =======================================================
+     CANONICAL URL
+  ======================================================= */
 
   const canonicalUrl =
     `${SITE_URL}/holidays/${packageData.slug}`;
 
+  /* =======================================================
+     PACKAGE IMAGE
+  ======================================================= */
+
   const packageImage =
     packageData.images?.[0]?.url || "";
 
+  /* =======================================================
+     PRICE
+  ======================================================= */
+
   const basePrice =
-    packageData.price ||
-    packageData.quadPrice ||
+    packageData.price ??
+    packageData.quadPrice ??
     0;
+
+  /* =======================================================
+     INCLUSIONS
+  ======================================================= */
+
+  const inclusionItems =
+    formatContentItems(
+      packageData.inclusions
+    );
+
+  /* =======================================================
+     EXCLUSIONS
+  ======================================================= */
+
+  const exclusionItems =
+    formatContentItems(
+      packageData.exclusions
+    );
 
   /* =======================================================
      PACKAGE JSON-LD
@@ -261,9 +331,10 @@ export default async function HolidayPackagePage({
         `${packageData.title} - ${destination} holiday package.`
       ),
 
-    image: packageData.images?.map(
-      (image) => image.url
-    ),
+    image:
+      packageData.images?.map(
+        (image) => image.url
+      ) || [],
 
     url: canonicalUrl,
 
@@ -346,7 +417,7 @@ export default async function HolidayPackagePage({
   };
 
   /* =======================================================
-     TRAVEL ACTION SCHEMA
+     TOURIST TRIP JSON-LD
   ======================================================= */
 
   const travelSchema = {
@@ -442,35 +513,37 @@ export default async function HolidayPackagePage({
               Holidays
             </Link>
 
-            {region && (
-              <>
-                <span>/</span>
+            {region &&
+              region !== "Holiday" && (
+                <>
+                  <span>/</span>
 
-                <Link
-                  href={`/holidays?region=${encodeURIComponent(
-                    region
-                  )}`}
-                  className="transition hover:text-emerald-600"
-                >
-                  {region}
-                </Link>
-              </>
-            )}
+                  <Link
+                    href={`/holidays?region=${encodeURIComponent(
+                      region
+                    )}`}
+                    className="transition hover:text-emerald-600"
+                  >
+                    {region}
+                  </Link>
+                </>
+              )}
 
-            {destination && (
-              <>
-                <span>/</span>
+            {destination &&
+              destination !== "International" && (
+                <>
+                  <span>/</span>
 
-                <Link
-                  href={`/holidays?destination=${encodeURIComponent(
-                    destination
-                  )}`}
-                  className="transition hover:text-emerald-600"
-                >
-                  {destination}
-                </Link>
-              </>
-            )}
+                  <Link
+                    href={`/holidays?destination=${encodeURIComponent(
+                      destination
+                    )}`}
+                    className="transition hover:text-emerald-600"
+                  >
+                    {destination}
+                  </Link>
+                </>
+              )}
 
             <span>/</span>
 
@@ -487,14 +560,14 @@ export default async function HolidayPackagePage({
       =================================================== */}
 
       <PackageHero
-  title={packageData.title}
-  images={packageData.images}
-  price={
-    packageData.price ??
-    packageData.quadPrice ??
-    undefined
-  }
-/>
+        title={packageData.title}
+        images={packageData.images}
+        price={
+          packageData.price ??
+          packageData.quadPrice ??
+          undefined
+        }
+      />
 
       {/* ===================================================
           MAIN CONTENT
@@ -517,19 +590,11 @@ export default async function HolidayPackagePage({
               ============================================= */}
 
               <PackageOverview
-  pkg={packageData}
-/>
-{/* =============================================================
-    DAY-WISE HOLIDAY ITINERARY
-============================================================= */}
-
-<HolidayItinerary
-  itinerary={packageData.itinerary}
-  title={packageData.title}
-/>
+                pkg={packageData}
+              />
 
               {/* =============================================
-                  SEO DESTINATION CONTENT
+                  DESTINATION CONTENT
               ============================================= */}
 
               <section className="rounded-2xl border bg-white p-6 shadow-sm md:p-8">
@@ -609,50 +674,191 @@ export default async function HolidayPackagePage({
               </section>
 
               {/* =============================================
+                  DAY-WISE ITINERARY
+              ============================================= */}
+
+              {packageData.itinerary?.trim() && (
+                <HolidayItinerary
+                  itinerary={packageData.itinerary}
+                  title={packageData.title}
+                />
+              )}
+
+              {/* =============================================
+                  INCLUSIONS
+              ============================================= */}
+
+              {inclusionItems.length > 0 && (
+                <section className="rounded-2xl bg-white p-6 shadow-sm md:p-8">
+
+                  <div className="mb-6">
+
+                    <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-emerald-600">
+                      Package Benefits
+                    </p>
+
+                    <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
+                      What's Included
+                    </h2>
+
+                    <p className="mt-2 text-gray-500">
+                      Your holiday package includes the
+                      following services and arrangements.
+                    </p>
+
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+
+                    {inclusionItems.map(
+                      (item, index) => (
+                        <div
+                          key={`inclusion-${index}`}
+                          className="flex items-start gap-3 rounded-xl border border-emerald-100 bg-emerald-50/50 p-4"
+                        >
+
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white">
+                            ✓
+                          </span>
+
+                          <p className="text-sm leading-6 text-gray-700">
+                            {item}
+                          </p>
+
+                        </div>
+                      )
+                    )}
+
+                  </div>
+
+                </section>
+              )}
+
+              {/* =============================================
+                  EXCLUSIONS
+              ============================================= */}
+
+              {exclusionItems.length > 0 && (
+                <section className="rounded-2xl bg-white p-6 shadow-sm md:p-8">
+
+                  <div className="mb-6">
+
+                    <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-gray-500">
+                      Please Note
+                    </p>
+
+                    <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
+                      What's Excluded
+                    </h2>
+
+                    <p className="mt-2 text-gray-500">
+                      The following items are not included
+                      in the advertised package price.
+                    </p>
+
+                  </div>
+
+                  <div className="space-y-3">
+
+                    {exclusionItems.map(
+                      (item, index) => (
+                        <div
+                          key={`exclusion-${index}`}
+                          className="flex items-start gap-3 rounded-xl border border-gray-100 bg-gray-50 p-4"
+                        >
+
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-200 text-sm font-bold text-gray-600">
+                            ×
+                          </span>
+
+                          <p className="text-sm leading-6 text-gray-700">
+                            {item}
+                          </p>
+
+                        </div>
+                      )
+                    )}
+
+                  </div>
+
+                </section>
+              )}
+
+              {/* =============================================
                   PRICING
               ============================================= */}
 
-             <PackagePricing
-  pkg={packageData}
-/>
+              <PackagePricing
+                pkg={packageData}
+              />
 
               {/* =============================================
-                  HOTELS
+                  HOLIDAY ACCOMMODATION
+                  
+                  IMPORTANT:
+                  Do NOT show Makkah/Madinah hotel fields here.
+                  Those fields are specific to Umrah packages.
               ============================================= */}
 
-              <PackageHotels
-  makkahHotel={packageData.makkahHotel}
-  madinahHotel={packageData.madinahHotel}
-/>
+              {/* Holiday accommodation is intentionally
+                  omitted until destination-specific hotel
+                  data is available. */}
 
               {/* =============================================
-                  INTERNAL LINKS / RELATED PACKAGES
+                  RELATED PACKAGES
               ============================================= */}
 
               {filteredRelatedPackages.length > 0 && (
-  <section className="pt-4">
+                <section className="pt-4">
 
-    <div className="mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-      {/* heading content */}
-    </div>
+                  <div className="mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
 
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {filteredRelatedPackages.map((item) => (
-        <PackageCard
-          key={item.id}
-          package={item}
-        />
-      ))}
-    </div>
+                    <div>
 
-  </section>
-)}
+                      <p className="text-sm font-semibold uppercase tracking-wider text-emerald-600">
+                        You May Also Like
+                      </p>
+
+                      <h2 className="mt-1 text-2xl font-bold text-gray-900">
+                        More Holiday Packages
+                      </h2>
+
+                    </div>
+
+                    <Link
+                      href="/holidays"
+                      className="font-semibold text-emerald-600 hover:underline"
+                    >
+                      View All Holidays
+                    </Link>
+
+                  </div>
+
+                  <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+
+                    {filteredRelatedPackages.map(
+                      (item) => (
+                        <PackageCard
+                          key={item.id}
+                          package={item}
+                        />
+                      )
+                    )}
+
+                  </div>
+
+                </section>
+              )}
 
               {/* =============================================
                   REGION INTERNAL LINK
               ============================================= */}
 
               <section className="rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-700 p-6 text-white md:p-8">
+
+                <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-emerald-100">
+                  More Travel Inspiration
+                </p>
 
                 <h2 className="text-2xl font-bold">
                   Discover More {region} Holidays
@@ -684,9 +890,11 @@ export default async function HolidayPackagePage({
             =============================================== */}
 
             <aside className="lg:sticky lg:top-24 lg:self-start">
+
               <PackageSidebar
-  pkg={packageData}
-/>
+                pkg={packageData}
+              />
+
             </aside>
 
           </div>
