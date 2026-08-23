@@ -40,11 +40,22 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${pkg.title} | Umrah Tours`;
+  const title =
+  pkg.seoTitle?.trim() ||
+  `${pkg.title} | Umrah Tours`;
 
-  const description =
-    pkg.description?.trim() ||
-    `Book ${pkg.title} with Umrah Tours. Explore Makkah and Madinah hotels, Umrah itinerary, package pricing and travel arrangements from the UAE.`;
+ const fallbackDescription =
+  `Book ${pkg.title} with Umrah Tours. Explore Makkah and Madinah hotels, Umrah itinerary, package pricing and travel arrangements from the UAE.`;
+
+const rawDescription =
+  pkg.seoDescription?.trim() ||
+  pkg.description?.trim() ||
+  fallbackDescription;
+
+const description =
+  rawDescription.length > 160
+    ? `${rawDescription.substring(0, 157).trim()}...`
+    : rawDescription;
 
   const image =
     pkg.images?.[0]?.url ||
@@ -57,14 +68,21 @@ export async function generateMetadata({
     description,
 
     keywords: [
-      pkg.title,
-      "Umrah package UAE",
-      "Umrah packages from UAE",
-      "Umrah packages Dubai",
-      "Umrah packages Sharjah",
-      "Umrah travel agency UAE",
-      "Makkah Madinah Umrah package",
-    ],
+  ...(pkg.seoKeywords
+    ? pkg.seoKeywords
+        .split(",")
+        .map((keyword) => keyword.trim())
+        .filter(Boolean)
+    : []),
+
+  pkg.title,
+  "Umrah package UAE",
+  "Umrah packages from UAE",
+  "Umrah packages Dubai",
+  "Umrah packages Sharjah",
+  "Umrah travel agency UAE",
+  "Makkah Madinah Umrah package",
+],
 
     alternates: {
       canonical: packageUrl,
