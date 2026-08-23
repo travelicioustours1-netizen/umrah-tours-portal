@@ -26,7 +26,9 @@ function numberOrZero(value: FormDataEntryValue | null) {
 }
 
 function packageData(formData: FormData) {
-  const title = String(formData.get("title") || "").trim();
+  const title = String(
+    formData.get("title") || ""
+  ).trim();
 
   const slug =
     String(formData.get("slug") || "").trim() ||
@@ -36,23 +38,24 @@ function packageData(formData: FormData) {
       .replace(/[^a-z0-9-]/g, "");
 
   const category =
-  String(formData.get("category") || "").trim() || null;
+    String(formData.get("category") || "").trim() ||
+    null;
 
-const selectedRegion =
-  String(formData.get("region") || "").trim();
+  const selectedRegion =
+    String(formData.get("region") || "").trim();
 
-const region =
-  category === "HOLIDAY" && selectedRegion
-    ? selectedRegion
-    : null;
+  const region =
+    category === "HOLIDAY" && selectedRegion
+      ? selectedRegion
+      : null;
 
-const selectedDestination =
-  String(formData.get("destination") || "").trim();
+  const selectedDestination =
+    String(formData.get("destination") || "").trim();
 
-const destination =
-  category === "HOLIDAY" && selectedDestination
-    ? selectedDestination
-    : null;
+  const destination =
+    category === "HOLIDAY" && selectedDestination
+      ? selectedDestination
+      : null;
 
   return {
     title,
@@ -60,56 +63,106 @@ const destination =
     slug,
 
     packageCode:
-      String(formData.get("packageCode") || "").trim() || null,
+      String(
+        formData.get("packageCode") || ""
+      ).trim() || null,
 
     status:
-      String(formData.get("status") || "ACTIVE"),
+      String(
+        formData.get("status") || "ACTIVE"
+      ),
 
     description:
-      String(formData.get("description") || ""),
+      String(
+        formData.get("description") || ""
+      ),
 
     duration:
-      String(formData.get("duration") || ""),
+      String(
+        formData.get("duration") || ""
+      ),
 
     category,
+
     region,
-destination,
-    departureCity:
-      String(formData.get("departureCity") || "").trim() || null,
 
-    departureDate: formData.get("departureDate")
-      ? new Date(String(formData.get("departureDate")))
-      : null,
-
-    returnDate: formData.get("returnDate")
-      ? new Date(String(formData.get("returnDate")))
-      : null,
-
-    flightNumber:
-      String(formData.get("flightNumber") || "").trim() || null,
-
-    airlineId:
-      String(formData.get("airlineId") || "").trim() || null,
+    destination,
 
     /*
-     * Existing Umrah hotel relations.
-     *
-     * These remain unchanged so existing
-     * Umrah packages continue working.
+     * SEO
+     */
+    seoTitle:
+      String(
+        formData.get("seoTitle") || ""
+      ).trim() || null,
+
+    seoDescription:
+      String(
+        formData.get("seoDescription") || ""
+      ).trim() || null,
+
+    seoKeywords:
+      String(
+        formData.get("seoKeywords") || ""
+      ).trim() || null,
+
+    departureCity:
+      String(
+        formData.get("departureCity") || ""
+      ).trim() || null,
+
+    departureDate:
+      formData.get("departureDate")
+        ? new Date(
+            String(
+              formData.get("departureDate")
+            )
+          )
+        : null,
+
+    returnDate:
+      formData.get("returnDate")
+        ? new Date(
+            String(
+              formData.get("returnDate")
+            )
+          )
+        : null,
+
+    flightNumber:
+      String(
+        formData.get("flightNumber") || ""
+      ).trim() || null,
+
+    airlineId:
+      String(
+        formData.get("airlineId") || ""
+      ).trim() || null,
+
+    /*
+     * Existing Umrah hotel relations
      */
     makkahHotelId:
-      String(formData.get("makkahHotelId") || "").trim() || null,
+      String(
+        formData.get("makkahHotelId") || ""
+      ).trim() || null,
 
     madinahHotelId:
-      String(formData.get("madinahHotelId") || "").trim() || null,
+      String(
+        formData.get("madinahHotelId") || ""
+      ).trim() || null,
 
     makkahNights: parseInt(
-      String(formData.get("makkahNights") || "0"),
+      String(
+        formData.get("makkahNights") || "0"
+      ),
       10
     ),
 
     madinahNights: parseInt(
-      String(formData.get("madinahNights") || "0"),
+      String(
+        formData.get("madinahNights") || "0"
+      ),
       10
     ),
 
@@ -185,20 +238,34 @@ destination,
      * Content
      */
     itinerary:
-      String(formData.get("itinerary") || "").trim() || null,
+      String(
+        formData.get("itinerary") || ""
+      ).trim() || null,
 
     inclusions:
-      String(formData.get("inclusions") || "").trim() || null,
+      String(
+        formData.get("inclusions") || ""
+      ).trim() || null,
 
     exclusions:
-      String(formData.get("exclusions") || "").trim() || null,
+      String(
+        formData.get("exclusions") || ""
+      ).trim() || null,
 
     brochure:
-      String(formData.get("brochure") || "").trim() || null,
+      String(
+        formData.get("brochure") || ""
+      ).trim() || null,
   };
 }
 
-export async function createPackage(formData: FormData) {
+/* =========================================================
+   CREATE PACKAGE
+========================================================= */
+
+export async function createPackage(
+  formData: FormData
+) {
   const data = packageData(formData);
 
   const created = await prisma.package.create({
@@ -224,7 +291,10 @@ export async function createPackage(formData: FormData) {
   if (images.length > 0) {
     await prisma.packageImage.createMany({
       data: images.map(
-        (url: string, index: number) => ({
+        (
+          url: string,
+          index: number
+        ) => ({
           url,
           sortOrder: index,
           packageId: created.id,
@@ -233,12 +303,24 @@ export async function createPackage(formData: FormData) {
     });
   }
 
-  revalidatePath("/dashboard/packages");
+  revalidatePath(
+    "/dashboard/packages"
+  );
+
   revalidatePath("/umrah");
+
   revalidatePath("/holidays");
 
-  redirect("/dashboard/packages");
+  revalidatePath("/visa");
+
+  redirect(
+    "/dashboard/packages"
+  );
 }
+
+/* =========================================================
+   UPDATE PACKAGE
+========================================================= */
 
 export async function updatePackage(
   id: string,
@@ -246,13 +328,27 @@ export async function updatePackage(
 ) {
   const data = packageData(formData);
 
-  await prisma.package.update({
-    where: {
-      id,
-    },
-    data,
-  });
+  /*
+   * Update package and retrieve slug/category
+   * for individual-page revalidation.
+   */
+  const updatedPackage =
+    await prisma.package.update({
+      where: {
+        id,
+      },
 
+      data,
+
+      select: {
+        slug: true,
+        category: true,
+      },
+    });
+
+  /*
+   * Process package images
+   */
   const rawImages = String(
     formData.get("images") || "[]"
   );
@@ -269,16 +365,25 @@ export async function updatePackage(
     images = [];
   }
 
+  /*
+   * Replace existing package images
+   */
   await prisma.packageImage.deleteMany({
     where: {
       packageId: id,
     },
   });
 
+  /*
+   * Add new package images
+   */
   if (images.length > 0) {
     await prisma.packageImage.createMany({
       data: images.map(
-        (url: string, index: number) => ({
+        (
+          url: string,
+          index: number
+        ) => ({
           url,
           sortOrder: index,
           packageId: id,
@@ -287,58 +392,132 @@ export async function updatePackage(
     });
   }
 
-  revalidatePath("/dashboard/packages");
+  /*
+   * Revalidate dashboard and listing pages
+   */
+  revalidatePath(
+    "/dashboard/packages"
+  );
+
   revalidatePath("/umrah");
+
   revalidatePath("/holidays");
 
-  redirect("/dashboard/packages");
+  revalidatePath("/visa");
+
+  /*
+   * Revalidate individual package page
+   *
+   * This is especially important for SEO metadata.
+   */
+  if (
+    updatedPackage.category ===
+    "HOLIDAY"
+  ) {
+    revalidatePath(
+      `/holidays/${updatedPackage.slug}`
+    );
+  }
+
+  if (
+    updatedPackage.category ===
+    "VISA"
+  ) {
+    revalidatePath(
+      `/visa/${updatedPackage.slug}`
+    );
+  }
+
+  if (
+    updatedPackage.category !==
+      "HOLIDAY" &&
+    updatedPackage.category !==
+      "VISA"
+  ) {
+    revalidatePath(
+      `/umrah/${updatedPackage.slug}`
+    );
+  }
+
+  redirect(
+    "/dashboard/packages"
+  );
 }
 
-export async function deletePackage(id: string) {
+/* =========================================================
+   DELETE PACKAGE
+========================================================= */
+
+export async function deletePackage(
+  id: string
+) {
   await prisma.package.delete({
     where: {
       id,
     },
   });
 
-  revalidatePath("/dashboard/packages");
+  revalidatePath(
+    "/dashboard/packages"
+  );
+
   revalidatePath("/umrah");
+
   revalidatePath("/holidays");
+
+  revalidatePath("/visa");
 }
 
-export async function deletePackageImage(imageId: string) {
-  const image = await prisma.packageImage.findUnique({
-    where: {
-      id: imageId,
-    },
-  });
+/* =========================================================
+   DELETE PACKAGE IMAGE
+========================================================= */
+
+export async function deletePackageImage(
+  imageId: string
+) {
+  const image =
+    await prisma.packageImage.findUnique({
+      where: {
+        id: imageId,
+      },
+    });
 
   if (!image) {
-    throw new Error("Package image not found.");
+    throw new Error(
+      "Package image not found."
+    );
   }
 
-  // Delete database record
+  /*
+   * Delete database record
+   */
   await prisma.packageImage.delete({
     where: {
       id: imageId,
     },
   });
 
-  // Delete actual file from Supabase Storage
+  /*
+   * Delete actual file from
+   * Supabase Storage
+   */
   try {
     const marker =
       "/storage/v1/object/public/package-images/";
 
-    const index = image.url.indexOf(marker);
+    const index =
+      image.url.indexOf(marker);
 
     if (index !== -1) {
-      const filePath = image.url.substring(
-        index + marker.length
-      );
+      const filePath =
+        image.url.substring(
+          index + marker.length
+        );
 
-      const { error } = await supabaseAdmin.storage
-        .from("package-images")
-        .remove([filePath]);
+      const { error } =
+        await supabaseAdmin.storage
+          .from("package-images")
+          .remove([filePath]);
 
       if (error) {
         console.error(
@@ -354,7 +533,16 @@ export async function deletePackageImage(imageId: string) {
     );
   }
 
-  revalidatePath("/dashboard/packages");
+  /*
+   * Revalidate image listings
+   */
+  revalidatePath(
+    "/dashboard/packages"
+  );
+
   revalidatePath("/umrah");
+
   revalidatePath("/holidays");
+
+  revalidatePath("/visa");
 }

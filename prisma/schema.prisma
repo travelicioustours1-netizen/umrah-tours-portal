@@ -15,7 +15,6 @@ model Package {
   airlineId       String?
   updatedAt       DateTime       @updatedAt
   category        String?
-  destination     String?
   departureCity   String?
   description     String
   duration        String
@@ -49,6 +48,10 @@ model Package {
   hotel4Price     Float?
   hotel5Price     Float?
   region          String?
+  destination     String?
+  seoDescription  String?
+  seoKeywords     String?
+  seoTitle        String?
   bookings        Booking[]
   enquiries       Enquiry[]
   airline         Airline?       @relation(fields: [airlineId], references: [id])

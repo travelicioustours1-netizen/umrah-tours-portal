@@ -73,12 +73,91 @@ export default function PackageForm({
       />
 
       <ContentSection
-        initialData={initialData}
+  initialData={initialData}
+/>
+
+{/* SEO Settings */}
+<div className="rounded-xl border bg-white p-6 shadow-sm">
+  <h2 className="mb-6 text-xl font-semibold text-gray-900">
+    SEO Settings
+  </h2>
+
+  <div className="space-y-5">
+
+    {/* SEO Title */}
+    <div>
+      <label
+        htmlFor="seoTitle"
+        className="mb-2 block text-sm font-semibold text-gray-900"
+      >
+        SEO Title
+      </label>
+
+      <input
+        id="seoTitle"
+        name="seoTitle"
+        type="text"
+        defaultValue={initialData?.seoTitle || ""}
+        placeholder="Georgia Holiday Package from Dubai | Umrah Tours"
+        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
       />
 
-      <MediaSection
-        initialData={initialData}
+      <p className="mt-1 text-xs text-gray-500">
+        Used as the page title in search engines and browser tabs.
+      </p>
+    </div>
+
+    {/* SEO Description */}
+    <div>
+      <label
+        htmlFor="seoDescription"
+        className="mb-2 block text-sm font-semibold text-gray-900"
+      >
+        SEO Description
+      </label>
+
+      <textarea
+        id="seoDescription"
+        name="seoDescription"
+        rows={4}
+        defaultValue={initialData?.seoDescription || ""}
+        placeholder="Discover our Georgia holiday package from Dubai with hotels, sightseeing and travel support."
+        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
       />
+
+      <p className="mt-1 text-xs text-gray-500">
+        Recommended length: around 150–160 characters.
+      </p>
+    </div>
+
+    {/* SEO Keywords */}
+    <div>
+      <label
+        htmlFor="seoKeywords"
+        className="mb-2 block text-sm font-semibold text-gray-900"
+      >
+        SEO Keywords
+      </label>
+
+      <input
+        id="seoKeywords"
+        name="seoKeywords"
+        type="text"
+        defaultValue={initialData?.seoKeywords || ""}
+        placeholder="Georgia holiday, Georgia tour package, Georgia from Dubai"
+        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+      />
+
+      <p className="mt-1 text-xs text-gray-500">
+        Enter relevant keywords separated by commas.
+      </p>
+    </div>
+
+  </div>
+</div>
+<MediaSection
+  initialData={initialData}
+/>
 
       <div className="flex justify-end border-t pt-6">
         <button

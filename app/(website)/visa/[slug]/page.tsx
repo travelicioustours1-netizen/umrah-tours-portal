@@ -48,33 +48,46 @@ export async function generateMetadata({
     pkg.images?.[0]?.url ||
     `${SITE_URL}/images/hero/umrah-hero.jpg`;
 
-  const title = `${pkg.title} | Visa Services UAE | Umrah Tours`;
+  const title =
+  pkg.seoTitle?.trim() ||
+  `${pkg.title} | Visa Services UAE | Umrah Tours`;
 
-  const rawDescription =
-    pkg.description?.trim() ||
-    `Explore ${pkg.title} with Umrah Tours. Get professional visa assistance and travel support from the UAE.`;
+  const fallbackDescription =
+  `Explore ${pkg.title} with Umrah Tours. Get professional visa assistance and travel support from the UAE.`;
 
-  const description =
-    rawDescription.length > 160
-      ? `${rawDescription.substring(0, 157).trim()}...`
-      : rawDescription;
+const rawDescription =
+  pkg.seoDescription?.trim() ||
+  pkg.description?.trim() ||
+  fallbackDescription;
+
+const description =
+  rawDescription.length > 160
+    ? `${rawDescription.substring(0, 157).trim()}...`
+    : rawDescription;
 
   return {
     title,
     description,
 
     keywords: [
-      pkg.title,
-      "visa services UAE",
-      "visa assistance UAE",
-      "visa services Dubai",
-      "visa services Sharjah",
-      "Umrah visa UAE",
-      "Umrah visa from UAE",
-      "Saudi visa UAE",
-      "visa package UAE",
-      "Umrah Tours",
-    ],
+  ...(pkg.seoKeywords
+    ? pkg.seoKeywords
+        .split(",")
+        .map((keyword) => keyword.trim())
+        .filter(Boolean)
+    : []),
+
+  pkg.title,
+  "visa services UAE",
+  "visa assistance UAE",
+  "visa services Dubai",
+  "visa services Sharjah",
+  "Umrah visa UAE",
+  "Umrah visa from UAE",
+  "Saudi visa UAE",
+  "visa package UAE",
+  "Umrah Tours",
+],
 
     authors: [
       {
