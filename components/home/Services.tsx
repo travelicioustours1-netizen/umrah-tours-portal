@@ -67,48 +67,39 @@ export default function Services() {
 
   return (
     <>
-      <section className="py-16 md:py-20 bg-white">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Heading */}
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <p className="text-sm font-semibold uppercase tracking-widest text-amber-600 mb-3">
+      <section className="bg-white py-16 md:py-20">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-12 max-w-3xl text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-amber-600">
               Our Travel Services
             </p>
 
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
               Everything You Need for Your Journey
             </h2>
 
-            <p className="mt-4 text-gray-600 text-base md:text-lg">
+            <p className="mt-4 text-base text-gray-600 md:text-lg">
               From Umrah and flights to hotels, holidays and visa assistance,
               we help make your travel planning simple and convenient.
             </p>
           </div>
 
-          {/* Services Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-5">
             {services.map((service) => (
-              <div
-                key={service.title}
-                className="group h-full"
-              >
+              <div key={service.title} className="group h-full">
                 <div className="flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-lg">
-                  {/* Icon */}
                   <div className="mx-auto mb-5 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-amber-50 text-3xl transition-transform duration-300 group-hover:scale-110">
                     {service.icon}
                   </div>
 
-                  {/* Title */}
                   <h3 className="text-xl font-semibold text-gray-900 transition-colors group-hover:text-amber-600">
                     {service.title}
                   </h3>
 
-                  {/* Description */}
                   <p className="mt-3 flex-1 text-sm leading-6 text-gray-600">
                     {service.description}
                   </p>
 
-                  {/* CTA */}
                   <button
                     type="button"
                     onClick={() => openQuote(service.service)}
@@ -124,7 +115,6 @@ export default function Services() {
             ))}
           </div>
 
-          {/* Partner Disclosure */}
           <div className="mt-10 text-center">
             <p className="mx-auto max-w-3xl text-xs leading-6 text-gray-500 md:text-sm">
               Travel services are provided and fulfilled through our licensed
@@ -134,7 +124,6 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Universal Quote Modal */}
       <GetQuoteModal
         isOpen={quoteOpen}
         service={selectedService}
