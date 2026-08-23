@@ -116,8 +116,8 @@ export async function generateMetadata({
   ======================================================= */
 
   const title =
-    packageData.seoTitle?.trim() ||
-    `${packageData.title} | ${destination} Holiday Package`;
+  packageData.seoTitle?.trim() ||
+  `${packageData.title} - ${destination} Holiday Package`;
 
   /* =======================================================
      SEO DESCRIPTION
@@ -339,7 +339,9 @@ export default async function HolidayPackagePage({
     url: canonicalUrl,
 
     category:
-      `${region} Holiday Packages`,
+  destination !== "International"
+    ? `${destination} Holiday Packages`
+    : "International Holiday Packages",
 
     brand: {
       "@type": "Brand",
