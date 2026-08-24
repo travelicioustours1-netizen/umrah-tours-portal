@@ -7,6 +7,7 @@ interface ProductSchemaProps {
   currency?: string;
   sku?: string;
   brand?: string;
+  category?: string;
 }
 
 export default function ProductSchema({
@@ -18,6 +19,7 @@ export default function ProductSchema({
   currency = "AED",
   sku,
   brand = "Umrah Tours",
+  category = "Travel Package",
 }: ProductSchemaProps) {
   const numericPrice = Number(price);
 
@@ -37,7 +39,7 @@ export default function ProductSchema({
       name: brand,
     },
 
-    category: "Holiday Travel Package",
+    category,
 
     ...(sku
       ? {

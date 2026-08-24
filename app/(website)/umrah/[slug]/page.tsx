@@ -42,7 +42,7 @@ export async function generateMetadata({
 
   const title =
   pkg.seoTitle?.trim() ||
-  `${pkg.title} | Umrah Tours`;
+  `${pkg.title} - Umrah Package from UAE`;
 
  const fallbackDescription =
   `Book ${pkg.title} with Umrah Tours. Explore Makkah and Madinah hotels, Umrah itinerary, package pricing and travel arrangements from the UAE.`;
