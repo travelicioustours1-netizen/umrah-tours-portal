@@ -50,7 +50,7 @@ export async function generateMetadata({
 
   const title =
   pkg.seoTitle?.trim() ||
-  `${pkg.title} | Visa Services UAE | Umrah Tours`;
+  `${pkg.title} - Visa Services UAE`;
 
   const fallbackDescription =
   `Explore ${pkg.title} with Umrah Tours. Get professional visa assistance and travel support from the UAE.`;
