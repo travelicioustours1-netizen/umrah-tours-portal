@@ -18,6 +18,11 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Armenia",
     "Uzbekistan",
     "Kyrgyzstan",
+    "Russia",
+  ],
+
+  ASIA: [
+    "Sri Lanka",
   ],
 
   AFRICA: [
@@ -63,6 +68,7 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Netherlands",
     "United Kingdom",
     "Portugal",
+    "Montenegro",
   ],
 
   SCANDINAVIA: [
@@ -72,6 +78,10 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Norway",
     "Sweden",
     "Scotland",
+  ],
+
+  MIDDLE_EAST: [
+    "Jordan",
   ],
 
   USA: [
@@ -98,6 +108,7 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Christchurch",
   ],
 };
+
 
 export default function BasicInfoSection({
   initialData,
@@ -299,6 +310,10 @@ export default function BasicInfoSection({
       CIS
     </option>
 
+    <option value="ASIA">
+      Asia
+    </option>
+
     <option value="AFRICA">
       Africa
     </option>
@@ -313,6 +328,10 @@ export default function BasicInfoSection({
 
     <option value="SCANDINAVIA">
       Scandinavia
+    </option>
+
+    <option value="MIDDLE_EAST">
+      Middle East
     </option>
 
     <option value="USA">

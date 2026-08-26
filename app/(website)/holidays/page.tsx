@@ -46,10 +46,18 @@ const REGION_CONFIG = [
     title: "CIS Holiday Packages",
     subtitle: "Explore CIS",
     description:
-      "Discover beautiful destinations across the CIS region, including Georgia, Azerbaijan, Kazakhstan and other Central Asian destinations.",
+      "Discover beautiful destinations across the CIS region, including Georgia, Azerbaijan, Kazakhstan, Russia and other Central Asian destinations.",
     icon: "🌍",
   },
-    {
+  {
+    key: "ASIA",
+    title: "Asia Holiday Packages",
+    subtitle: "Explore Asia",
+    description:
+      "Discover unforgettable holidays across Asia, from tropical escapes and beautiful beaches to vibrant cities, rich cultures and fascinating natural wonders.",
+    icon: "🌏",
+  },
+  {
     key: "AFRICA",
     title: "Africa Holiday Packages",
     subtitle: "Explore Africa",
@@ -70,8 +78,24 @@ const REGION_CONFIG = [
     title: "Europe Holiday Packages",
     subtitle: "Discover Europe",
     description:
-      "Explore iconic European cities, scenic landscapes, cultural attractions and unforgettable experiences.",
+      "Explore iconic European cities, scenic landscapes, cultural attractions and unforgettable experiences, including destinations such as Montenegro.",
     icon: "🏰",
+  },
+  {
+    key: "SCANDINAVIA",
+    title: "Scandinavia Holiday Packages",
+    subtitle: "Explore Scandinavia",
+    description:
+      "Discover breathtaking Nordic landscapes, charming cities, dramatic fjords, Arctic adventures and unforgettable experiences across Scandinavia.",
+    icon: "❄️",
+  },
+  {
+    key: "MIDDLE_EAST",
+    title: "Middle East Holiday Packages",
+    subtitle: "Explore the Middle East",
+    description:
+      "Discover the Middle East's rich history, ancient wonders, breathtaking landscapes and vibrant cities, including unforgettable destinations such as Jordan.",
+    icon: "🏜️",
   },
   {
     key: "USA",
