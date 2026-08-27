@@ -65,6 +65,16 @@ const REGION_CONFIG = [
       "Experience unforgettable African adventures, from luxury Maasai Mara safaris and wildlife experiences to breathtaking beaches, cultural journeys and premium escapes across the continent.",
     icon: "🦁",
   },
+
+  {
+  key: "ISLANDS",
+  title: "Island Holiday Packages",
+  subtitle: "Explore Island Escapes",
+  description:
+    "Escape to breathtaking island destinations including the Maldives, Seychelles and Mauritius, with pristine beaches, crystal-clear waters, luxury resorts and unforgettable tropical experiences.",
+  icon: "🏝️",
+},
+
   {
     key: "FAR_EAST",
     title: "Far East Holiday Packages",

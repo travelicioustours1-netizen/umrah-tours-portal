@@ -30,8 +30,6 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Tanzania",
     "Zanzibar",
     "South Africa",
-    "Mauritius",
-    "Seychelles",
     "Egypt",
     "Morocco",
     "Tunisia",
@@ -43,6 +41,12 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Zambia",
   ],
 
+  ISLANDS: [
+    "Maldives",
+    "Seychelles",
+    "Mauritius",
+  ],
+  
   FAR_EAST: [
     "Japan",
     "South Korea",
@@ -317,6 +321,10 @@ export default function BasicInfoSection({
     <option value="AFRICA">
       Africa
     </option>
+
+<option value="AFRICA">
+  Africa
+</option>
 
     <option value="FAR_EAST">
       Far East
