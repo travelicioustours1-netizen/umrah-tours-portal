@@ -46,7 +46,7 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Seychelles",
     "Mauritius",
   ],
-  
+
   FAR_EAST: [
     "Japan",
     "South Korea",
@@ -310,45 +310,45 @@ export default function BasicInfoSection({
         : "Not Applicable"}
     </option>
 
-    <option value="CIS">
-      CIS
-    </option>
+   <option value="CIS">
+  CIS
+</option>
 
-    <option value="ASIA">
-      Asia
-    </option>
-
-    <option value="AFRICA">
-      Africa
-    </option>
+<option value="ASIA">
+  Asia
+</option>
 
 <option value="AFRICA">
   Africa
 </option>
 
-    <option value="FAR_EAST">
-      Far East
-    </option>
+<option value="ISLANDS">
+  Islands
+</option>
 
-    <option value="EUROPE">
-      Europe
-    </option>
+<option value="FAR_EAST">
+  Far East
+</option>
 
-    <option value="SCANDINAVIA">
-      Scandinavia
-    </option>
+<option value="EUROPE">
+  Europe
+</option>
 
-    <option value="MIDDLE_EAST">
-      Middle East
-    </option>
+<option value="SCANDINAVIA">
+  Scandinavia
+</option>
 
-    <option value="USA">
-      USA
-    </option>
+<option value="MIDDLE_EAST">
+  Middle East
+</option>
 
-    <option value="AUSTRALIA_NEW_ZEALAND">
-      Australia & New Zealand
-    </option>
+<option value="USA">
+  USA
+</option>
+
+<option value="AUSTRALIA_NEW_ZEALAND">
+  Australia & New Zealand
+</option>
   </select>
 
   <p className="mt-1 text-sm text-gray-500">
