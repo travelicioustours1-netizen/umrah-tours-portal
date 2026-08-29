@@ -75,6 +75,18 @@ const REGION_DESTINATIONS: Record<string, string[]> = {
     "Montenegro",
   ],
 
+  BALTIC: [
+  "Lithuania",
+  "Latvia",
+  "Estonia",
+  "Vilnius",
+  "Kaunas",
+  "Trakai",
+  "Riga",
+  "Tallinn",
+  "Pärnu",
+  "Sigulda",
+],
   SCANDINAVIA: [
     "Scandinavia",
     "Iceland",
@@ -332,6 +344,10 @@ export default function BasicInfoSection({
 
 <option value="EUROPE">
   Europe
+</option>
+
+<option value="BALTIC">
+  Baltic Region
 </option>
 
 <option value="SCANDINAVIA">
