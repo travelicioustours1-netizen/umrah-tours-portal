@@ -91,6 +91,16 @@ const REGION_CONFIG = [
       "Explore iconic European cities, scenic landscapes, cultural attractions and unforgettable experiences, including destinations such as Montenegro.",
     icon: "🏰",
   },
+
+  {
+  key: "BALTIC",
+  title: "Baltic Holiday Packages",
+  subtitle: "Explore the Baltics",
+  description:
+    "Discover the fascinating Baltic region through Lithuania, Latvia and Estonia, featuring medieval old towns, historic castles, UNESCO heritage sites, beautiful landscapes and rich cultural experiences.",
+  icon: "🌍",
+},
+
   {
     key: "SCANDINAVIA",
     title: "Scandinavia Holiday Packages",
