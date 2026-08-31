@@ -69,19 +69,40 @@ Thank you.`
     <section className="space-y-4">
 
       {/* Main Hero */}
-      <div className="relative h-[520px] overflow-hidden rounded-2xl">
+      <div className="relative w-full aspect-[16/7] min-h-[400px] overflow-hidden rounded-2xl bg-gray-900">
 
-        <Image
-          src={activeImage.url}
-          alt={activeImage.alt || title}
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-        />
+  {/* Background - fills the entire hero */}
+  <Image
+    src={activeImage.url}
+    alt=""
+    fill
+    priority
+    quality={90}
+    className="scale-110 object-cover blur-xl"
+    sizes="100vw"
+    aria-hidden="true"
+  />
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+  {/* Darken blurred background */}
+  <div className="absolute inset-0 bg-black/20" />
+
+  {/* Main image - entire image remains visible */}
+  <div className="absolute inset-0 flex items-center justify-center">
+    <Image
+      src={activeImage.url}
+      alt={activeImage.alt || title}
+      fill
+      priority
+      quality={75}
+      className="object-contain"
+      sizes="(max-width: 768px) 100vw, 1400px"
+    />
+  </div>
+
+  {/* Overlay */}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+        
 
         {/* Destination Badge */}
         <div className="absolute left-6 top-6">
@@ -108,7 +129,7 @@ Thank you.`
               Explore {destination}
             </p>
 
-            <h1 className="mt-3 text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
+            <h1 className="mt-3 text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
               {title}
             </h1>
 
