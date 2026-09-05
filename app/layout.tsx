@@ -4,6 +4,12 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import type { Metadata } from "next";
 import "./globals.css";
 
+// Vercel Analytics
+import { Analytics } from "@vercel/analytics/next";
+
+// Vercel Speed Insights
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 const baseUrl = "https://umrahtours.co";
 
 export const metadata: Metadata = {
@@ -71,10 +77,14 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
+
     title:
       "Umrah Packages & International Holidays from UAE | Umrah Tours",
+
     description:
       "Explore Umrah packages and international holiday experiences with Umrah Tours.",
+
+    images: ["/images/hero/umrah-hero.jpg"],
   },
 
   robots: {
@@ -100,10 +110,21 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
+          {/* Organization SEO Schema */}
           <OrganizationSchema />
+
+          {/* Website Content */}
           {children}
+
+          {/* WhatsApp Floating Button */}
           <WhatsAppButton />
         </Providers>
+
+        {/* Vercel Web Analytics */}
+        <Analytics />
+
+        {/* Vercel Speed Insights */}
+        <SpeedInsights />
       </body>
     </html>
   );
