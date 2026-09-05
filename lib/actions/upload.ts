@@ -5,7 +5,11 @@ import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export async function uploadFile(
   file: File,
-  bucket: "package-images" | "brochures" | "hotel-images"
+  bucket:
+    | "package-images"
+    | "brochures"
+    | "hotel-images"
+    | "promotion-images"
 ) {
   console.log("========== UPLOAD START ==========");
 
