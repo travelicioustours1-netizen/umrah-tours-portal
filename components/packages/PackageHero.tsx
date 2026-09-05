@@ -71,17 +71,14 @@ Thank you.`
       {/* Main Hero */}
       <div className="relative w-full aspect-[16/7] min-h-[400px] overflow-hidden rounded-2xl bg-gray-900">
 
-  {/* Background - fills the entire hero */}
-  <Image
-    src={activeImage.url}
-    alt=""
-    fill
-    priority
-    quality={90}
-    className="scale-110 object-cover blur-xl"
-    sizes="100vw"
-    aria-hidden="true"
-  />
+  {/* Background - decorative blurred image */}
+<div
+  className="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
+  style={{
+    backgroundImage: `url("${activeImage.url}")`,
+  }}
+  aria-hidden="true"
+/>
 
   {/* Darken blurred background */}
   <div className="absolute inset-0 bg-black/20" />
