@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -106,14 +105,11 @@ export default async function PromotionPage({
 
           {promotion.imageUrl && (
             <div className="relative bg-gray-100">
-              <Image
+              <img
                 src={promotion.imageUrl}
                 alt={promotion.title}
-                width={1600}
-                height={1200}
-                priority
-                className="mx-auto h-auto max-h-[800px] w-full object-contain"
-                sizes="(max-width: 768px) 100vw, 1200px"
+                className="mx-auto block h-auto max-h-[800px] w-full object-contain"
+                loading="eager"
               />
             </div>
           )}
