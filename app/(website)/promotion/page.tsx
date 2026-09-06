@@ -81,12 +81,13 @@ export default async function PromotionPage() {
 
                       <div className="relative bg-gray-100">
                         <Image
-                          src={promotion.imageUrl}
-                          alt={promotion.title}
-                          width={1600}
-                          height={1200}
-                          className="h-auto max-h-[650px] w-full object-contain"
-                          sizes="(max-width: 768px) 100vw, 50vw"
+                        src={promotion.imageUrl}
+                        alt={promotion.title}
+                        width={1600}
+                        height={1200}
+                        className="h-auto max-h-[650px] w-full object-contain"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        loading="eager"
                         />
                       </div>
 
@@ -112,12 +113,13 @@ export default async function PromotionPage() {
 
                       <div className="relative bg-gray-100">
                         <Image
-                          src={promotion.imageUrl}
-                          alt={promotion.title}
-                          width={1600}
-                          height={1200}
-                          className="h-auto max-h-[650px] w-full object-contain"
-                          sizes="(max-width: 768px) 100vw, 50vw"
+                        src={promotion.imageUrl}
+                        alt={promotion.title}
+                        width={1600}
+                        height={1200}
+                        className="h-auto max-h-[650px] w-full object-contain"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        loading="eager"
                         />
                       </div>
 
