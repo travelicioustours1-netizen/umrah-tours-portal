@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import SupabaseImage from "@/components/ui/SupabaseImage";
 import { Globe2, MessageCircle, Sparkles } from "lucide-react";
 
 interface PackageImage {
@@ -85,15 +85,15 @@ Thank you.`
 
   {/* Main image - entire image remains visible */}
   <div className="absolute inset-0 flex items-center justify-center">
-    <Image
-      src={activeImage.url}
-      alt={activeImage.alt || title}
-      fill
-      priority
-      quality={75}
-      className="object-contain"
-      sizes="(max-width: 768px) 100vw, 1400px"
-    />
+            <SupabaseImage
+          src={activeImage.url}
+          alt={activeImage.alt || title}
+          fill
+          priority
+          quality={75}
+          className="object-contain"
+          sizes="(max-width: 768px) 100vw, 1400px"
+        />
   </div>
 
   {/* Overlay */}
@@ -180,13 +180,13 @@ Thank you.`
                   : "border-transparent"
               }`}
             >
-              <Image
-                src={image.url}
-                alt={image.alt || title}
-                fill
-                className="object-cover"
-                sizes="128px"
-              />
+             <SupabaseImage
+              src={image.url}
+              alt={image.alt || title}
+              fill
+              className="object-cover"
+              sizes="128px"
+            />
             </button>
           ))}
 
