@@ -88,6 +88,7 @@ export default async function PromotionPage() {
                         className="h-auto max-h-[650px] w-full object-contain"
                         sizes="(max-width: 768px) 100vw, 50vw"
                         loading="eager"
+                        unoptimized
                         />
                       </div>
 
@@ -120,6 +121,7 @@ export default async function PromotionPage() {
                         className="h-auto max-h-[650px] w-full object-contain"
                         sizes="(max-width: 768px) 100vw, 50vw"
                         loading="eager"
+                        unoptimized
                         />
                       </div>
 
