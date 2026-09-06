@@ -1,4 +1,4 @@
-import Image from "next/image";
+import SupabaseImage from "@/components/ui/SupabaseImage";
 import Link from "next/link";
 import {
   CalendarDays,
@@ -89,13 +89,13 @@ Thank you.`
       <Link href={href}>
         <div className="relative h-64 overflow-hidden">
 
-          <Image
-            src={image}
-            alt={pkg.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover transition duration-500 group-hover:scale-105"
-          />
+          <SupabaseImage
+          src={image}
+          alt={pkg.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className="object-cover transition duration-500 group-hover:scale-105"
+        />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
