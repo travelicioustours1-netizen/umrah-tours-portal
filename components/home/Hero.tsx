@@ -66,10 +66,17 @@ export default function Hero() {
               </Link>
 
               <Link
-                href="/visa"
-                className="rounded-lg border border-emerald-300 px-7 py-4 font-semibold text-emerald-300 transition hover:bg-emerald-300 hover:text-gray-900"
+              href="/visa"
+              className="rounded-lg border border-emerald-300 px-7 py-4 font-semibold text-emerald-300 transition hover:bg-emerald-300 hover:text-gray-900"
+            >
+              Visa Services
+            </Link>
+
+                          <Link
+                href="/promotion"
+                className="rounded-lg bg-emerald-500 px-7 py-4 font-semibold text-white shadow-lg transition hover:bg-emerald-600"
               >
-                Visa Services
+                Offers
               </Link>
             </div>
 
