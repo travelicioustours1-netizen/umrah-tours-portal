@@ -1,6 +1,7 @@
 import SupabaseImage from "@/components/ui/SupabaseImage";
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   ArrowRight,
   CalendarDays,
@@ -13,7 +14,103 @@ import {
 } from "lucide-react";
 import { getPackages } from "@/lib/package-service";
 
+const baseUrl = "https://www.umrahtours.co";
 const whatsappNumber = "971525657940";
+
+/*
+|--------------------------------------------------------------------------
+| SEO Metadata
+|--------------------------------------------------------------------------
+*/
+
+export const metadata: Metadata = {
+  title: "Holiday Packages UAE | Dubai & Sharjah | Umrah Tours",
+
+  description:
+    "Explore international holiday packages from Dubai, Sharjah and across the UAE. Discover destinations in Asia, Europe, Africa, CIS, the Middle East, islands and beyond.",
+
+  keywords: [
+    "holiday packages UAE",
+    "holiday packages Dubai",
+    "holiday packages Sharjah",
+    "holiday packages from UAE",
+    "international holiday packages UAE",
+    "international holidays Dubai",
+    "international holidays Sharjah",
+    "travel packages UAE",
+    "family holiday packages UAE",
+    "honeymoon packages UAE",
+    "Europe holiday packages UAE",
+    "Asia holiday packages UAE",
+    "Africa holiday packages UAE",
+    "CIS holiday packages UAE",
+    "Middle East holiday packages UAE",
+    "Maldives holiday packages UAE",
+    "Seychelles holiday packages UAE",
+    "Mauritius holiday packages UAE",
+  ],
+
+  authors: [
+    {
+      name: "Umrah Tours",
+    },
+  ],
+
+  creator: "Umrah Tours",
+  publisher: "Umrah Tours",
+
+  alternates: {
+    canonical: `${baseUrl}/holidays`,
+  },
+
+  openGraph: {
+    title: "Holiday Packages UAE | Dubai & Sharjah | Umrah Tours",
+
+    description:
+      "Discover international holiday packages from Dubai, Sharjah and across the UAE, including Asia, Europe, Africa, CIS, Middle East and island destinations.",
+
+    url: `${baseUrl}/holidays`,
+
+    siteName: "Umrah Tours",
+
+    locale: "en_AE",
+
+    type: "website",
+
+    images: [
+      {
+        url: `${baseUrl}/images/hero/umrah-hero.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "International Holiday Packages from UAE - Umrah Tours",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title: "Holiday Packages UAE | Dubai & Sharjah",
+
+    description:
+      "Explore international holiday packages from Dubai, Sharjah and across the UAE with Umrah Tours.",
+
+    images: [`${baseUrl}/images/hero/umrah-hero.jpg`],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -66,16 +163,14 @@ const REGION_CONFIG = [
       "Experience unforgettable African adventures, from luxury Maasai Mara safaris and wildlife experiences to breathtaking beaches, cultural journeys and premium escapes across the continent.",
     icon: "🦁",
   },
-
   {
-  key: "ISLANDS",
-  title: "Island Holiday Packages",
-  subtitle: "Explore Island Escapes",
-  description:
-    "Escape to breathtaking island destinations including the Maldives, Seychelles and Mauritius, with pristine beaches, crystal-clear waters, luxury resorts and unforgettable tropical experiences.",
-  icon: "🏝️",
-},
-
+    key: "ISLANDS",
+    title: "Island Holiday Packages",
+    subtitle: "Explore Island Escapes",
+    description:
+      "Escape to breathtaking island destinations including the Maldives, Seychelles and Mauritius, with pristine beaches, crystal-clear waters, luxury resorts and unforgettable tropical experiences.",
+    icon: "🏝️",
+  },
   {
     key: "FAR_EAST",
     title: "Far East Holiday Packages",
@@ -92,16 +187,14 @@ const REGION_CONFIG = [
       "Explore iconic European cities, scenic landscapes, cultural attractions and unforgettable experiences, including destinations such as Montenegro.",
     icon: "🏰",
   },
-
   {
-  key: "BALTIC",
-  title: "Baltic Holiday Packages",
-  subtitle: "Explore the Baltics",
-  description:
-    "Discover the fascinating Baltic region through Lithuania, Latvia and Estonia, featuring medieval old towns, historic castles, UNESCO heritage sites, beautiful landscapes and rich cultural experiences.",
-  icon: "🌍",
-},
-
+    key: "BALTIC",
+    title: "Baltic Holiday Packages",
+    subtitle: "Explore the Baltics",
+    description:
+      "Discover the fascinating Baltic region through Lithuania, Latvia and Estonia, featuring medieval old towns, historic castles, UNESCO heritage sites, beautiful landscapes and rich cultural experiences.",
+    icon: "🌍",
+  },
   {
     key: "SCANDINAVIA",
     title: "Scandinavia Holiday Packages",
@@ -285,538 +378,676 @@ export default async function HolidaysPage() {
     });
   }
 
+  /*
+  |--------------------------------------------------------------------------
+  | CollectionPage Schema
+  |--------------------------------------------------------------------------
+  */
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+
+    name: "Holiday Packages UAE | Dubai & Sharjah",
+
+    description:
+      "Explore international holiday packages from Dubai, Sharjah and across the UAE, including destinations across Asia, Europe, Africa, CIS, the Middle East and island destinations.",
+
+    url: `${baseUrl}/holidays`,
+
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Umrah Tours",
+      url: baseUrl,
+    },
+
+    about: {
+      "@type": "Thing",
+      name: "International Holiday Packages",
+    },
+
+    provider: {
+      "@id": `${baseUrl}/#organization`,
+    },
+
+    areaServed: {
+      "@type": "Country",
+      name: "United Arab Emirates",
+    },
+
+    mainEntity: {
+      "@type": "ItemList",
+
+      name: "International Holiday Packages from UAE",
+
+      numberOfItems: packages.length,
+
+      itemListElement: packages.map((pkg, index) => ({
+        "@type": "ListItem",
+
+        position: index + 1,
+
+        url: `${baseUrl}/holidays/${pkg.slug}`,
+
+        name: pkg.title,
+      })),
+    },
+  };
+
   return (
-    <main className="bg-gray-50">
+    <>
       {/* =========================================================
-          HERO
+          SEO SCHEMA
       ========================================================== */}
 
-      <section className="relative min-h-[560px] overflow-hidden">
-        <Image
-          src="/images/hero/umrah-hero.jpg"
-          alt="International holiday destinations"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema),
+        }}
+      />
 
-        <div className="absolute inset-0 bg-black/60" />
+      <main className="bg-gray-50">
+        {/* =========================================================
+            HERO
+        ========================================================== */}
 
-        <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl items-center px-6 py-20">
-          <div className="max-w-3xl text-white">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur">
-              <Globe2 size={17} />
-              International Holidays
-            </div>
+        <section className="relative min-h-[560px] overflow-hidden">
+          <Image
+            src="/images/hero/umrah-hero.jpg"
+            alt="International holiday destinations"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
 
-            <p className="mt-6 uppercase tracking-[5px] text-emerald-300">
-              Travel Beyond Boundaries
-            </p>
+          <div className="absolute inset-0 bg-black/60" />
 
-            <h1 className="mt-4 text-5xl font-bold leading-tight md:text-6xl lg:text-7xl">
-              Explore The World
-              <span className="block text-emerald-300">
-                With Umrah Tours
-              </span>
-            </h1>
+          <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl items-center px-6 py-20">
+            <div className="max-w-3xl text-white">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur">
+                <Globe2 size={17} />
+                International Holidays
+              </div>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-200 md:text-xl">
-              Discover carefully selected international holiday packages
-              designed for families, couples, friends and groups.
-            </p>
-
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <a
-                href="#holiday-packages"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-7 py-4 font-semibold text-white transition hover:bg-emerald-700"
-              >
-                Explore Packages
-                <ArrowRight size={19} />
-              </a>
-
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/50 bg-white/10 px-7 py-4 font-semibold text-white backdrop-blur transition hover:bg-white hover:text-gray-900"
-              >
-                Plan My Holiday
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          TRUST BAR
-      ========================================================== */}
-
-      <section className="border-b bg-white">
-        <div className="mx-auto grid max-w-7xl gap-6 px-6 py-8 md:grid-cols-3">
-          <div className="flex items-center gap-4">
-            <div className="rounded-xl bg-emerald-100 p-3 text-emerald-700">
-              <Plane size={24} />
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900">
-                International Flights
+              <p className="mt-6 uppercase tracking-[5px] text-emerald-300">
+                Travel Beyond Boundaries
               </p>
 
-              <p className="text-sm text-gray-500">
-                Convenient flight options
-              </p>
-            </div>
-          </div>
+              <h1 className="mt-4 text-5xl font-bold leading-tight md:text-6xl lg:text-7xl">
+                International Holiday Packages
+                <span className="block text-emerald-300">
+                  From Dubai, Sharjah & UAE
+                </span>
+              </h1>
 
-          <div className="flex items-center gap-4">
-            <div className="rounded-xl bg-emerald-100 p-3 text-emerald-700">
-              <CheckCircle size={24} />
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900">
-                Handpicked Packages
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-200 md:text-xl">
+                Discover carefully selected international holiday packages
+                from the UAE for families, couples, friends and groups.
+                Explore destinations across Asia, Europe, Africa, CIS,
+                the Middle East and beautiful island escapes.
               </p>
 
-              <p className="text-sm text-gray-500">
-                Selected for quality and value
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="rounded-xl bg-emerald-100 p-3 text-emerald-700">
-              <Globe2 size={24} />
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-900">
-                Travel Assistance
-              </p>
-
-              <p className="text-sm text-gray-500">
-                Support throughout your journey
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          REGION NAVIGATION
-      ========================================================== */}
-
-      {regionsWithPackages.length > 0 && (
-        <section className="border-b bg-white">
-          <div className="mx-auto max-w-7xl px-6 py-8">
-            <div className="text-center">
-              <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
-                Choose Your Region
-              </p>
-
-              <h2 className="mt-3 text-3xl font-bold text-gray-900 md:text-4xl">
-                Explore Holidays By Region
-              </h2>
-
-              <p className="mx-auto mt-3 max-w-2xl text-gray-600">
-                Browse our holiday packages by region and destination.
-              </p>
-            </div>
-
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <a
-                href="#holiday-packages"
-                className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white"
-              >
-                <Globe2 size={16} />
-                All Holidays
-              </a>
-
-              {regionsWithPackages.map((region) => (
+              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <a
-                  key={region.key}
-                  href={`#region-${region.key.toLowerCase()}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700"
+                  href="#holiday-packages"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-7 py-4 font-semibold text-white transition hover:bg-emerald-700"
                 >
-                  <span>{region.icon}</span>
-                  {region.title.replace(
-                    " Holiday Packages",
-                    ""
-                  )}
+                  Explore Holiday Packages
+                  <ArrowRight size={19} />
                 </a>
-              ))}
+
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/50 bg-white/10 px-7 py-4 font-semibold text-white backdrop-blur transition hover:bg-white hover:text-gray-900"
+                >
+                  Plan My Holiday
+                </Link>
+              </div>
             </div>
           </div>
         </section>
-      )}
 
-      {/* =========================================================
-          HOLIDAY PACKAGES
-      ========================================================== */}
+        {/* =========================================================
+            TRUST BAR
+        ========================================================== */}
 
-      <section
-        id="holiday-packages"
-        className="py-20"
-      >
-        <div className="mx-auto max-w-7xl px-6">
-          {/* =====================================================
-              NO PACKAGES
-          ====================================================== */}
-
-          {packages.length === 0 ? (
-            <div className="rounded-3xl bg-white p-12 text-center shadow-sm">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
-                <Globe2 size={30} />
+        <section className="border-b bg-white">
+          <div className="mx-auto grid max-w-7xl gap-6 px-6 py-8 md:grid-cols-3">
+            <div className="flex items-center gap-4">
+              <div className="rounded-xl bg-emerald-100 p-3 text-emerald-700">
+                <Plane size={24} />
               </div>
 
-              <h3 className="mt-6 text-2xl font-bold text-gray-900">
-                Holiday Packages Coming Soon
-              </h3>
+              <div>
+                <p className="font-semibold text-gray-900">
+                  International Flights
+                </p>
 
-              <p className="mx-auto mt-3 max-w-xl text-gray-600">
-                Our holiday collection is currently being updated.
-                Contact our travel experts for a customized international
-                holiday.
-              </p>
-
-              <Link
-                href="/contact"
-                className="mt-7 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white transition hover:bg-emerald-700"
-              >
-                Enquire Now
-                <ArrowRight size={18} />
-              </Link>
+                <p className="text-sm text-gray-500">
+                  Convenient flight options
+                </p>
+              </div>
             </div>
-          ) : (
-            <>
-              {/* =================================================
-                  REGION GROUPS
-              ================================================== */}
 
-              {regionsWithPackages.map((region) => {
-                const regionPackages =
-                  groupedPackages[region.key] || [];
+            <div className="flex items-center gap-4">
+              <div className="rounded-xl bg-emerald-100 p-3 text-emerald-700">
+                <CheckCircle size={24} />
+              </div>
 
-                if (regionPackages.length === 0) {
-                  return null;
-                }
+              <div>
+                <p className="font-semibold text-gray-900">
+                  Handpicked Packages
+                </p>
 
-                /*
-                |--------------------------------------------------------------------------
-                | Group packages inside the region by destination
-                |--------------------------------------------------------------------------
-                */
+                <p className="text-sm text-gray-500">
+                  Selected for quality and value
+                </p>
+              </div>
+            </div>
 
-                const packagesByDestination =
-                  groupPackagesByDestination(
-                    regionPackages
-                  );
+            <div className="flex items-center gap-4">
+              <div className="rounded-xl bg-emerald-100 p-3 text-emerald-700">
+                <Globe2 size={24} />
+              </div>
 
-                return (
-                  <section
+              <div>
+                <p className="font-semibold text-gray-900">
+                  Travel Assistance
+                </p>
+
+                <p className="text-sm text-gray-500">
+                  Support throughout your journey
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================
+            REGION NAVIGATION
+        ========================================================== */}
+
+        {regionsWithPackages.length > 0 && (
+          <section className="border-b bg-white">
+            <div className="mx-auto max-w-7xl px-6 py-8">
+              <div className="text-center">
+                <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
+                  Choose Your Region
+                </p>
+
+                <h2 className="mt-3 text-3xl font-bold text-gray-900 md:text-4xl">
+                  Explore Holiday Packages By Region
+                </h2>
+
+                <p className="mx-auto mt-3 max-w-2xl text-gray-600">
+                  Browse international holiday packages by region
+                  and destination to find the right trip for your
+                  travel plans.
+                </p>
+              </div>
+
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
+                <a
+                  href="#holiday-packages"
+                  className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white"
+                >
+                  <Globe2 size={16} />
+                  All Holidays
+                </a>
+
+                {regionsWithPackages.map((region) => (
+                  <a
                     key={region.key}
-                    id={`region-${region.key.toLowerCase()}`}
-                    className="mb-24 scroll-mt-24 last:mb-0"
+                    href={`#region-${region.key.toLowerCase()}`}
+                    className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700"
                   >
-                    {/* =================================================
-                        REGION HEADER
-                    ================================================== */}
+                    <span>{region.icon}</span>
+                    {region.title.replace(
+                      " Holiday Packages",
+                      ""
+                    )}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
-                    <div className="mb-12">
-                      <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-                        <div>
-                          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
-                            <span className="text-lg">
-                              {region.icon}
-                            </span>
+        {/* =========================================================
+            HOLIDAY PACKAGES
+        ========================================================== */}
 
-                            {region.subtitle}
+        <section
+          id="holiday-packages"
+          className="py-20"
+        >
+          <div className="mx-auto max-w-7xl px-6">
+            {packages.length === 0 ? (
+              <div className="rounded-3xl bg-white p-12 text-center shadow-sm">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                  <Globe2 size={30} />
+                </div>
+
+                <h3 className="mt-6 text-2xl font-bold text-gray-900">
+                  Holiday Packages Coming Soon
+                </h3>
+
+                <p className="mx-auto mt-3 max-w-xl text-gray-600">
+                  Our holiday collection is currently being updated.
+                  Contact our travel experts for a customized international
+                  holiday.
+                </p>
+
+                <Link
+                  href="/contact"
+                  className="mt-7 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white transition hover:bg-emerald-700"
+                >
+                  Enquire Now
+                  <ArrowRight size={18} />
+                </Link>
+              </div>
+            ) : (
+              <>
+                {regionsWithPackages.map((region) => {
+                  const regionPackages =
+                    groupedPackages[region.key] || [];
+
+                  if (regionPackages.length === 0) {
+                    return null;
+                  }
+
+                  const packagesByDestination =
+                    groupPackagesByDestination(
+                      regionPackages
+                    );
+
+                  return (
+                    <section
+                      key={region.key}
+                      id={`region-${region.key.toLowerCase()}`}
+                      className="mb-24 scroll-mt-24 last:mb-0"
+                    >
+                      {/* =================================================
+                          REGION HEADER
+                      ================================================== */}
+
+                      <div className="mb-12">
+                        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+                          <div>
+                            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
+                              <span className="text-lg">
+                                {region.icon}
+                              </span>
+
+                              {region.subtitle}
+                            </div>
+
+                            <h2 className="mt-4 text-4xl font-bold text-gray-900 md:text-5xl">
+                              {region.title}
+                            </h2>
+
+                            <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
+                              {region.description}
+                            </p>
                           </div>
 
-                          <h2 className="mt-4 text-4xl font-bold text-gray-900 md:text-5xl">
-                            {region.title}
-                          </h2>
-
-                          <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
-                            {region.description}
-                          </p>
-                        </div>
-
-                        <div className="shrink-0">
-                          <span className="inline-flex rounded-full border bg-white px-4 py-2 text-sm font-semibold text-gray-600 shadow-sm">
-                            {regionPackages.length}{" "}
-                            {regionPackages.length === 1
-                              ? "Package"
-                              : "Packages"}
-                          </span>
+                          <div className="shrink-0">
+                            <span className="inline-flex rounded-full border bg-white px-4 py-2 text-sm font-semibold text-gray-600 shadow-sm">
+                              {regionPackages.length}{" "}
+                              {regionPackages.length === 1
+                                ? "Package"
+                                : "Packages"}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* =================================================
-                        DESTINATION GROUPS
-                    ================================================== */}
+                      {/* =================================================
+                          DESTINATION GROUPS
+                      ================================================== */}
 
-                    <div className="space-y-16">
-                      {Object.entries(
-                        packagesByDestination
-                      ).map(
-                        ([
-                          destination,
-                          destinationPackages,
-                        ]) => {
-                          const featuredPackages =
-                            destinationPackages.filter(
-                              (holiday) =>
-                                holiday.featured
-                            );
+                      <div className="space-y-16">
+                        {Object.entries(
+                          packagesByDestination
+                        ).map(
+                          ([
+                            destination,
+                            destinationPackages,
+                          ]) => {
+                            const featuredPackages =
+                              destinationPackages.filter(
+                                (holiday) =>
+                                  holiday.featured
+                              );
 
-                          const regularPackages =
-                            destinationPackages.filter(
-                              (holiday) =>
-                                !holiday.featured
-                            );
+                            const regularPackages =
+                              destinationPackages.filter(
+                                (holiday) =>
+                                  !holiday.featured
+                              );
 
-                          return (
-                            <div
-                              key={destination}
-                              className="scroll-mt-24"
-                            >
-                              {/* Destination Header */}
+                            return (
+                              <div
+                                key={destination}
+                                className="scroll-mt-24"
+                              >
+                                {/* Destination Header */}
 
-                              <div className="mb-7 flex flex-col gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
-                                <div>
-                                  <div className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
-                                    <MapPin size={16} />
-                                    Destination
+                                <div className="mb-7 flex flex-col gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                                  <div>
+                                    <div className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
+                                      <MapPin size={16} />
+                                      Destination
+                                    </div>
+
+                                    <h3 className="mt-2 text-3xl font-bold text-gray-900 md:text-4xl">
+                                      {destination}
+                                    </h3>
                                   </div>
 
-                                  <h3 className="mt-2 text-3xl font-bold text-gray-900 md:text-4xl">
-                                    {destination}
-                                  </h3>
-                                </div>
-
-                                <div className="inline-flex w-fit rounded-full bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-600">
-                                  {
-                                    destinationPackages.length
-                                  }{" "}
-                                  {destinationPackages.length ===
-                                  1
-                                    ? "Package"
-                                    : "Packages"}
-                                </div>
-                              </div>
-
-                              {/* Featured Destination Packages */}
-
-                              {featuredPackages.length >
-                                0 && (
-                                <div className="mb-10">
-                                  <div className="mb-5 flex items-center gap-2">
-                                    <Sparkles
-                                      size={18}
-                                      className="text-emerald-600"
-                                    />
-
-                                    <h4 className="text-xl font-bold text-gray-900">
-                                      Featured{" "}
-                                      {destination}{" "}
-                                      Holidays
-                                    </h4>
-                                  </div>
-
-                                  <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                                    {featuredPackages.map(
-                                      (holiday) => (
-                                        <HolidayCard
-                                          key={
-                                            holiday.id
-                                          }
-                                          holiday={
-                                            holiday
-                                          }
-                                          featured
-                                        />
-                                      )
-                                    )}
+                                  <div className="inline-flex w-fit rounded-full bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-600">
+                                    {
+                                      destinationPackages.length
+                                    }{" "}
+                                    {destinationPackages.length ===
+                                    1
+                                      ? "Package"
+                                      : "Packages"}
                                   </div>
                                 </div>
-                              )}
 
-                              {/* Regular Destination Packages */}
+                                {/* Featured Destination Packages */}
 
-                              {regularPackages.length >
-                                0 && (
-                                <div>
-                                  {featuredPackages.length >
-                                    0 && (
-                                    <div className="mb-5">
+                                {featuredPackages.length >
+                                  0 && (
+                                  <div className="mb-10">
+                                    <div className="mb-5 flex items-center gap-2">
+                                      <Sparkles
+                                        size={18}
+                                        className="text-emerald-600"
+                                      />
+
                                       <h4 className="text-xl font-bold text-gray-900">
-                                        More{" "}
+                                        Featured{" "}
                                         {destination}{" "}
                                         Holidays
                                       </h4>
                                     </div>
-                                  )}
 
-                                  <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                                    {regularPackages.map(
-                                      (holiday) => (
-                                        <HolidayCard
-                                          key={
-                                            holiday.id
-                                          }
-                                          holiday={
-                                            holiday
-                                          }
-                                        />
-                                      )
-                                    )}
+                                    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                                      {featuredPackages.map(
+                                        (holiday) => (
+                                          <HolidayCard
+                                            key={
+                                              holiday.id
+                                            }
+                                            holiday={
+                                              holiday
+                                            }
+                                            featured
+                                          />
+                                        )
+                                      )}
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        }
-                      )}
-                    </div>
-                  </section>
-                );
-              })}
-            </>
-          )}
-        </div>
-      </section>
+                                )}
 
-      {/* =========================================================
-          CUSTOM HOLIDAY CTA
-      ========================================================== */}
+                                {/* Regular Destination Packages */}
 
-      <section className="bg-emerald-950 py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-800 to-emerald-950 p-8 text-white shadow-2xl md:p-14">
-            <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-300">
-                  Can&apos;t Find What You&apos;re Looking For?
-                </p>
+                                {regularPackages.length >
+                                  0 && (
+                                  <div>
+                                    {featuredPackages.length >
+                                      0 && (
+                                      <div className="mb-5">
+                                        <h4 className="text-xl font-bold text-gray-900">
+                                          More{" "}
+                                          {destination}{" "}
+                                          Holidays
+                                        </h4>
+                                      </div>
+                                    )}
 
-                <h2 className="mt-4 text-4xl font-bold md:text-5xl">
-                  Let Us Plan Your Dream Holiday
-                </h2>
+                                    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                                      {regularPackages.map(
+                                        (holiday) => (
+                                          <HolidayCard
+                                            key={
+                                              holiday.id
+                                            }
+                                            holiday={
+                                              holiday
+                                            }
+                                          />
+                                        )
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    </section>
+                  );
+                })}
+              </>
+            )}
+          </div>
+        </section>
 
-                <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50">
-                  Tell us your destination, travel dates, number of
-                  travellers and budget. Our travel team will create a
-                  suitable holiday option for you.
-                </p>
-              </div>
+        {/* =========================================================
+            CUSTOM HOLIDAY CTA
+        ========================================================== */}
 
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-4 font-semibold text-emerald-900 transition hover:bg-gray-100"
-                >
-                  Get a Quote
-                  <ArrowRight size={18} />
-                </Link>
+        <section className="bg-emerald-950 py-20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-800 to-emerald-950 p-8 text-white shadow-2xl md:p-14">
+              <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-300">
+                    Can&apos;t Find What You&apos;re Looking For?
+                  </p>
 
-                <a
-                  href={getWhatsAppUrl(
-                    "a customized international holiday"
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 px-7 py-4 font-semibold text-white transition hover:bg-green-700"
-                >
-                  <MessageCircle size={19} />
-                  WhatsApp Us
-                </a>
+                  <h2 className="mt-4 text-4xl font-bold md:text-5xl">
+                    Let Us Plan Your Dream Holiday
+                  </h2>
+
+                  <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50">
+                    Tell us your destination, travel dates, number of
+                    travellers and budget. Our travel team will create a
+                    suitable holiday option for you.
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-4 font-semibold text-emerald-900 transition hover:bg-gray-100"
+                  >
+                    Get a Quote
+                    <ArrowRight size={18} />
+                  </Link>
+
+                  <a
+                    href={getWhatsAppUrl(
+                      "a customized international holiday"
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 px-7 py-4 font-semibold text-white transition hover:bg-green-700"
+                  >
+                    <MessageCircle size={19} />
+                    WhatsApp Us
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* =========================================================
-          HOLIDAY SERVICES
-      ========================================================== */}
+        {/* =========================================================
+            HOLIDAY SERVICES
+        ========================================================== */}
 
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
-              Travel Support
-            </p>
+        <section className="bg-white py-20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="text-center">
+              <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
+                Travel Support
+              </p>
 
-            <h2 className="mt-3 text-4xl font-bold text-gray-900">
-              Everything You Need For Your Holiday
+              <h2 className="mt-3 text-4xl font-bold text-gray-900">
+                Complete Holiday Travel Services
+              </h2>
+
+              <p className="mx-auto mt-4 max-w-2xl text-gray-600">
+                From flights and hotels to transfers and customized tours,
+                our team can help arrange your complete international holiday.
+              </p>
+            </div>
+
+            <div className="mt-12 grid gap-6 md:grid-cols-3">
+              <ServiceCard
+                icon={<Plane size={28} />}
+                title="Flight Booking"
+                description="International flight options tailored to your travel dates."
+              />
+
+              <ServiceCard
+                icon={<Globe2 size={28} />}
+                title="Hotel Reservation"
+                description="Comfortable accommodation selected for your destination."
+              />
+
+              <ServiceCard
+                icon={<CalendarDays size={28} />}
+                title="Custom Holidays"
+                description="Flexible itineraries designed around your preferences."
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================
+            SEO CONTENT
+        ========================================================== */}
+
+        <section className="border-t bg-white py-20">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="text-center">
+              <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
+                International Travel From UAE
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold text-gray-900 md:text-4xl">
+                International Holiday Packages from Dubai, Sharjah & UAE
+              </h2>
+            </div>
+
+            <div className="mt-8 space-y-6 text-lg leading-8 text-gray-600">
+              <p>
+                Umrah Tours offers international holiday packages for
+                travellers from Dubai, Sharjah and across the UAE. Explore
+                carefully selected destinations for family holidays,
+                couples&apos; trips, group travel, city breaks, beach
+                holidays and customized international vacations.
+              </p>
+
+              <p>
+                Our holiday destinations cover a wide range of regions,
+                including Asia, Europe, Africa, CIS countries, the Middle
+                East, the Far East, Scandinavia, the Baltics, the USA,
+                Australia and New Zealand, as well as popular island
+                destinations such as the Maldives, Seychelles and Mauritius.
+              </p>
+
+              <p>
+                Whether you are looking for a relaxing beach holiday,
+                a cultural city experience, an adventurous safari or a
+                customized multi-destination trip, you can browse our
+                available packages and compare destinations, accommodation,
+                travel arrangements and package pricing.
+              </p>
+
+              <p>
+                Travellers can also explore our{" "}
+                <Link
+                  href="/hotels"
+                  className="font-semibold text-emerald-700 hover:underline"
+                >
+                  hotel options
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/visa"
+                  className="font-semibold text-emerald-700 hover:underline"
+                >
+                  visa services
+                </Link>{" "}
+                when planning their international trip. If you need help
+                selecting a destination or creating a personalized itinerary,
+                our team can assist with{" "}
+                <Link
+                  href="/contact"
+                  className="font-semibold text-emerald-700 hover:underline"
+                >
+                  holiday planning and travel enquiries
+                </Link>
+                .
+              </p>
+
+              <p>
+                Package availability, travel dates, hotel options and prices
+                can vary by destination and season. Contact Umrah Tours for
+                current availability, personalized recommendations and a
+                holiday quote based on your requirements.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================
+            FINAL CTA
+        ========================================================== */}
+
+        <section className="bg-gray-100 py-16 text-center">
+          <div className="mx-auto max-w-3xl px-6">
+            <h2 className="text-4xl font-bold text-gray-900 md:text-5xl">
+              Ready For Your Next Adventure?
             </h2>
 
-            <p className="mx-auto mt-4 max-w-2xl text-gray-600">
-              From flights and hotels to transfers and customized tours,
-              our team can help arrange your complete holiday.
+            <p className="mt-5 text-lg text-gray-600">
+              Start planning your international holiday from the UAE
+              with Umrah Tours.
             </p>
+
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-8 py-4 font-semibold text-white transition hover:bg-emerald-700"
+              >
+                Start Planning
+                <ArrowRight size={18} />
+              </Link>
+
+              <a
+                href={getWhatsAppUrl("an international holiday")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-green-600 bg-white px-8 py-4 font-semibold text-green-700 transition hover:bg-green-50"
+              >
+                <MessageCircle size={19} />
+                WhatsApp Enquiry
+              </a>
+            </div>
           </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            <ServiceCard
-              icon={<Plane size={28} />}
-              title="Flight Booking"
-              description="International flight options tailored to your travel dates."
-            />
-
-            <ServiceCard
-              icon={<Globe2 size={28} />}
-              title="Hotel Reservation"
-              description="Comfortable accommodation selected for your destination."
-            />
-
-            <ServiceCard
-              icon={<CalendarDays size={28} />}
-              title="Custom Holidays"
-              description="Flexible itineraries designed around your preferences."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          FINAL CTA
-      ========================================================== */}
-
-      <section className="bg-gray-100 py-16 text-center">
-        <div className="mx-auto max-w-3xl px-6">
-          <h2 className="text-4xl font-bold text-gray-900 md:text-5xl">
-            Ready For Your Next Adventure?
-          </h2>
-
-          <p className="mt-5 text-lg text-gray-600">
-            Start planning your international holiday with Umrah Tours.
-          </p>
-
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-8 py-4 font-semibold text-white transition hover:bg-emerald-700"
-            >
-              Start Planning
-              <ArrowRight size={18} />
-            </Link>
-
-            <a
-              href={getWhatsAppUrl("an international holiday")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-green-600 bg-white px-8 py-4 font-semibold text-green-700 transition hover:bg-green-50"
-            >
-              <MessageCircle size={19} />
-              WhatsApp Enquiry
-            </a>
-          </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 }
 
@@ -843,12 +1074,12 @@ function HolidayCard({
 
       <div className="relative h-72 overflow-hidden">
         <SupabaseImage
-        src={image}
-        alt={holiday.title}
-        fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        className="object-cover transition duration-700 group-hover:scale-110"
-      />
+          src={image}
+          alt={holiday.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transition duration-700 group-hover:scale-110"
+        />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
@@ -890,9 +1121,9 @@ function HolidayCard({
             : "International Holiday"}
         </p>
 
-        <h2 className="mt-2 min-h-[58px] text-2xl font-bold leading-tight text-gray-900">
-          {holiday.title}
-        </h2>
+        <h4 className="mt-2 min-h-[58px] text-2xl font-bold leading-tight text-gray-900">
+  {holiday.title}
+</h4>
 
         {/* Description */}
 
