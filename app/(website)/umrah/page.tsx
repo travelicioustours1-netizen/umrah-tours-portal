@@ -1,5 +1,6 @@
 import UmrahFAQ from "@/components/SEO/UmrahFAQ";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { getPackageFilters } from "@/lib/filter-service";
 import { getPackages } from "@/lib/package-service";
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
   title: "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
 
   description:
-    "Explore Umrah packages from Dubai, Sharjah and across the UAE with Umrah Tours. Compare Makkah and Madinah hotels, flights, visa assistance and complete Umrah travel services.",
+    "Explore Umrah packages from Dubai, Sharjah and across the UAE. Compare Makkah and Madinah hotels, flights, visa assistance and package options. Request a quote from Umrah Tours.",
 
   keywords: [
     "Umrah packages UAE",
@@ -60,7 +61,7 @@ export const metadata: Metadata = {
     title: "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
 
     description:
-      "Find Umrah packages from Dubai, Sharjah and across the UAE with Makkah and Madinah hotels, flights, visa assistance and pilgrimage travel support.",
+      "Explore Umrah packages from Dubai, Sharjah and across the UAE with Makkah and Madinah hotels, flights, visa assistance and flexible package options.",
 
     url: `${baseUrl}/umrah`,
 
@@ -86,7 +87,7 @@ export const metadata: Metadata = {
     title: "Umrah Packages UAE | Dubai & Sharjah",
 
     description:
-      "Explore Umrah packages from Dubai, Sharjah and across the UAE with Umrah Tours.",
+      "Explore Umrah packages from Dubai, Sharjah and across the UAE with hotels, flights, visa assistance and flexible package options.",
 
     images: [`${baseUrl}/images/hero/umrah-hero.jpg`],
   },
@@ -163,8 +164,8 @@ export default async function UmrahPackagesPage({
     },
 
     provider: {
-  "@id": `${baseUrl}/#organization`,
-},
+      "@id": `${baseUrl}/#organization`,
+    },
 
     areaServed: {
       "@type": "Country",
@@ -209,8 +210,8 @@ export default async function UmrahPackagesPage({
             </p>
 
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
-  Umrah Packages from Dubai, Sharjah & Across the UAE
-</h1>
+              Umrah Packages from Dubai, Sharjah & Across the UAE
+            </h1>
 
             <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
               Explore Umrah packages from Dubai, Sharjah and across
@@ -295,28 +296,59 @@ export default async function UmrahPackagesPage({
 
             <div className="mt-5 space-y-5 leading-8 text-gray-600">
               <p>
-                Umrah Tours provides Umrah travel services for
-                pilgrims travelling from the UAE to Makkah and
-                Madinah. Explore available Umrah packages and
-                compare accommodation, travel arrangements and
-                package options according to your requirements.
+                Umrah Tours provides Umrah travel services for pilgrims
+                travelling from Dubai, Sharjah and other parts of the UAE
+                to Makkah and Madinah. Browse our available Umrah packages
+                to compare accommodation, flights, transportation and other
+                pilgrimage travel arrangements.
               </p>
 
               <p>
-                Our Umrah packages are designed for travellers
-                looking for convenient pilgrimage arrangements
-                from Dubai, Sharjah and other parts of the UAE.
-                Depending on the package, services may include
-                accommodation, flights, transportation and
-                visa assistance.
+                Our Umrah packages from the UAE are designed for individuals,
+                couples, families and groups looking for convenient pilgrimage
+                arrangements. Depending on the selected package, services may
+                include Makkah and Madinah accommodation, flights,
+                transportation and visa assistance.
               </p>
 
               <p>
-                Whether you are travelling individually, as a
-                couple, with family or as a group, you can browse
-                our available Umrah packages and contact our team
-                for current availability, pricing and booking
-                assistance.
+                Travellers looking for an{" "}
+                <Link
+                  href="/visa"
+                  className="font-semibold text-emerald-700 hover:underline"
+                >
+                  Umrah visa
+                </Link>{" "}
+                can also explore our visa services, while pilgrims who need
+                accommodation can learn more about our{" "}
+                <Link
+                  href="/hotels"
+                  className="font-semibold text-emerald-700 hover:underline"
+                >
+                  hotel options
+                </Link>
+                . For current package availability, pricing and booking
+                assistance, you can{" "}
+                <Link
+                  href="/contact"
+                  className="font-semibold text-emerald-700 hover:underline"
+                >
+                  contact Umrah Tours
+                </Link>{" "}
+                and request a quote.
+              </p>
+
+              <p>
+                Whether you are travelling from Dubai, Sharjah or elsewhere
+                in the UAE, compare the available{" "}
+                <Link
+                  href="/umrah"
+                  className="font-semibold text-emerald-700 hover:underline"
+                >
+                  Umrah packages
+                </Link>{" "}
+                and choose an option that suits your travel dates,
+                accommodation preferences and group requirements.
               </p>
             </div>
           </div>
