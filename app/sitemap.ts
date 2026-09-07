@@ -49,6 +49,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/about`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
       url: `${baseUrl}/contact`,
       lastModified: now,
       changeFrequency: "monthly",
@@ -57,25 +63,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const packagePages: MetadataRoute.Sitemap = packages
-  .filter((pkg) => pkg.category && pkg.slug)
-  .map((pkg) => {
-    const category = pkg.category?.toUpperCase();
+    .filter((pkg) => pkg.category && pkg.slug)
+    .map((pkg) => {
+      const category = pkg.category.trim().toUpperCase();
 
-    let prefix = "umrah";
+      // Default package route
+      let prefix = "umrah";
 
-    if (category === "HOLIDAY") {
-      prefix = "holidays";
-    } else if (category === "VISA") {
-      prefix = "visa";
-    }
+      if (category === "HOLIDAY") {
+        prefix = "holidays";
+      } else if (category === "VISA") {
+        prefix = "visa";
+      }
 
-    return {
-      url: `${baseUrl}/${prefix}/${pkg.slug}`,
-      lastModified: pkg.updatedAt,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    };
-  });
+      return {
+        url: `${baseUrl}/${prefix}/${pkg.slug}`,
+        lastModified: pkg.updatedAt,
+        changeFrequency: "weekly",
+        priority: 0.8,
+      };
+    });
 
   return [...staticPages, ...packagePages];
 }

@@ -20,7 +20,7 @@ interface Props {
   }>;
 }
 
-const baseUrl = "https://umrahtours.co";
+const baseUrl = "https://www.umrahtours.co";
 
 export const metadata: Metadata = {
   title: "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title: "Umrah Packages UAE | Dubai & Sharjah | Umrah Tours",
+    title: "Umrah Packages UAE | Dubai & Sharjah",
 
     description:
       "Explore Umrah packages from Dubai, Sharjah and across the UAE with Umrah Tours.",
@@ -209,8 +209,8 @@ export default async function UmrahPackagesPage({
             </p>
 
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
-              Umrah Packages UAE
-            </h1>
+  Umrah Packages from Dubai, Sharjah & Across the UAE
+</h1>
 
             <p className="mt-4 max-w-3xl text-lg leading-8 text-gray-600">
               Explore Umrah packages from Dubai, Sharjah and across
