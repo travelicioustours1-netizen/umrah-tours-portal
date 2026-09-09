@@ -38,6 +38,8 @@ export default function PackageSidebar({ pkg }: Props) {
 
   const isHoliday = category === "HOLIDAY";
   const isVisa = category === "VISA";
+  const isEnquiryOnlyVisa =
+    isVisa && Number(pkg.price) <= 0;
 
   const serviceLabel = isHoliday
     ? "International Holiday"
@@ -50,7 +52,9 @@ export default function PackageSidebar({ pkg }: Props) {
 
 I'm interested in the ${pkg.title}.
 
-Please share the availability, travel dates, complete package details, inclusions, exclusions and booking procedure.
+Please share the applicable visa fee, requirements, availability, processing time, complete service details and application procedure.
+
+My nationality/passport country is:
 
 Thank you.`
   );
@@ -79,19 +83,40 @@ Thank you.`
 
           {/* Price */}
           <div>
-            <p className="text-sm text-gray-500">
-              Starting From
-            </p>
+            {isEnquiryOnlyVisa ? (
+              <>
+                <p className="text-sm text-gray-500">
+                  Visa Fee
+                </p>
 
-            <div className="mt-1 flex items-end gap-2">
-              <span className="text-4xl font-bold text-emerald-600">
-                AED {Number(pkg.price).toLocaleString("en-AE")}
-              </span>
-            </div>
+                <div className="mt-1">
+                  <span className="text-3xl font-bold text-emerald-600">
+                    Contact for Price
+                  </span>
+                </div>
 
-            <p className="mt-1 text-sm text-gray-500">
-              {isVisa ? "Per applicant" : "Per person"}
-            </p>
+                <p className="mt-2 text-sm leading-5 text-gray-500">
+                  Fees vary by nationality, visa type and applicable
+                  government charges.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-gray-500">
+                  Starting From
+                </p>
+
+                <div className="mt-1 flex items-end gap-2">
+                  <span className="text-4xl font-bold text-emerald-600">
+                    AED {Number(pkg.price).toLocaleString("en-AE")}
+                  </span>
+                </div>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  {isVisa ? "Per applicant" : "Per person"}
+                </p>
+              </>
+            )}
           </div>
 
           {/* WhatsApp */}
@@ -103,7 +128,10 @@ Thank you.`
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-4 font-semibold text-white shadow-sm transition hover:bg-green-700"
             >
               <MessageCircle size={21} />
-              Check Availability
+
+              {isEnquiryOnlyVisa
+                ? "Get Visa Assistance"
+                : "Check Availability"}
             </a>
 
             <p className="mt-2 text-center text-xs text-gray-500">
@@ -127,14 +155,26 @@ Thank you.`
             onClose={() => setIsQuoteModalOpen(false)}
           />
 
-          {/* Book Now */}
-          <Link
-            href={`/booking/${pkg.slug}`}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3.5 font-semibold text-white transition hover:bg-emerald-700"
-          >
-            <CalendarCheck size={19} />
-            Book Now
-          </Link>
+          {/* Book Now / Visa Assistance */}
+          {isEnquiryOnlyVisa ? (
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3.5 font-semibold text-white transition hover:bg-emerald-700"
+            >
+              <ShieldCheck size={19} />
+              Check Visa Requirements
+            </a>
+          ) : (
+            <Link
+              href={`/booking/${pkg.slug}`}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3.5 font-semibold text-white transition hover:bg-emerald-700"
+            >
+              <CalendarCheck size={19} />
+              Book Now
+            </Link>
+          )}
 
           {/* Holiday trust */}
           {isHoliday && (

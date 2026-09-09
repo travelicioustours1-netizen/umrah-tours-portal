@@ -13,10 +13,46 @@ import {
 
 const SITE_URL = "https://umrahtours.co";
 
+const malaysiaFaqs = [
+  {
+    question: "Do UAE residents need a visa to visit Malaysia?",
+    answer:
+      "Malaysia visa requirements depend on the traveller's nationality and passport, not simply UAE residency. Some nationalities can enter Malaysia without a visa for tourism, while others may need a visa or eVisa. Check the current Malaysian immigration requirements for your passport before travelling.",
+  },
+  {
+    question: "Do Indian passport holders need a Malaysia Tourist Visa in 2026?",
+    answer:
+      "Indian passport holders are currently eligible for visa-free entry to Malaysia for tourism until 31 December 2026, subject to the applicable Malaysian immigration conditions. UAE residence does not change the passport-based eligibility rules.",
+  },
+  {
+    question: "Do Pakistani passport holders need a visa for Malaysia?",
+    answer:
+      "Pakistani passport holders are currently listed among nationalities that require a visa to enter Malaysia. Depending on eligibility and the purpose of travel, an eVisa or another applicable visa process may be required.",
+  },
+  {
+    question: "What documents are commonly required for a Malaysia visa from the UAE?",
+    answer:
+      "Requirements vary by nationality and visa type. Depending on the application, documents can include a passport valid for more than six months, UAE residence or Emirates ID documentation, return or onward flight details, accommodation or invitation documents, photographs and financial or other supporting documents.",
+  },
+  {
+    question: "How long does a Malaysia visa application take from the UAE?",
+    answer:
+      "Processing time depends on nationality, visa type and the application route. Applicants should confirm the current processing timeline before applying because processing times can change and additional checks may sometimes be required.",
+  },
+  {
+    question: "What is the Malaysia Digital Arrival Card (MDAC)?",
+    answer:
+      "The Malaysia Digital Arrival Card is an online arrival form required for applicable foreign travellers entering Malaysia. Malaysian authorities state that it should generally be completed online within three days before arrival.",
+  },
+  {
+    question: "Can Umrah Tours help with a Malaysia Tourist Visa from Dubai or Sharjah?",
+    answer:
+      "Yes. Umrah Tours provides Malaysia visa guidance and application assistance for eligible travellers in the UAE, including document guidance, application procedure support and pre-travel requirement guidance. Visa approval remains subject to the relevant Malaysian authorities.",
+  },
+];
+
 interface Props {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({
@@ -49,45 +85,32 @@ export async function generateMetadata({
     `${SITE_URL}/images/hero/umrah-hero.jpg`;
 
   const title =
-  pkg.seoTitle?.trim() ||
-  `${pkg.title} - Visa Services UAE`;
+    pkg.seoTitle?.trim() ||
+    `${pkg.title} - Visa Services UAE`;
 
   const fallbackDescription =
-  `Explore ${pkg.title} with Umrah Tours. Get professional visa assistance and travel support from the UAE.`;
+    `Explore ${pkg.title} with Umrah Tours. Get professional visa assistance and travel support from the UAE.`;
 
-const rawDescription =
-  pkg.seoDescription?.trim() ||
-  pkg.description?.trim() ||
-  fallbackDescription;
+  const rawDescription =
+    pkg.seoDescription?.trim() ||
+    pkg.description?.trim() ||
+    fallbackDescription;
 
-const description =
-  rawDescription.length > 160
-    ? `${rawDescription.substring(0, 157).trim()}...`
-    : rawDescription;
+  const description =
+    rawDescription.length > 160
+      ? `${rawDescription.substring(0, 157).trim()}...`
+      : rawDescription;
 
   return {
     title,
     description,
 
-    keywords: [
-  ...(pkg.seoKeywords
-    ? pkg.seoKeywords
-        .split(",")
-        .map((keyword) => keyword.trim())
-        .filter(Boolean)
-    : []),
-
-  pkg.title,
-  "visa services UAE",
-  "visa assistance UAE",
-  "visa services Dubai",
-  "visa services Sharjah",
-  "Umrah visa UAE",
-  "Umrah visa from UAE",
-  "Saudi visa UAE",
-  "visa package UAE",
-  "Umrah Tours",
-],
+    keywords: pkg.seoKeywords
+      ? pkg.seoKeywords
+          .split(",")
+          .map((keyword) => keyword.trim())
+          .filter(Boolean)
+      : [],
 
     authors: [
       {
@@ -173,11 +196,60 @@ export default async function VisaPackageDetails({
         ? Number(pkg.quadPrice)
         : undefined;
 
+  const isMalaysiaVisa =
+    pkg.slug === "malaysia-tourist-visa";
+
+  const faqSchema = isMalaysiaVisa
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: malaysiaFaqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      }
+    : null;
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Visa Services",
+        item: `${SITE_URL}/visa`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: pkg.title,
+        item: packageUrl,
+      },
+    ],
+  };
+
   return (
     <>
-      {/* =========================================================
-          PRODUCT SCHEMA
-      ========================================================= */}
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqSchema),
+          }}
+        />
+      )}
+
       <ProductSchema
         name={pkg.title}
         description={
@@ -191,45 +263,14 @@ export default async function VisaPackageDetails({
         sku={pkg.slug}
       />
 
-      {/* =========================================================
-          BREADCRUMB SCHEMA
-      ========================================================= */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Home",
-                item: SITE_URL,
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Visa Services",
-                item: `${SITE_URL}/visa`,
-              },
-              {
-                "@type": "ListItem",
-                position: 3,
-                name: pkg.title,
-                item: packageUrl,
-              },
-            ],
-          }),
+          __html: JSON.stringify(breadcrumbSchema),
         }}
       />
 
-      {/* =========================================================
-          MAIN
-      ========================================================= */}
       <main className="bg-gray-50">
-
-        {/* Hero */}
         <PackageHero
           title={pkg.title}
           images={pkg.images}
@@ -238,13 +279,8 @@ export default async function VisaPackageDetails({
 
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-6">
           <div className="grid gap-8 lg:grid-cols-3">
-
-            {/* =====================================================
-                MAIN CONTENT
-            ===================================================== */}
             <div className="space-y-8 lg:col-span-2">
-
-              {/* Description */}
+              {/* Main Visa Description */}
               <section className="rounded-2xl bg-white p-8 shadow-sm">
                 <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
                   Visa Service
@@ -266,14 +302,14 @@ export default async function VisaPackageDetails({
                 </h2>
 
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
-
                   <div className="rounded-xl bg-emerald-50 p-5">
                     <h3 className="font-bold text-gray-900">
                       Professional Assistance
                     </h3>
 
                     <p className="mt-2 text-sm leading-6 text-gray-600">
-                      Get guidance throughout the visa application process.
+                      Get guidance throughout the visa application
+                      process.
                     </p>
                   </div>
 
@@ -283,8 +319,8 @@ export default async function VisaPackageDetails({
                     </h3>
 
                     <p className="mt-2 text-sm leading-6 text-gray-600">
-                      Receive guidance on the documents required for your
-                      application.
+                      Receive guidance on the documents required for
+                      your application.
                     </p>
                   </div>
 
@@ -294,8 +330,8 @@ export default async function VisaPackageDetails({
                     </h3>
 
                     <p className="mt-2 text-sm leading-6 text-gray-600">
-                      Our team helps make the application process simple and
-                      convenient.
+                      Our team helps make the application process
+                      simple and convenient.
                     </p>
                   </div>
 
@@ -308,18 +344,17 @@ export default async function VisaPackageDetails({
                       Get travel-focused support before your journey.
                     </p>
                   </div>
-
                 </div>
               </section>
 
-              {/* Itinerary / Process */}
+              {/* Visa Process */}
               {pkg.itinerary && (
                 <section className="rounded-2xl bg-white p-8 shadow-sm">
-                  <h2 className="mb-4 text-2xl font-bold text-gray-900">
+                  <h2 className="text-2xl font-bold text-gray-900">
                     Visa Process & Details
                   </h2>
 
-                  <div className="whitespace-pre-line leading-8 text-gray-700">
+                  <div className="mt-6 whitespace-pre-line leading-8 text-gray-700">
                     {pkg.itinerary}
                   </div>
                 </section>
@@ -328,11 +363,11 @@ export default async function VisaPackageDetails({
               {/* Inclusions */}
               {pkg.inclusions && (
                 <section className="rounded-2xl bg-white p-8 shadow-sm">
-                  <h2 className="mb-4 text-2xl font-bold text-gray-900">
+                  <h2 className="text-2xl font-bold text-gray-900">
                     Service Inclusions
                   </h2>
 
-                  <div className="whitespace-pre-line leading-8 text-gray-700">
+                  <div className="mt-6 whitespace-pre-line leading-8 text-gray-700">
                     {pkg.inclusions}
                   </div>
                 </section>
@@ -341,48 +376,76 @@ export default async function VisaPackageDetails({
               {/* Exclusions */}
               {pkg.exclusions && (
                 <section className="rounded-2xl bg-white p-8 shadow-sm">
-                  <h2 className="mb-4 text-2xl font-bold text-gray-900">
+                  <h2 className="text-2xl font-bold text-gray-900">
                     Service Exclusions
                   </h2>
 
-                  <div className="whitespace-pre-line leading-8 text-gray-700">
+                  <div className="mt-6 whitespace-pre-line leading-8 text-gray-700">
                     {pkg.exclusions}
                   </div>
                 </section>
               )}
 
-              {/* Important Note */}
+              {/* Important Information */}
               <section className="rounded-2xl border border-amber-200 bg-amber-50 p-8">
                 <h2 className="text-xl font-bold text-gray-900">
                   Important Visa Information
                 </h2>
 
                 <p className="mt-4 leading-7 text-gray-700">
-                  Visa issuance, validity, entry requirements, permitted stay
-                  and approval are subject to the applicable Saudi Arabian
-                  immigration and government regulations. Requirements and
-                  processing times may vary according to nationality and visa
-                  type.
+                  Visa issuance, validity, entry requirements, permitted
+                  stay and approval are subject to the immigration
+                  regulations of the destination country and the
+                  applicant&apos;s nationality. Requirements, documents,
+                  fees and processing times may vary and can change
+                  without notice.
                 </p>
               </section>
+
+              {/* Malaysia FAQ */}
+              {isMalaysiaVisa && (
+                <section className="rounded-2xl bg-white p-8 shadow-sm">
+                  <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
+                    Malaysia Visa FAQ
+                  </p>
+
+                  <h2 className="mt-2 text-3xl font-bold text-gray-900">
+                    Malaysia Tourist Visa from UAE – Frequently Asked
+                    Questions
+                  </h2>
+
+                  <div className="mt-8 space-y-6">
+                    {malaysiaFaqs.map((faq) => (
+                      <div
+                        key={faq.question}
+                        className="border-b border-gray-100 pb-6 last:border-b-0 last:pb-0"
+                      >
+                        <h3 className="text-lg font-bold text-gray-900">
+                          {faq.question}
+                        </h3>
+
+                        <p className="mt-2 leading-7 text-gray-600">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
 
-            {/* =====================================================
-                SIDEBAR
-            ===================================================== */}
+            {/* Sidebar */}
             <div>
               <PackageSidebar pkg={pkg} />
             </div>
           </div>
 
-          {/* =======================================================
-              RELATED VISA PACKAGES
-          ======================================================= */}
+          {/* Related Visa Services */}
           {relatedPackages.length > 0 && (
             <section className="mt-16">
-              <div className="mb-7">
+              <div className="mb-6">
                 <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
-                  Explore More
+                  More Visa Services
                 </p>
 
                 <h2 className="mt-2 text-3xl font-bold text-gray-900">
@@ -391,10 +454,10 @@ export default async function VisaPackageDetails({
               </div>
 
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {relatedPackages.map((item) => (
+                {relatedPackages.map((relatedPackage) => (
                   <PackageCard
-                    key={item.id}
-                    package={item}
+                    key={relatedPackage.id}
+                    package={relatedPackage}
                   />
                 ))}
               </div>
