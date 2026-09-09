@@ -6,7 +6,6 @@ interface ProductSchemaProps {
   price?: number | string | { toString(): string };
   currency?: string;
   sku?: string;
-  brand?: string;
   category?: string;
 }
 
@@ -18,25 +17,41 @@ export default function ProductSchema({
   price,
   currency = "AED",
   sku,
-  brand = "Umrah Tours",
-  category = "Travel Package",
+  category = "Umrah Travel Package",
 }: ProductSchemaProps) {
   const numericPrice = Number(price);
+
+  /*
+   * Remove Markdown formatting from descriptions before
+   * placing them inside structured data.
+   */
+  const cleanDescription = description
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/\*(.*?)\*/g, "$1")
+    .replace(/`(.*?)`/g, "$1")
+    .replace(/\r?\n+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
   const schema = {
     "@context": "https://schema.org",
     "@type": "Product",
+
     "@id": `${url}#product`,
 
     name,
-    description,
+    description: cleanDescription,
     url,
 
     image: [image],
 
+    /*
+     * Connect the Product to the main Umrah Tours
+     * organization entity.
+     */
     brand: {
-      "@type": "Brand",
-      name: brand,
+      "@id": "https://umrahtours.co/#organization",
     },
 
     category,
@@ -51,9 +66,13 @@ export default function ProductSchema({
       ? {
           offers: {
             "@type": "Offer",
+
             url,
+
             priceCurrency: currency,
+
             price: numericPrice.toFixed(2),
+
             availability: "https://schema.org/InStock",
 
             seller: {
