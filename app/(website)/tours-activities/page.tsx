@@ -1,4 +1,42 @@
-import Script from "next/script";
+"use client";
+
+import { useEffect, useRef } from "react";
+
+function TravelpayoutsWidget({
+  src,
+}: {
+  src: string;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) return;
+
+    // Prevent duplicate widgets during React development / Fast Refresh
+    container.innerHTML = "";
+
+    const script = document.createElement("script");
+
+    script.async = true;
+    script.src = src;
+    script.charset = "utf-8";
+
+    container.appendChild(script);
+
+    return () => {
+      container.innerHTML = "";
+    };
+  }, [src]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="w-full min-h-[120px]"
+    />
+  );
+}
 
 function WidgetCard({
   title,
@@ -13,14 +51,28 @@ function WidgetCard({
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <h3 className="text-xl font-bold text-gray-900">{title}</h3>
 
-      <p className="mt-2 text-sm leading-6 text-gray-600">{description}</p>
+      <p className="mt-2 text-sm leading-6 text-gray-600">
+        {description}
+      </p>
 
-      <div className="mt-6 min-h-[120px] overflow-hidden">
+      <div className="mt-6 w-full overflow-hidden">
         {children}
       </div>
     </div>
   );
 }
+
+const TIQETS_FEATURED =
+  "https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=977218&language=en&layout=horizontal&powered_by=true&campaign_id=89&promo_id=3948";
+
+const TIQETS_AVAILABILITY =
+  "https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=1056326&language=en&layout=compact&orientation=vertical&powered_by=true&campaign_id=89&promo_id=3984";
+
+const TIQETS_POPULAR =
+  "https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&language=en&locale=260932&layout=horizontal&cards=4&powered_by=true&campaign_id=89&promo_id=3947";
+
+const KLOOK_ACTIVITIES =
+  "https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&locale=en&city_id=78&category=3&amount=3&powered_by=true&campaign_id=137&promo_id=4497";
 
 export default function ToursActivitiesPage() {
   return (
@@ -44,7 +96,7 @@ export default function ToursActivitiesPage() {
             </p>
 
             <a
-              href="#tiqets-tours"
+              href="#popular-tours-widget"
               className="mt-8 inline-flex items-center rounded-lg bg-white px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
             >
               Open Tours & Attractions ↓
@@ -97,145 +149,53 @@ export default function ToursActivitiesPage() {
         </div>
       </section>
 
-      {/* Tiqets */}
+      {/* Navigation */}
       <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
-            Tiqets
-          </p>
+        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+          <div className="mb-5">
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
+              Explore
+            </p>
 
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
-            Tours & attractions
-          </h2>
+            <h2 className="mt-2 text-2xl font-bold text-gray-900">
+              Find your experience
+            </h2>
 
-          <p className="mt-3 max-w-2xl text-gray-600">
-            Discover popular attractions and book unforgettable experiences
-            with Tiqets.
-          </p>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              Choose from popular attractions, featured tours, availability
+              options and activities.
+            </p>
+          </div>
 
-          <a
-            href="#tiqets-tours"
-            className="mt-5 inline-flex items-center rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
-          >
-            Open Tours & Attractions ↓
-          </a>
-        </div>
-
-        <div
-          id="tiqets-tours"
-          className="grid scroll-mt-24 gap-8 lg:grid-cols-2"
-        >
-          <WidgetCard
-            title="Featured Tour"
-            description="Explore a featured attraction and discover memorable experiences."
-          >
+          <div className="flex flex-wrap gap-3">
             <a
-              href="#featured-tour-widget"
-              className="mb-5 inline-flex items-center rounded-lg border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+              href="#popular-tours-widget"
+              className="inline-flex items-center rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
             >
-              View Featured Tour ↓
+              Popular Tours ↓
             </a>
 
-            <div id="featured-tour-widget" className="scroll-mt-24">
-              <Script
-                async
-                src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=977218&language=en&layout=horizontal&powered_by=true&campaign_id=89&promo_id=3948"
-                charSet="utf-8"
-                strategy="afterInteractive"
-              />
-            </div>
-          </WidgetCard>
+            <a
+              href="#featured-tour-widget"
+              className="inline-flex items-center rounded-lg border border-emerald-600 px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+            >
+              Featured Tour ↓
+            </a>
 
-          <WidgetCard
-            title="Check Tour Availability"
-            description="Check availability and explore booking options for selected tours."
-          >
             <a
               href="#availability-widget"
-              className="mb-5 inline-flex items-center rounded-lg border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+              className="inline-flex items-center rounded-lg border border-emerald-600 px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
             >
               Check Availability ↓
             </a>
 
-            <div id="availability-widget" className="scroll-mt-24">
-              <Script
-                async
-                src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=1056326&language=en&layout=compact&orientation=vertical&powered_by=true&campaign_id=89&promo_id=3984"
-                charSet="utf-8"
-                strategy="afterInteractive"
-              />
-            </div>
-          </WidgetCard>
-        </div>
-      </section>
-
-      {/* Popular Tours */}
-      <section className="bg-white py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
-              Popular Tours
-            </p>
-
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
-              Popular experiences
-            </h2>
-
-            <p className="mt-3 max-w-2xl text-gray-600">
-              Browse popular tours and attractions selected for travelers
-              looking for memorable experiences.
-            </p>
+            <a
+              href="#klook-widget"
+              className="inline-flex items-center rounded-lg border border-emerald-600 px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+            >
+              Klook Activities ↓
+            </a>
           </div>
-
-          <WidgetCard
-            title="Popular Tours"
-            description="Explore popular tours and attractions available through Tiqets."
-          >
-            <Script
-              async
-              src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&language=en&locale=260932&layout=horizontal&cards=4&powered_by=true&campaign_id=89&promo_id=3947"
-              charSet="utf-8"
-              strategy="afterInteractive"
-            />
-          </WidgetCard>
-        </div>
-      </section>
-
-      {/* Klook */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
-            Klook
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
-            Explore activities
-          </h2>
-
-          <p className="mt-3 max-w-2xl text-gray-600">
-            Find tours and activities in selected destinations with Klook.
-          </p>
-
-          <a
-            href="#klook-activities"
-            className="mt-5 inline-flex items-center rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
-          >
-            Explore Klook Activities ↓
-          </a>
-        </div>
-
-        <div id="klook-activities" className="scroll-mt-24">
-          <WidgetCard
-            title="Tours & Activities"
-            description="Explore activities available for your destination."
-          >
-            <Script
-              async
-              src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&locale=en&city_id=78&category=3&amount=3&powered_by=true&campaign_id=137&promo_id=4497"
-              charSet="utf-8"
-              strategy="afterInteractive"
-            />
-          </WidgetCard>
         </div>
       </section>
 
@@ -275,6 +235,81 @@ export default function ToursActivitiesPage() {
                 holiday itinerary.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Travelpayouts Widgets */}
+      <section
+        id="travelpayouts-widgets"
+        className="bg-white py-14"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
+              Book Experiences
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
+              Tours, Attractions & Activities
+            </h2>
+
+            <p className="mt-3 max-w-2xl text-gray-600">
+              Explore tours, attractions and activities through our trusted
+              international travel partners.
+            </p>
+          </div>
+
+          {/* Featured Tour */}
+          <div
+            id="featured-tour-widget"
+            className="scroll-mt-24 mb-12"
+          >
+            <WidgetCard
+              title="Featured Tour"
+              description="Explore a featured attraction and discover memorable experiences."
+            >
+              <TravelpayoutsWidget src={TIQETS_FEATURED} />
+            </WidgetCard>
+          </div>
+
+          {/* Availability */}
+          <div
+            id="availability-widget"
+            className="scroll-mt-24 mb-12"
+          >
+            <WidgetCard
+              title="Check Tour Availability"
+              description="Check availability and explore booking options for selected tours."
+            >
+              <TravelpayoutsWidget src={TIQETS_AVAILABILITY} />
+            </WidgetCard>
+          </div>
+
+          {/* Popular Tours */}
+          <div
+            id="popular-tours-widget"
+            className="scroll-mt-24 mb-12"
+          >
+            <WidgetCard
+              title="Popular Tours & Attractions"
+              description="Browse popular tours and attractions selected for travelers looking for memorable activities."
+            >
+              <TravelpayoutsWidget src={TIQETS_POPULAR} />
+            </WidgetCard>
+          </div>
+
+          {/* Klook */}
+          <div
+            id="klook-widget"
+            className="scroll-mt-24"
+          >
+            <WidgetCard
+              title="Klook Tours & Activities"
+              description="Explore activities available for your destination."
+            >
+              <TravelpayoutsWidget src={KLOOK_ACTIVITIES} />
+            </WidgetCard>
           </div>
         </div>
       </section>
