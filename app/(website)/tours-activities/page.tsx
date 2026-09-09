@@ -1,53 +1,54 @@
 import Script from "next/script";
 
-export const metadata = {
-  title: "Tours & Activities",
-  description:
-    "Discover and book tours, attractions, activities and experiences around the world with Umrah Tours.",
-};
-
 function WidgetCard({
   title,
   description,
   children,
 }: {
   title: string;
-  description?: string;
+  description: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-      <div className="mb-5">
-        <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-        {description && (
-          <p className="mt-1 text-sm text-gray-600">{description}</p>
-        )}
-      </div>
+    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h3 className="text-xl font-bold text-gray-900">{title}</h3>
 
-      <div className="w-full overflow-hidden">{children}</div>
+      <p className="mt-2 text-sm leading-6 text-gray-600">{description}</p>
+
+      <div className="mt-6 min-h-[120px] overflow-hidden">
+        {children}
+      </div>
     </div>
   );
 }
 
 export default function ToursActivitiesPage() {
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="bg-gray-50">
       {/* Hero */}
-      <section className="bg-gradient-to-r from-emerald-700 to-emerald-600">
+      <section className="bg-emerald-700">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-emerald-100">
-              Tours & Activities
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-100">
+              Other Services
             </p>
 
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Discover amazing tours & experiences
+            <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+              Tours & Activities
             </h1>
 
             <p className="mt-5 text-lg leading-8 text-emerald-50">
-              Explore attractions, sightseeing tours, activities and memorable
-              experiences for your next journey.
+              Discover exciting tours, attractions, experiences and activities
+              for your next holiday. Compare options and book memorable
+              experiences through our trusted travel partners.
             </p>
+
+            <a
+              href="#tiqets-tours"
+              className="mt-8 inline-flex items-center rounded-lg bg-white px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+            >
+              Open Tours & Attractions ↓
+            </a>
           </div>
         </div>
       </section>
@@ -55,36 +56,42 @@ export default function ToursActivitiesPage() {
       {/* Intro */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-            <div className="mb-3 text-3xl">🌍</div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              Experiences worldwide
+          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+            <div className="text-2xl">🎟️</div>
+
+            <h2 className="mt-4 text-lg font-bold text-gray-900">
+              Attractions
             </h2>
+
             <p className="mt-2 text-sm leading-6 text-gray-600">
-              Find exciting activities and attractions in destinations around
-              the world.
+              Discover museums, landmarks, attractions and popular experiences
+              around the world.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-            <div className="mb-3 text-3xl">🎟️</div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              Easy booking
+          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+            <div className="text-2xl">🌍</div>
+
+            <h2 className="mt-4 text-lg font-bold text-gray-900">
+              Local Experiences
             </h2>
+
             <p className="mt-2 text-sm leading-6 text-gray-600">
-              Discover tours and activities and book your preferred
-              experiences online.
+              Find activities and experiences to make every destination more
+              memorable.
             </p>
           </div>
 
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-            <div className="mb-3 text-3xl">⭐</div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              Great experiences
+          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+            <div className="text-2xl">📅</div>
+
+            <h2 className="mt-4 text-lg font-bold text-gray-900">
+              Easy Booking
             </h2>
+
             <p className="mt-2 text-sm leading-6 text-gray-600">
-              Choose from popular attractions, tours and activities for your
-              trip.
+              Check availability and explore activities through our integrated
+              travel partners.
             </p>
           </div>
         </div>
@@ -93,11 +100,11 @@ export default function ToursActivitiesPage() {
       {/* Tiqets */}
       <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-wider text-emerald-600">
+          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
             Tiqets
           </p>
 
-          <h2 className="mt-2 text-3xl font-bold text-gray-900">
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
             Tours & attractions
           </h2>
 
@@ -105,33 +112,59 @@ export default function ToursActivitiesPage() {
             Discover popular attractions and book unforgettable experiences
             with Tiqets.
           </p>
+
+          <a
+            href="#tiqets-tours"
+            className="mt-5 inline-flex items-center rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+          >
+            Open Tours & Attractions ↓
+          </a>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          {/* Specific Tour Widget */}
+        <div
+          id="tiqets-tours"
+          className="grid scroll-mt-24 gap-8 lg:grid-cols-2"
+        >
           <WidgetCard
             title="Featured Tour"
-            description="Explore this selected Tiqets experience."
+            description="Explore a featured attraction and discover memorable experiences."
           >
-            <Script
-              async
-              src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=977218&language=en&layout=horizontal&powered_by=true&campaign_id=89&promo_id=3948"
-              charSet="utf-8"
-              strategy="afterInteractive"
-            />
+            <a
+              href="#featured-tour-widget"
+              className="mb-5 inline-flex items-center rounded-lg border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+            >
+              View Featured Tour ↓
+            </a>
+
+            <div id="featured-tour-widget" className="scroll-mt-24">
+              <Script
+                async
+                src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=977218&language=en&layout=horizontal&powered_by=true&campaign_id=89&promo_id=3948"
+                charSet="utf-8"
+                strategy="afterInteractive"
+              />
+            </div>
           </WidgetCard>
 
-          {/* Availability Calendar Widget */}
           <WidgetCard
             title="Check Tour Availability"
-            description="Check availability for this selected experience."
+            description="Check availability and explore booking options for selected tours."
           >
-            <Script
-              async
-              src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=1056326&language=en&layout=compact&orientation=vertical&powered_by=true&campaign_id=89&promo_id=3984"
-              charSet="utf-8"
-              strategy="afterInteractive"
-            />
+            <a
+              href="#availability-widget"
+              className="mb-5 inline-flex items-center rounded-lg border border-emerald-600 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+            >
+              Check Availability ↓
+            </a>
+
+            <div id="availability-widget" className="scroll-mt-24">
+              <Script
+                async
+                src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=1056326&language=en&layout=compact&orientation=vertical&powered_by=true&campaign_id=89&promo_id=3984"
+                charSet="utf-8"
+                strategy="afterInteractive"
+              />
+            </div>
           </WidgetCard>
         </div>
       </section>
@@ -140,22 +173,23 @@ export default function ToursActivitiesPage() {
       <section className="bg-white py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <p className="text-sm font-semibold uppercase tracking-wider text-emerald-600">
-              Popular experiences
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
+              Popular Tours
             </p>
 
-            <h2 className="mt-2 text-3xl font-bold text-gray-900">
-              Popular tours
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
+              Popular experiences
             </h2>
 
             <p className="mt-3 max-w-2xl text-gray-600">
-              Browse popular tours and attractions available through Tiqets.
+              Browse popular tours and attractions selected for travelers
+              looking for memorable experiences.
             </p>
           </div>
 
           <WidgetCard
             title="Popular Tours"
-            description="Discover popular experiences and attractions."
+            description="Explore popular tours and attractions available through Tiqets."
           >
             <Script
               async
@@ -170,70 +204,76 @@ export default function ToursActivitiesPage() {
       {/* Klook */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-wider text-emerald-600">
+          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
             Klook
           </p>
 
-          <h2 className="mt-2 text-3xl font-bold text-gray-900">
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
             Explore activities
           </h2>
 
           <p className="mt-3 max-w-2xl text-gray-600">
             Find tours and activities in selected destinations with Klook.
           </p>
+
+          <a
+            href="#klook-activities"
+            className="mt-5 inline-flex items-center rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+          >
+            Explore Klook Activities ↓
+          </a>
         </div>
 
-        <WidgetCard
-          title="Tours & Activities"
-          description="Explore activities available for your destination."
-        >
-          <Script
-            async
-            src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&locale=en&city_id=78&category=3&amount=3&powered_by=true&campaign_id=137&promo_id=4497"
-            charSet="utf-8"
-            strategy="afterInteractive"
-          />
-        </WidgetCard>
+        <div id="klook-activities" className="scroll-mt-24">
+          <WidgetCard
+            title="Tours & Activities"
+            description="Explore activities available for your destination."
+          >
+            <Script
+              async
+              src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&locale=en&city_id=78&category=3&amount=3&powered_by=true&campaign_id=137&promo_id=4497"
+              charSet="utf-8"
+              strategy="afterInteractive"
+            />
+          </WidgetCard>
+        </div>
       </section>
 
       {/* Benefits */}
       <section className="bg-gray-100 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl bg-white p-8 shadow-sm sm:p-10">
-            <h2 className="text-2xl font-bold text-gray-900">
-              Make more of your journey
-            </h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900">
+                Wide Selection
+              </h3>
 
-            <div className="mt-8 grid gap-6 md:grid-cols-3">
-              <div>
-                <h3 className="font-semibold text-gray-900">
-                  Plan memorable days
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-gray-600">
-                  Add sightseeing, attractions and activities to your travel
-                  itinerary.
-                </p>
-              </div>
+              <p className="mt-2 text-sm leading-6 text-gray-600">
+                Explore attractions, tours and activities across popular travel
+                destinations.
+              </p>
+            </div>
 
-              <div>
-                <h3 className="font-semibold text-gray-900">
-                  Discover local experiences
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-gray-600">
-                  Explore experiences that can make every destination more
-                  enjoyable.
-                </p>
-              </div>
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900">
+                Trusted Partners
+              </h3>
 
-              <div>
-                <h3 className="font-semibold text-gray-900">
-                  Book with confidence
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-gray-600">
-                  Compare available experiences and select activities that fit
-                  your trip.
-                </p>
-              </div>
+              <p className="mt-2 text-sm leading-6 text-gray-600">
+                Access experiences through established international travel
+                platforms.
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900">
+                Plan With Confidence
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-gray-600">
+                Discover activities before your trip and build a better
+                holiday itinerary.
+              </p>
             </div>
           </div>
         </div>
@@ -241,15 +281,22 @@ export default function ToursActivitiesPage() {
 
       {/* CTA */}
       <section className="bg-emerald-700">
-        <div className="mx-auto max-w-7xl px-4 py-12 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white">
-            Ready to explore?
+        <div className="mx-auto max-w-7xl px-4 py-14 text-center sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold tracking-tight text-white">
+            Planning your next holiday?
           </h2>
 
-          <p className="mx-auto mt-3 max-w-2xl text-emerald-100">
-            Discover tours, attractions and activities for your next
-            destination.
+          <p className="mx-auto mt-4 max-w-2xl text-emerald-50">
+            Explore attractions, tours and activities and make your next trip
+            even more memorable.
           </p>
+
+          <a
+            href="/contact"
+            className="mt-7 inline-flex items-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+          >
+            Get a Quote
+          </a>
         </div>
       </section>
     </main>
