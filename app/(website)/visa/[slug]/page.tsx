@@ -198,6 +198,9 @@ export default async function VisaPackageDetails({
 
   const isMalaysiaVisa =
     pkg.slug === "malaysia-tourist-visa";
+    const isEnquiryOnlyVisa =
+  pkg.category?.toUpperCase() === "VISA" &&
+  Number(pkg.price) <= 0;
 
   const faqSchema = isMalaysiaVisa
     ? {
@@ -240,16 +243,17 @@ export default async function VisaPackageDetails({
   };
 
   return (
-    <>
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(faqSchema),
-          }}
-        />
-      )}
+  <>
+    {faqSchema && (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema),
+        }}
+      />
+    )}
 
+    {!isEnquiryOnlyVisa && (
       <ProductSchema
         name={pkg.title}
         description={
@@ -262,20 +266,21 @@ export default async function VisaPackageDetails({
         currency="AED"
         sku={pkg.slug}
       />
+    )}
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema),
-        }}
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(breadcrumbSchema),
+      }}
+    />
+
+    <main className="bg-gray-50">
+      <PackageHero
+        title={pkg.title}
+        images={pkg.images}
+        price={pkg.price}
       />
-
-      <main className="bg-gray-50">
-        <PackageHero
-          title={pkg.title}
-          images={pkg.images}
-          price={pkg.price}
-        />
 
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-6">
           <div className="grid gap-8 lg:grid-cols-3">
