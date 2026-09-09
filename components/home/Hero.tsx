@@ -21,7 +21,6 @@ export default function Hero() {
       <div className="relative z-10 flex min-h-[680px] items-center md:min-h-[760px]">
         <div className="mx-auto w-full max-w-7xl px-6 py-20">
           <div className="max-w-5xl text-white">
-
             {/* Eyebrow */}
             <p className="mb-5 text-sm font-semibold uppercase tracking-[5px] text-emerald-300 md:text-base">
               Premium Umrah & Holiday Experiences
@@ -66,18 +65,48 @@ export default function Hero() {
               </Link>
 
               <Link
-              href="/visa"
-              className="rounded-lg border border-emerald-300 px-7 py-4 font-semibold text-emerald-300 transition hover:bg-emerald-300 hover:text-gray-900"
-            >
-              Visa Services
-            </Link>
+                href="/visa"
+                className="rounded-lg border border-emerald-300 px-7 py-4 font-semibold text-emerald-300 transition hover:bg-emerald-300 hover:text-gray-900"
+              >
+                Visa Services
+              </Link>
 
-                          <Link
+              <Link
                 href="/promotion"
                 className="rounded-lg bg-emerald-500 px-7 py-4 font-semibold text-white shadow-lg transition hover:bg-emerald-600"
               >
                 Offers
               </Link>
+            </div>
+
+            {/* Travel Services */}
+            <div className="mt-8">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[3px] text-gray-300">
+                Travel Services
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/car-rentals"
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-black/30 px-6 py-3 font-semibold text-white backdrop-blur-sm transition hover:border-emerald-300 hover:bg-emerald-600"
+                >
+                  🚗 Car Rental
+                </Link>
+
+                <Link
+                  href="/airport-transfers"
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-black/30 px-6 py-3 font-semibold text-white backdrop-blur-sm transition hover:border-emerald-300 hover:bg-emerald-600"
+                >
+                  🚐 Airport Transfers
+                </Link>
+
+                <Link
+  href="/tours-activities"
+  className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-black/30 px-6 py-3 font-semibold text-white backdrop-blur-sm transition hover:border-emerald-300 hover:bg-emerald-600"
+>
+  🎟️ Activities
+</Link>
+              </div>
             </div>
 
             {/* Trust Points */}
@@ -87,7 +116,6 @@ export default function Hero() {
               <div>✓ Hotels & Transport</div>
               <div>✓ Customized Holidays</div>
             </div>
-
           </div>
         </div>
       </div>

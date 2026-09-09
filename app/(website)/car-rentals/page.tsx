@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import {
   Car,
   Bike,
   CheckCircle,
   Globe2,
-  ShieldCheck,
   Search,
   MapPin,
+  ShieldCheck,
 } from "lucide-react";
+
+import TravelpayoutsWidget from "@/components/common/TravelpayoutsWidget";
 
 const SITE_URL = "https://umrahtours.co";
 
@@ -48,6 +49,31 @@ export const metadata: Metadata = {
       "Search rental cars from leading travel providers with Umrah Tours.",
   },
 };
+
+/* =========================================================
+   EXACT TRAVELPAYOUTS URLS
+========================================================= */
+
+const LOCALRENT_SEARCH =
+  "https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&default_pick_up_location=Dubai%20Airport%20T3&default_drop_off_location=Dubai%20Deira&powered_by=true&border_radius=5&plain=true&show_logo=true&color_background=%23ffca28&color_button=%2355a539&color_text=%23000000&color_input_text=%23000000&color_button_text=%23ffffff&promo_id=4480&campaign_id=10";
+
+const LOCALRENT_WHITE_LABEL =
+  "https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&country=14&city=62821&powered_by=true&campaign_id=87&promo_id=2466";
+
+const GETRENTACAR =
+  "https://tp.media/content?campaign_id=222&promo_id=8813&shmarker=775245&trs=571731";
+
+const ECONOMYBOOKINGS =
+  "https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&width=100&height=100&powered_by=true&campaign_id=10&promo_id=2082";
+
+const QEEQ =
+  "https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&powered_by=true&campaign_id=172&promo_id=4850";
+
+const AUTO_EUROPE =
+  "https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&default_pick_up_location=DXB&powered_by=true&border_radius=5&plain=true&show_logo=true&color_background=%23ffca28&color_button=%2355a539&promo_id=4362&campaign_id=143";
+
+const BIKES_BOOKING =
+  "https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&default_pick_up_location=Dubai&powered_by=true&border_radius=5&plain=true&color_background=%23ffffff&color_button=%235080c5&promo_id=5472&campaign_id=57";
 
 export default function CarRentalsPage() {
   return (
@@ -116,6 +142,7 @@ export default function CarRentalsPage() {
               <p className="font-semibold text-gray-900">
                 Worldwide Options
               </p>
+
               <p className="text-sm text-gray-500">
                 Rental cars in destinations worldwide
               </p>
@@ -131,6 +158,7 @@ export default function CarRentalsPage() {
               <p className="font-semibold text-gray-900">
                 Compare Options
               </p>
+
               <p className="text-sm text-gray-500">
                 Explore different rental providers
               </p>
@@ -146,6 +174,7 @@ export default function CarRentalsPage() {
               <p className="font-semibold text-gray-900">
                 Flexible Travel
               </p>
+
               <p className="text-sm text-gray-500">
                 Choose the option that suits your journey
               </p>
@@ -189,6 +218,7 @@ export default function CarRentalsPage() {
                 <h3 className="font-bold text-gray-900">
                   Search Rental Cars
                 </h3>
+
                 <p className="text-sm text-gray-500">
                   Find a vehicle for your destination
                 </p>
@@ -196,11 +226,7 @@ export default function CarRentalsPage() {
             </div>
 
             <div className="overflow-hidden rounded-xl">
-              <Script
-                src="https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&default_pick_up_location=Dubai%20Airport%20T3&default_drop_off_location=Dubai%20Deira&powered_by=true&border_radius=5&plain=true&show_logo=true&color_background=%23ffca28&color_button=%2355a539&color_text=%23000000&color_input_text=%23000000&color_button_text=%23ffffff&promo_id=4480&campaign_id=10"
-                strategy="afterInteractive"
-                charSet="utf-8"
-              />
+              <TravelpayoutsWidget src={LOCALRENT_SEARCH} />
             </div>
           </div>
         </div>
@@ -209,7 +235,10 @@ export default function CarRentalsPage() {
       {/* =========================================================
           PROVIDERS
       ========================================================== */}
-      <section id="providers" className="bg-white py-16 md:py-20">
+      <section
+        id="providers"
+        className="bg-white py-16 md:py-20"
+      >
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-12 text-center">
             <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
@@ -241,6 +270,7 @@ export default function CarRentalsPage() {
                     <h3 className="text-xl font-bold text-gray-900">
                       Localrent.com
                     </h3>
+
                     <p className="text-sm text-gray-500">
                       White Label Rental Cars
                     </p>
@@ -249,11 +279,7 @@ export default function CarRentalsPage() {
               </div>
 
               <div className="min-h-[220px] overflow-hidden rounded-xl bg-white">
-                <Script
-                  src="https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&country=14&city=62821&powered_by=true&campaign_id=87&promo_id=2466"
-                  strategy="afterInteractive"
-                  charSet="utf-8"
-                />
+                <TravelpayoutsWidget src={LOCALRENT_WHITE_LABEL} />
               </div>
             </div>
 
@@ -271,6 +297,7 @@ export default function CarRentalsPage() {
                     <h3 className="text-xl font-bold text-gray-900">
                       GetRentacar.com
                     </h3>
+
                     <p className="text-sm text-gray-500">
                       Rental Cars Search Form
                     </p>
@@ -279,11 +306,7 @@ export default function CarRentalsPage() {
               </div>
 
               <div className="min-h-[220px] overflow-hidden rounded-xl bg-white">
-                <Script
-                  src="https://tp.media/content?campaign_id=222&promo_id=8813&shmarker=775245&trs=571731"
-                  strategy="afterInteractive"
-                  charSet="utf-8"
-                />
+                <TravelpayoutsWidget src={GETRENTACAR} />
               </div>
             </div>
 
@@ -301,6 +324,7 @@ export default function CarRentalsPage() {
                     <h3 className="text-xl font-bold text-gray-900">
                       EconomyBookings.com
                     </h3>
+
                     <p className="text-sm text-gray-500">
                       Rental Cars
                     </p>
@@ -309,11 +333,7 @@ export default function CarRentalsPage() {
               </div>
 
               <div className="min-h-[220px] overflow-hidden rounded-xl bg-white">
-                <Script
-                  src="https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&width=100&height=100&powered_by=true&campaign_id=10&promo_id=2082"
-                  strategy="afterInteractive"
-                  charSet="utf-8"
-                />
+                <TravelpayoutsWidget src={ECONOMYBOOKINGS} />
               </div>
             </div>
 
@@ -331,6 +351,7 @@ export default function CarRentalsPage() {
                     <h3 className="text-xl font-bold text-gray-900">
                       QEEQ
                     </h3>
+
                     <p className="text-sm text-gray-500">
                       Rental Cars Search Form
                     </p>
@@ -339,11 +360,7 @@ export default function CarRentalsPage() {
               </div>
 
               <div className="min-h-[220px] overflow-hidden rounded-xl bg-white">
-                <Script
-                  src="https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&powered_by=true&campaign_id=172&promo_id=4850"
-                  strategy="afterInteractive"
-                  charSet="utf-8"
-                />
+                <TravelpayoutsWidget src={QEEQ} />
               </div>
             </div>
 
@@ -361,6 +378,7 @@ export default function CarRentalsPage() {
                     <h3 className="text-xl font-bold text-gray-900">
                       Auto Europe
                     </h3>
+
                     <p className="text-sm text-gray-500">
                       Rental Cars — Europe & UK
                     </p>
@@ -369,11 +387,7 @@ export default function CarRentalsPage() {
               </div>
 
               <div className="overflow-hidden rounded-xl bg-white">
-                <Script
-                  src="https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&default_pick_up_location=DXB&powered_by=true&border_radius=5&plain=true&show_logo=true&color_background=%23ffca28&color_button=%2355a539&promo_id=4362&campaign_id=143"
-                  strategy="afterInteractive"
-                  charSet="utf-8"
-                />
+                <TravelpayoutsWidget src={AUTO_EUROPE} />
               </div>
             </div>
           </div>
@@ -402,11 +416,7 @@ export default function CarRentalsPage() {
             </div>
 
             <div className="overflow-hidden rounded-xl border bg-gray-50 p-3">
-              <Script
-                src="https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&country=14&city=62821&powered_by=true&campaign_id=87&promo_id=2466"
-                strategy="afterInteractive"
-                charSet="utf-8"
-              />
+              <TravelpayoutsWidget src={LOCALRENT_WHITE_LABEL} />
             </div>
           </div>
         </div>
@@ -438,11 +448,7 @@ export default function CarRentalsPage() {
             </div>
 
             <div className="overflow-hidden rounded-xl bg-white">
-              <Script
-                src="https://tpemb.com/content?trs=571731&shmarker=775245&locale=en&default_pick_up_location=Dubai&powered_by=true&border_radius=5&plain=true&color_background=%23ffffff&color_button=%235080c5&promo_id=5472&campaign_id=57"
-                strategy="afterInteractive"
-                charSet="utf-8"
-              />
+              <TravelpayoutsWidget src={BIKES_BOOKING} />
             </div>
           </div>
         </div>
@@ -465,7 +471,10 @@ export default function CarRentalsPage() {
 
           <div className="grid gap-5 md:grid-cols-3">
             <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <CheckCircle className="text-emerald-600" size={28} />
+              <CheckCircle
+                className="text-emerald-600"
+                size={28}
+              />
 
               <h3 className="mt-4 font-bold text-gray-900">
                 Choose Your Vehicle
@@ -478,7 +487,10 @@ export default function CarRentalsPage() {
             </div>
 
             <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <CheckCircle className="text-emerald-600" size={28} />
+              <CheckCircle
+                className="text-emerald-600"
+                size={28}
+              />
 
               <h3 className="mt-4 font-bold text-gray-900">
                 Convenient Pickup
@@ -491,7 +503,10 @@ export default function CarRentalsPage() {
             </div>
 
             <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <CheckCircle className="text-emerald-600" size={28} />
+              <CheckCircle
+                className="text-emerald-600"
+                size={28}
+              />
 
               <h3 className="mt-4 font-bold text-gray-900">
                 Travel Independently
