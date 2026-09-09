@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowRight,
   CheckCircle2,
@@ -187,6 +188,103 @@ export default async function VisaPage() {
 
         </div>
       </section>
+
+{/* =====================================================
+    MALAYSIA VISA
+===================================================== */}
+<section className="bg-emerald-50 py-16 md:py-20">
+  <div className="mx-auto max-w-7xl px-6">
+    <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+      <div>
+        <p className="font-semibold uppercase tracking-[4px] text-emerald-600">
+          Malaysia Visa From UAE
+        </p>
+
+        <h2 className="mt-3 text-4xl font-bold text-gray-900 md:text-5xl">
+          Malaysia Tourist Visa UAE
+        </h2>
+
+        <p className="mt-5 text-lg leading-8 text-gray-600">
+          Planning a trip to Malaysia from Dubai, Sharjah or elsewhere in
+          the UAE? Get Malaysia Tourist Visa guidance, document assistance
+          and application support from Umrah Tours.
+        </p>
+
+        <p className="mt-4 leading-7 text-gray-600">
+          Visa requirements depend on your nationality and passport. Our
+          team can help UAE residents understand the applicable Malaysia
+          visa requirements, eVisa options and travel documentation.
+        </p>
+
+        <Link
+          href="/visa/malaysia-tourist-visa"
+          className="mt-7 inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-6 py-3 font-semibold text-white transition hover:bg-emerald-800"
+        >
+          Malaysia Tourist Visa
+          <ArrowRight size={18} />
+        </Link>
+      </div>
+
+      <div className="rounded-3xl bg-white p-8 shadow-sm md:p-10">
+        <h3 className="text-2xl font-bold text-gray-900">
+          Malaysia Visa Assistance
+        </h3>
+
+        <div className="mt-6 space-y-4">
+          <div className="flex items-start gap-3">
+            <CheckCircle2
+              className="mt-0.5 shrink-0 text-emerald-600"
+              size={20}
+            />
+            <span className="text-gray-700">
+              Malaysia Tourist Visa guidance from the UAE
+            </span>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <CheckCircle2
+              className="mt-0.5 shrink-0 text-emerald-600"
+              size={20}
+            />
+            <span className="text-gray-700">
+              Document and eligibility guidance
+            </span>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <CheckCircle2
+              className="mt-0.5 shrink-0 text-emerald-600"
+              size={20}
+            />
+            <span className="text-gray-700">
+              Malaysia eVisa guidance where applicable
+            </span>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <CheckCircle2
+              className="mt-0.5 shrink-0 text-emerald-600"
+              size={20}
+            />
+            <span className="text-gray-700">
+              Malaysia Digital Arrival Card guidance
+            </span>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <CheckCircle2
+              className="mt-0.5 shrink-0 text-emerald-600"
+              size={20}
+            />
+            <span className="text-gray-700">
+              Assistance for travellers from Dubai and Sharjah
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* =====================================================
           VISA SERVICE INTRO
