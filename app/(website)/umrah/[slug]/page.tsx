@@ -70,17 +70,27 @@ export async function generateMetadata({
     `and pilgrimage travel arrangements from the UAE.`;
 
   const rawDescription =
-    pkg.seoDescription?.trim() ||
-    pkg.description?.trim() ||
-    fallbackDescription;
+  pkg.seoDescription?.trim() ||
+  pkg.description?.trim() ||
+  fallbackDescription;
 
-  /*
-   * Keep the meta description within a practical SEO length.
-   */
-  const description =
-    rawDescription.length > 160
-      ? `${rawDescription.substring(0, 157).trim()}...`
-      : rawDescription;
+/*
+ * Clean Markdown formatting before using the text
+ * as the HTML meta description.
+ */
+const cleanDescription = rawDescription
+  .replace(/^#{1,6}\s+/gm, "")
+  .replace(/\*\*(.*?)\*\*/g, "$1")
+  .replace(/\*(.*?)\*/g, "$1")
+  .replace(/`(.*?)`/g, "$1")
+  .replace(/\r?\n+/g, " ")
+  .replace(/\s+/g, " ")
+  .trim();
+
+const description =
+  cleanDescription.length > 160
+    ? `${cleanDescription.substring(0, 157).trim()}...`
+    : cleanDescription;
 
   return {
     title,
