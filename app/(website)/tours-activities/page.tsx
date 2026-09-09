@@ -116,7 +116,7 @@ export default function ToursActivitiesPage() {
             <Script
               async
               src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=977218&language=en&layout=horizontal&powered_by=true&campaign_id=89&promo_id=3948"
-              charset="utf-8"
+              charSet="utf-8"
               strategy="afterInteractive"
             />
           </WidgetCard>
@@ -129,7 +129,7 @@ export default function ToursActivitiesPage() {
             <Script
               async
               src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&product=1056326&language=en&layout=compact&orientation=vertical&powered_by=true&campaign_id=89&promo_id=3984"
-              charset="utf-8"
+              charSet="utf-8"
               strategy="afterInteractive"
             />
           </WidgetCard>
@@ -160,7 +160,7 @@ export default function ToursActivitiesPage() {
             <Script
               async
               src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&language=en&locale=260932&layout=horizontal&cards=4&powered_by=true&campaign_id=89&promo_id=3947"
-              charset="utf-8"
+              charSet="utf-8"
               strategy="afterInteractive"
             />
           </WidgetCard>
@@ -190,7 +190,7 @@ export default function ToursActivitiesPage() {
           <Script
             async
             src="https://tpemb.com/content?currency=AED&trs=571731&shmarker=775245&locale=en&city_id=78&category=3&amount=3&powered_by=true&campaign_id=137&promo_id=4497"
-            charset="utf-8"
+            charSet="utf-8"
             strategy="afterInteractive"
           />
         </WidgetCard>
