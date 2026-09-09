@@ -7,6 +7,7 @@ import { useState } from "react";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Umrah", href: "/umrah" },
+  { label: "Flights", href: "/flights" },
   { label: "Holidays", href: "/holidays" },
   { label: "Visa", href: "/visa" },
   { label: "Hotels", href: "/hotels" },
@@ -16,17 +17,7 @@ const navItems = [
 
 const otherServices = [
   {
-    title: "Flights",
-    icon: "✈️",
-    services: [
-      {
-        label: "Search Flights",
-        href: "https://aviasales.tpo.mx/I7xeUixi",
-        description: "Find the best flight deals",
-      },
-    ],
-  },
-  {
+   
     title: "Airport Transfers",
     icon: "🚐",
     services: [
@@ -37,7 +28,7 @@ const otherServices = [
       },
       {
         label: "Welcome Pickups",
-        href: "https://welcomepickups.com",
+        href: "https://tpo.mx/w3Ylsjy",
         description: "Private airport transfers",
       },
       {
