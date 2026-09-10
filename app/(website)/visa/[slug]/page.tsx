@@ -13,6 +13,49 @@ import {
 
 const SITE_URL = "https://umrahtours.co";
 
+const azerbaijanFaqs = [
+  {
+    question: "Can I apply for an Azerbaijan Tourist Visa from the UAE?",
+    answer:
+      "Yes. UAE-based travellers may be able to apply for an Azerbaijan eVisa or another applicable visa route depending on their nationality, passport and current Azerbaijan visa rules. Our team can help you check the applicable route and document requirements.",
+  },
+  {
+    question: "Can Indian passport holders apply for an Azerbaijan eVisa?",
+    answer:
+      "Indian citizens are currently listed on the official Azerbaijan ASAN Visa website among the nationalities eligible to apply for an eVisa. Eligibility and visa conditions remain subject to the applicable Azerbaijani rules.",
+  },
+  {
+    question: "Can Pakistani passport holders apply for an Azerbaijan eVisa?",
+    answer:
+      "Pakistani citizens are currently listed on the official Azerbaijan ASAN Visa website among the nationalities eligible to apply for an eVisa. Eligibility and visa conditions remain subject to the applicable Azerbaijani rules.",
+  },
+  {
+    question: "How long does an Azerbaijan eVisa take?",
+    answer:
+      "According to the official Azerbaijan ASAN Visa portal, a standard eVisa is issued within 3 working days. An urgent eVisa can be issued within 3 hours, subject to eligibility and the official system.",
+  },
+  {
+    question: "How long can I stay in Azerbaijan with an eVisa?",
+    answer:
+      "An Azerbaijan eVisa is valid for 90 days and permits a stay of up to 30 days. The eVisa is issued for single entry.",
+  },
+  {
+    question: "How much passport validity is required for an Azerbaijan eVisa?",
+    answer:
+      "The official Azerbaijan eVisa conditions state that the travel document should remain valid for at least 3 months beyond the expiry date of the eVisa to be issued.",
+  },
+  {
+    question: "What documents are required for an Azerbaijan Tourist Visa?",
+    answer:
+      "The required documents depend on your nationality and the applicable visa route. Applicants should provide the required passport and application information and may need additional supporting documents depending on their circumstances. Our team can guide you through the applicable document checklist.",
+  },
+  {
+    question: "Can Umrah Tours help with an Azerbaijan Tourist Visa from Dubai or Sharjah?",
+    answer:
+      "Yes. Umrah Tours can assist UAE-based travellers with Azerbaijan visa eligibility guidance, document preparation, application procedure guidance and travel preparation. Visa approval remains subject to the relevant Azerbaijani authorities.",
+  },
+];
+
 const malaysiaFaqs = [
   {
     question: "Do UAE residents need a visa to visit Malaysia?",
@@ -197,12 +240,16 @@ export default async function VisaPackageDetails({
         : undefined;
 
   const isMalaysiaVisa =
-    pkg.slug === "malaysia-tourist-visa";
-    const isEnquiryOnlyVisa =
+  pkg.slug === "malaysia-tourist-visa";
+
+const isAzerbaijanVisa =
+  pkg.slug === "azerbaijan-tourist-visa";
+
+const isEnquiryOnlyVisa =
   pkg.category?.toUpperCase() === "VISA" &&
   Number(pkg.price) <= 0;
 
-  const faqSchema = isMalaysiaVisa
+    const faqSchema = isMalaysiaVisa
     ? {
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -215,7 +262,20 @@ export default async function VisaPackageDetails({
           },
         })),
       }
-    : null;
+    : isAzerbaijanVisa
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: azerbaijanFaqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.answer,
+            },
+          })),
+        }
+      : null;
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -421,6 +481,36 @@ export default async function VisaPackageDetails({
 
                   <div className="mt-8 space-y-6">
                     {malaysiaFaqs.map((faq) => (
+                      <div
+                        key={faq.question}
+                        className="border-b border-gray-100 pb-6 last:border-b-0 last:pb-0"
+                      >
+                        <h3 className="text-lg font-bold text-gray-900">
+                          {faq.question}
+                        </h3>
+
+                        <p className="mt-2 leading-7 text-gray-600">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+                            {/* Azerbaijan FAQ */}
+              {isAzerbaijanVisa && (
+                <section className="rounded-2xl bg-white p-8 shadow-sm">
+                  <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
+                    Azerbaijan Visa FAQ
+                  </p>
+
+                  <h2 className="mt-2 text-3xl font-bold text-gray-900">
+                    Azerbaijan Tourist Visa from UAE – Frequently Asked
+                    Questions
+                  </h2>
+
+                  <div className="mt-8 space-y-6">
+                    {azerbaijanFaqs.map((faq) => (
                       <div
                         key={faq.question}
                         className="border-b border-gray-100 pb-6 last:border-b-0 last:pb-0"

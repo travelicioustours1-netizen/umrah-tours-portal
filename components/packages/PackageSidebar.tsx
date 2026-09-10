@@ -236,25 +236,29 @@ Thank you.`
             <div className="space-y-3">
 
               <Feature
-                enabled={pkg.visa}
-                title={
-                  isVisa
-                    ? "Visa Assistance"
-                    : isHoliday
-                      ? "Visa Assistance"
-                      : "Visa Included"
-                }
-              />
+  enabled={pkg.visa}
+  title={
+    isVisa
+      ? "Visa Assistance"
+      : isHoliday
+        ? "Visa Assistance"
+        : "Visa Included"
+  }
+/>
 
-              <Feature
-                enabled={pkg.transport}
-                title="Airport & Local Transport"
-              />
+{!isVisa && (
+  <>
+    <Feature
+      enabled={pkg.transport}
+      title="Airport & Local Transport"
+    />
 
-              <Feature
-                enabled={pkg.meals}
-                title="Meals Included"
-              />
+    <Feature
+      enabled={pkg.meals}
+      title="Meals Included"
+    />
+  </>
+)}
 
             </div>
           </div>
