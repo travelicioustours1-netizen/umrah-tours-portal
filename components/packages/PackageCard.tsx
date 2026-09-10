@@ -1,11 +1,11 @@
 import SupabaseImage from "@/components/ui/SupabaseImage";
+import PackageCardWhatsApp from "@/components/packages/PackageCardWhatsApp";
 import Link from "next/link";
 import {
   CalendarDays,
   Plane,
   Building2,
   MapPin,
-  MessageCircle,
   FileText,
 } from "lucide-react";
 
@@ -84,18 +84,16 @@ Thank you.`
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-
       {/* Image */}
       <Link href={href}>
         <div className="relative h-64 overflow-hidden">
-
           <SupabaseImage
-          src={image}
-          alt={pkg.title}
-          fill
-          sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition duration-500 group-hover:scale-105"
-        />
+            src={image}
+            alt={pkg.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition duration-500 group-hover:scale-105"
+          />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
@@ -239,21 +237,17 @@ Thank you.`
                 View Details
               </Link>
 
-              <a
+              <PackageCardWhatsApp
                 href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
-              >
-                <MessageCircle size={17} />
-                Get a Quote
-              </a>
+                packageTitle={pkg.title}
+                category={category}
+              />
 
             </div>
           ) : (
             <Link
               href={href}
-              className="block w-full rounded-xl bg-emerald-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
+              className="block w-full rounded-xl bg-emerald-600 px-4 py-3 text-centertext-sm font-semibold text-white transition hover:bg-emerald-700"
             >
               View Details
             </Link>
