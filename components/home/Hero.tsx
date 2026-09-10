@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import HeroWhatsAppButton from "@/components/home/HeroWhatsAppButton";
+
 export default function Hero() {
   return (
     <section className="relative min-h-[680px] overflow-hidden md:min-h-[760px]">
@@ -43,6 +45,8 @@ export default function Hero() {
 
             {/* Main CTA Buttons */}
             <div className="mt-10 flex flex-wrap gap-4">
+              <HeroWhatsAppButton />
+
               <Link
                 href="/umrah"
                 className="rounded-lg bg-emerald-600 px-7 py-4 font-semibold text-white transition hover:bg-emerald-700"
@@ -94,18 +98,11 @@ export default function Hero() {
                 </Link>
 
                 <Link
-                  href="/airport-transfers"
+                  href="/tours-activities"
                   className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-black/30 px-6 py-3 font-semibold text-white backdrop-blur-sm transition hover:border-emerald-300 hover:bg-emerald-600"
                 >
-                  🚐 Airport Transfers
+                  🎟️ Activities
                 </Link>
-
-                <Link
-  href="/tours-activities"
-  className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-black/30 px-6 py-3 font-semibold text-white backdrop-blur-sm transition hover:border-emerald-300 hover:bg-emerald-600"
->
-  🎟️ Activities
-</Link>
               </div>
             </div>
 
