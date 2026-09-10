@@ -1,24 +1,6 @@
 import Link from "next/link";
-import {
-  CheckCircle2,
-  MessageCircle,
-  ArrowRight,
-} from "lucide-react";
-
-const whatsappNumber = "971525657940";
-
-const whatsappMessage = encodeURIComponent(
-  `Assalamu Alaikum,
-
-I'm interested in the Awwal Umrah Package.
-
-Please share the availability, travel dates, complete package details and booking procedure.
-
-Thank you.`
-);
-
-const whatsappUrl =
-  `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+import { CheckCircle2, ArrowRight } from "lucide-react";
+import AwwalPromoWhatsAppButton from "@/components/home/AwwalPromoWhatsAppButton";
 
 const highlights = [
   "Premium Accommodation",
@@ -34,7 +16,6 @@ export default function AwwalPromo() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-3xl bg-white shadow-2xl">
           <div className="grid lg:grid-cols-2">
-
             {/* Promotional Content */}
             <div className="p-6 sm:p-8 md:p-12">
               <div className="inline-flex items-center rounded-full bg-emerald-50 px-4 py-2">
@@ -86,15 +67,7 @@ export default function AwwalPromo() {
 
               {/* CTA */}
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-green-600 px-6 py-4 font-semibold text-white transition duration-200 hover:bg-green-700 hover:shadow-lg"
-                >
-                  <MessageCircle size={20} />
-                  Enquire on WhatsApp
-                </a>
+                <AwwalPromoWhatsAppButton />
 
                 <Link
                   href="/umrah/awwal-package"
@@ -126,7 +99,8 @@ export default function AwwalPromo() {
                 </p>
 
                 <h3 className="mt-5 max-w-md text-3xl font-bold leading-tight md:text-4xl">
-                  Begin your journey to the Holy Cities with comfort and peace of mind.
+                  Begin your journey to the Holy Cities with comfort and peace
+                  of mind.
                 </h3>
 
                 <p className="mt-4 max-w-md leading-7 text-emerald-100">
@@ -160,7 +134,6 @@ export default function AwwalPromo() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
