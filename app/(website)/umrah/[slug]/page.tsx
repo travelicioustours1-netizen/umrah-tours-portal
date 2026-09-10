@@ -96,12 +96,28 @@ const description =
     title,
     description,
 
-    keywords: pkg.seoKeywords
-  ? pkg.seoKeywords
-      .split(",")
-      .map((keyword) => keyword.trim())
-      .filter(Boolean)
-  : [],
+    keywords: [
+      ...(pkg.seoKeywords
+        ? pkg.seoKeywords
+            .split(",")
+            .map((keyword) => keyword.trim())
+            .filter(Boolean)
+        : []),
+
+      pkg.title,
+
+      "Umrah package UAE",
+      "Umrah packages UAE",
+      "Umrah packages Dubai",
+      "Umrah packages Sharjah",
+      "Umrah package from UAE",
+      "Umrah travel UAE",
+      "Umrah tours UAE",
+      "Umrah visa UAE",
+      "Makkah Umrah package",
+      "Madinah Umrah package",
+      "Makkah Madinah Umrah package",
+    ],
 
     authors: [
       {
