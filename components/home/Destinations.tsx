@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
+import DestinationLink from "@/components/home/DestinationLink";
 
 const destinations = [
   {
@@ -94,13 +95,11 @@ export default function Destinations() {
                   {destination.description}
                 </p>
 
-                <Link
+                <DestinationLink
                   href={destination.href}
-                  className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
-                >
-                  {destination.label}
-                  <ArrowRight size={17} />
-                </Link>
+                  label={destination.label}
+                  destination={destination.name}
+                />
               </div>
             </div>
           ))}
@@ -112,7 +111,7 @@ export default function Destinations() {
             href="/holidays"
             className="inline-flex items-center gap-2 font-semibold text-emerald-700 transition hover:text-emerald-800"
           >
-            Explore All Holiday Destinations
+            Explore All Holiday Packages
             <ArrowRight size={18} />
           </Link>
         </div>
