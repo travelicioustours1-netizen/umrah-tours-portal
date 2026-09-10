@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import SupabaseImage from "@/components/ui/SupabaseImage";
 import { Globe2, MessageCircle, Sparkles } from "lucide-react";
 
@@ -65,12 +66,17 @@ Thank you.`
   const whatsappUrl =
     `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
+  const handleWhatsAppClick = () => {
+    track("whatsapp_click", {
+      location: "package_hero",
+      package: title,
+    });
+  };
+
   return (
     <section className="space-y-4">
-
       {/* Main Hero */}
       <div className="relative w-full aspect-[16/7] min-h-[400px] overflow-hidden rounded-2xl bg-gray-900">
-
         {/* Background - decorative blurred image */}
         <div
           className="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
@@ -117,9 +123,7 @@ Thank you.`
 
         {/* Hero Content */}
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
-
           <div className="max-w-4xl">
-
             <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-300">
               Explore {destination}
             </p>
@@ -129,7 +133,6 @@ Thank you.`
             </h1>
 
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-
               {price != null && (
                 <div className="rounded-xl bg-white/95 px-5 py-3 shadow-lg">
                   <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
@@ -150,14 +153,13 @@ Thank you.`
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={handleWhatsAppClick}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 px-6 py-4 font-semibold text-white shadow-lg transition hover:bg-green-700"
               >
                 <MessageCircle size={20} />
                 Get Today's Best Price
               </a>
-
             </div>
-
           </div>
         </div>
       </div>
@@ -165,7 +167,6 @@ Thank you.`
       {/* Gallery */}
       {gallery.length > 1 && (
         <div className="flex gap-3 overflow-x-auto pb-2">
-
           {gallery.map((image, index) => (
             <button
               key={image.id}
@@ -187,10 +188,8 @@ Thank you.`
               />
             </button>
           ))}
-
         </div>
       )}
-
     </section>
   );
 }
