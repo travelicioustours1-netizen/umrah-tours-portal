@@ -315,59 +315,54 @@ export default async function HolidayPackagePage({
       packageData.exclusions
     );
 
-  /* =======================================================
-     PACKAGE JSON-LD
-  ======================================================= */
-
   const packageSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
+  "@context": "https://schema.org",
+  "@type": "Product",
 
-    name: packageData.title,
+  "@id": `${canonicalUrl}#product`,
 
-    description:
-      createSeoDescription(
-        packageData.description,
-        `${packageData.title} - ${destination} holiday package.`
-      ),
+  name: packageData.title,
 
-    image:
-      packageData.images?.map(
-        (image) => image.url
-      ) || [],
+  description: createSeoDescription(
+    packageData.description,
+    `${packageData.title} - ${destination} holiday package.`
+  ),
+
+  image:
+    packageData.images?.map((image) => image.url) || [],
+
+  url: canonicalUrl,
+
+  sku: packageData.slug,
+
+  category:
+    destination !== "International"
+      ? `${destination} Holiday Packages`
+      : "International Holiday Packages",
+
+  brand: {
+    "@type": "Brand",
+    name: "Umrah Tours",
+  },
+
+  offers: {
+    "@type": "Offer",
 
     url: canonicalUrl,
 
-    category:
-  destination !== "International"
-    ? `${destination} Holiday Packages`
-    : "International Holiday Packages",
+    priceCurrency: "AED",
 
-    brand: {
-      "@type": "Brand",
+    price: Number(basePrice),
+
+    availability: "https://schema.org/InStock",
+
+    seller: {
+      "@type": "TravelAgency",
       name: "Umrah Tours",
+      url: SITE_URL,
     },
-
-    offers: {
-      "@type": "Offer",
-
-      url: canonicalUrl,
-
-      priceCurrency: "AED",
-
-      price: basePrice,
-
-      availability:
-        "https://schema.org/InStock",
-
-      seller: {
-        "@type": "TravelAgency",
-        name: "Umrah Tours",
-        url: SITE_URL,
-      },
-    },
-  };
-
+  },
+};
   /* =======================================================
      BREADCRUMB JSON-LD
   ======================================================= */
