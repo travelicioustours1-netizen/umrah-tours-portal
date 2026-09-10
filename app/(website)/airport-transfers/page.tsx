@@ -1,9 +1,78 @@
 import TravelpayoutsWidget from "@/components/common/TravelpayoutsWidget";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Airport Transfers",
+export const metadata: Metadata = {
+  title: "Airport Transfers UAE | Dubai & Sharjah | Umrah Tours",
   description:
-    "Book reliable airport transfers, private transfers, shuttles and city transfers worldwide with Umrah Tours.",
+    "Book reliable airport transfers from Dubai, Sharjah and across the UAE. Compare private airport transfers, taxis, shuttles and city transfers worldwide with Umrah Tours.",
+  alternates: {
+    canonical: "https://umrahtours.co/airport-transfers",
+  },
+  openGraph: {
+    title: "Airport Transfers UAE | Dubai & Sharjah | Umrah Tours",
+    description:
+      "Book reliable airport transfers from Dubai, Sharjah and across the UAE. Compare private transfers, taxis and shuttle services worldwide.",
+    url: "https://umrahtours.co/airport-transfers",
+    siteName: "Umrah Tours",
+    locale: "en_AE",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Airport Transfers UAE | Dubai & Sharjah",
+    description:
+      "Compare and book airport transfers, private cars and shuttle services from Dubai, Sharjah and worldwide.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+};
+
+const airportTransfersSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Airport Transfers UAE | Dubai & Sharjah",
+  description:
+    "Compare and book airport transfers, private cars, taxis and shuttle services from Dubai, Sharjah and destinations worldwide.",
+  url: "https://umrahtours.co/airport-transfers",
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Umrah Tours",
+    url: "https://umrahtours.co",
+  },
+  about: {
+    "@type": "Thing",
+    name: "Airport Transfers",
+  },
+  provider: {
+    "@id": "https://umrahtours.co/#organization",
+  },
+  areaServed: {
+    "@type": "Country",
+    name: "United Arab Emirates",
+  },
+  mainEntity: {
+    "@type": "Service",
+    name: "Airport Transfer Services",
+    serviceType: "Airport Transfers",
+    description:
+      "Airport transfer, private car, taxi and shuttle booking services for travellers from Dubai, Sharjah and worldwide destinations.",
+    provider: {
+      "@id": "https://umrahtours.co/#organization",
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "United Arab Emirates",
+    },
+  },
 };
 
 function WidgetCard({
@@ -18,20 +87,14 @@ function WidgetCard({
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
       <div className="mb-5">
-        <h2 className="text-xl font-bold text-gray-900">
-          {title}
-        </h2>
+        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
 
         {description && (
-          <p className="mt-1 text-sm text-gray-600">
-            {description}
-          </p>
+          <p className="mt-1 text-sm text-gray-600">{description}</p>
         )}
       </div>
 
-      <div className="w-full overflow-hidden">
-        {children}
-      </div>
+      <div className="w-full overflow-hidden">{children}</div>
     </div>
   );
 }
@@ -39,6 +102,13 @@ function WidgetCard({
 export default function AirportTransfersPage() {
   return (
     <main className="bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(airportTransfersSchema),
+        }}
+      />
+
       {/* =========================================================
           HERO
       ========================================================== */}
@@ -69,21 +139,7 @@ export default function AirportTransfersPage() {
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="grid gap-6 md:grid-cols-3">
             <div>
-              <div className="mb-3 text-2xl">
-                🚐
-              </div>
-
-              <h2 className="font-semibold text-gray-900">
-                Private Transfers
-              </h2>
-
-              <p className="mt-2 text-sm leading-6 text-gray-600">
-                Travel directly from the airport to your hotel or destination.
-              </p>
-            </div>
-
-            <div>
-              <div className="mb-3 text-2xl">
+              <div className="mb-3 text-2xl" aria-hidden="true">
                 ✈️
               </div>
 
@@ -97,7 +153,7 @@ export default function AirportTransfersPage() {
             </div>
 
             <div>
-              <div className="mb-3 text-2xl">
+              <div className="mb-3 text-2xl" aria-hidden="true">
                 🌍
               </div>
 
@@ -390,6 +446,13 @@ export default function AirportTransfersPage() {
             Arrange your airport transfer before you travel and enjoy a
             smoother arrival.
           </p>
+
+          <a
+            href="/contact"
+            className="mt-7 inline-flex items-center justify-center rounded-lg bg-white px-8 py-4 font-semibold text-emerald-800 transition hover:bg-gray-100"
+          >
+            Enquire Now
+          </a>
         </div>
       </section>
     </main>
