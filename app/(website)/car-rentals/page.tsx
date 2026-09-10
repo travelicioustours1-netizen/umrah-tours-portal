@@ -14,15 +14,19 @@ import TravelpayoutsWidget from "@/components/common/TravelpayoutsWidget";
 const SITE_URL = "https://umrahtours.co";
 
 export const metadata: Metadata = {
-  title: "Car Rentals",
+  title: "Car Rental Worldwide | Compare Rental Cars | Umrah Tours",
   description:
-    "Compare and search rental cars from leading travel providers including Localrent, EconomyBookings, QEEQ, Auto Europe and GetRentacar.",
+    "Compare and search rental cars worldwide with leading travel providers. Find convenient car rental options for holidays, business trips and journeys across destinations worldwide.",
   keywords: [
+    "car rental worldwide",
+    "rental cars worldwide",
+    "international car rental",
+    "car rental abroad",
     "car rental",
+    "rental cars",
     "car rental UAE",
     "car rental Dubai",
     "Dubai car rental",
-    "rental cars",
     "EconomyBookings",
     "QEEQ",
     "Auto Europe",
@@ -34,19 +38,73 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/car-rentals`,
   },
   openGraph: {
-    title: "Car Rentals | Umrah Tours",
+    title: "Car Rental Worldwide | Compare Rental Cars | Umrah Tours",
     description:
-      "Compare rental cars and find convenient car rental options for your next journey.",
+      "Compare and search rental cars worldwide for holidays, business trips and international journeys with leading travel providers.",
     url: `${SITE_URL}/car-rentals`,
     siteName: "Umrah Tours",
     locale: "en_AE",
     type: "website",
   },
   twitter: {
-    card: "summary",
-    title: "Car Rentals | Umrah Tours",
+    card: "summary_large_image",
+    title: "Car Rental Worldwide | Compare Rental Cars",
     description:
-      "Search rental cars from leading travel providers with Umrah Tours.",
+      "Search and compare rental cars worldwide for holidays, business trips and international journeys.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+};
+
+/* =========================================================
+   CAR RENTAL SERVICE STRUCTURED DATA
+========================================================= */
+
+const carRentalSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Car Rental Worldwide",
+  description:
+    "Compare and search rental cars worldwide for holidays, business trips and international journeys.",
+  url: `${SITE_URL}/car-rentals`,
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Umrah Tours",
+    url: SITE_URL,
+  },
+  about: {
+    "@type": "Thing",
+    name: "Car Rental",
+  },
+  provider: {
+    "@id": `${SITE_URL}/#organization`,
+  },
+  areaServed: {
+    "@type": "Place",
+    name: "Worldwide",
+  },
+  mainEntity: {
+    "@type": "Service",
+    name: "Worldwide Car Rental",
+    serviceType: "Car Rental",
+    description:
+      "Car rental search and comparison services for travellers across destinations worldwide.",
+    provider: {
+      "@id": `${SITE_URL}/#organization`,
+    },
+    areaServed: {
+      "@type": "Place",
+      name: "Worldwide",
+    },
   },
 };
 
@@ -78,6 +136,13 @@ const BIKES_BOOKING =
 export default function CarRentalsPage() {
   return (
     <main className="bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(carRentalSchema),
+        }}
+      />
+
       {/* =========================================================
           HERO
       ========================================================== */}
