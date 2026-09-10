@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import {
   CheckCircle,
   Download,
@@ -78,6 +79,30 @@ Thank you.`;
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
     whatsappMessage
   )}`;
+
+  const handlePrimaryWhatsAppClick = () => {
+    track("whatsapp_click", {
+      location: "package_sidebar_primary",
+      package: pkg.title,
+      category: category || "UNKNOWN",
+    });
+  };
+
+  const handleVisaWhatsAppClick = () => {
+    track("whatsapp_click", {
+      location: "package_sidebar_visa",
+      package: pkg.title,
+      category: category || "VISA",
+    });
+  };
+
+  const handleCustomizedWhatsAppClick = () => {
+    track("whatsapp_click", {
+      location: "package_sidebar_customized",
+      package: pkg.title,
+      category: "HOLIDAY",
+    });
+  };
 
   const whatsappButtonLabel = isEnquiryOnlyVisa
     ? "Get Visa Assistance"
@@ -159,6 +184,7 @@ Thank you.`;
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handlePrimaryWhatsAppClick}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-4 font-semibold text-white shadow-sm transition hover:bg-green-700"
             >
               <MessageCircle size={21} />
@@ -192,6 +218,7 @@ Thank you.`;
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleVisaWhatsAppClick}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3.5 font-semibold text-white transition hover:bg-emerald-700"
             >
               <ShieldCheck size={19} />
@@ -323,9 +350,10 @@ Thank you.`;
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={handleCustomizedWhatsAppClick}
                     className="mt-3 inline-flex text-xs font-semibold text-emerald-700 hover:underline"
                   >
-                    Chat with our team →
+                    Chat with our team â†’
                   </a>
                 </div>
               </div>
