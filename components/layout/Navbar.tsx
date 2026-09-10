@@ -17,66 +17,8 @@ const navItems = [
 
 const otherServices = [
   {
-   
     title: "Airport Transfers",
-    icon: "🚐",
-    services: [
-      {
-        label: "Kiwitaxi",
-        href: "https://kiwitaxi.tpo.mx/i3R5g7Wj",
-        description: "Book airport transfers",
-      },
-      {
-        label: "Welcome Pickups",
-        href: "https://tpo.mx/w3Ylsjy",
-        description: "Private airport transfers",
-      },
-      {
-        label: "GetTransfer",
-        href: "https://gettransfer.tpo.mx/wjaU3B56",
-        description: "Transfers worldwide",
-      },
-      {
-        label: "Intui Travel",
-        href: "https://intui.tpo.mx/uqoNmvzV",
-        description: "Airport shuttle transfers",
-      },
-    ],
-  },
-  {
-    title: "Car Rentals",
-    icon: "🚗",
-    services: [
-      {
-        label: "Localrent",
-        href: "https://localrent.tpo.mx/CJUVSjya",
-        description: "Rent a car worldwide",
-      },
-      {
-        label: "GetRentacar",
-        href: "https://getrentacar.tpo.mx/qyhWRLIi",
-        description: "Car rental marketplace",
-      },
-      {
-        label: "EconomyBookings",
-        href: "https://economybookings.tpo.mx/dSZ6SEnH",
-        description: "Compare car rental prices",
-      },
-      {
-        label: "QEEQ",
-        href: "https://qeeq.tpo.mx/lObVvdlg",
-        description: "Global car rentals",
-      },
-      {
-        label: "Auto Europe",
-        href: "https://autoeurope.tpo.mx/4or1KsKv",
-        description: "International car hire",
-      },
-    ],
-  },
-  {
-    title: "Tours & Activities",
-    icon: "🎟️",
+    icon: "ðŸš",
     services: [
       {
         label: "Klook",
@@ -107,7 +49,7 @@ const otherServices = [
   },
   {
     title: "Travel Essentials",
-    icon: "🌍",
+    icon: "ðŸŒ",
     services: [
       {
         label: "Airalo",
@@ -138,7 +80,7 @@ const otherServices = [
   },
   {
     title: "Travel Support",
-    icon: "🧳",
+    icon: "ðŸ§³",
     services: [
       {
         label: "AirHelp",
@@ -182,6 +124,21 @@ export default function Navbar() {
     setMobileServicesOpen(false);
   };
 
+  const whatsappNumber = "971525657940";
+
+  const whatsappMessage = encodeURIComponent(
+    `Assalamu Alaikum,
+
+I'm interested in your travel services.
+
+Please share today's best available price, availability and complete details.
+
+Thank you.`
+  );
+
+  const whatsappUrl =
+    `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -192,7 +149,7 @@ export default function Navbar() {
           onClick={closeAllMenus}
         >
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-600 text-xl">
-            🕋
+            ðŸ•‹
           </div>
 
           <div>
@@ -307,7 +264,7 @@ export default function Navbar() {
                                   </span>
 
                                   <span className="shrink-0 text-xs text-gray-400 transition group-hover:text-emerald-600">
-                                    ↗
+                                    â†—
                                   </span>
                                 </div>
 
@@ -349,13 +306,25 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop CTA */}
-        <Link
-          href="/contact"
-          className="hidden rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 lg:inline-flex"
-        >
-          Get a Quote
-        </Link>
+        {/* Desktop CTAs */}
+        <div className="hidden items-center gap-2 lg:flex">
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
+          >
+            <span aria-hidden="true">💬</span>
+            WhatsApp
+          </a>
+
+          <Link
+            href="/contact"
+            className="inline-flex rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+          >
+            Get a Quote
+          </Link>
+        </div>
 
         {/* Mobile Menu Button */}
         <button
@@ -368,9 +337,9 @@ export default function Navbar() {
           aria-label="Toggle navigation"
         >
           {mobileOpen ? (
-            <span className="text-2xl">✕</span>
+            <span className="text-2xl">âœ•</span>
           ) : (
-            <span className="text-2xl">☰</span>
+            <span className="text-2xl">â˜°</span>
           )}
         </button>
       </div>
@@ -450,7 +419,7 @@ export default function Navbar() {
                             <span>{service.label}</span>
 
                             <span className="text-gray-400">
-                              ↗
+                              â†—
                             </span>
                           </a>
                         ))}
@@ -477,11 +446,23 @@ export default function Navbar() {
               </Link>
             ))}
 
-            {/* Mobile CTA */}
+            {/* Mobile WhatsApp CTA */}
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeAllMenus}
+              className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-3.5 text-center text-sm font-bold text-white shadow-sm transition hover:bg-green-700"
+            >
+              <span aria-hidden="true">💬</span>
+              WhatsApp Us — Get Today's Best Price
+            </a>
+
+            {/* Mobile Quote CTA */}
             <Link
               href="/contact"
               onClick={closeAllMenus}
-              className="mt-3 block rounded-lg bg-emerald-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
+              className="block rounded-lg bg-emerald-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
             >
               Get a Quote
             </Link>
