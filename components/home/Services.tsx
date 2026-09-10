@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import GetQuoteModal from "@/components/common/GetQuoteModal";
 
 const services = [
@@ -56,6 +57,11 @@ export default function Services() {
   const [selectedService, setSelectedService] = useState("");
 
   function openQuote(service: string) {
+    track("service_quote_started", {
+      service,
+      location: "homepage_services",
+    });
+
     setSelectedService(service);
     setQuoteOpen(true);
   }
@@ -106,6 +112,7 @@ export default function Services() {
                     className="mt-5 inline-flex items-center justify-center text-sm font-semibold text-amber-600 transition-colors hover:text-amber-700"
                   >
                     {service.button}
+
                     <span className="ml-1 inline-block transition-transform group-hover:translate-x-1">
                       →
                     </span>
