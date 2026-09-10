@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import PackageCard from "@/components/packages/PackageCard";
+import FeaturedPackagesWhatsAppButton from "@/components/home/FeaturedPackagesWhatsAppButton";
 import { getFeaturedPackages } from "@/lib/package-service";
 
 export default async function FeaturedPackages() {
@@ -12,19 +13,13 @@ export default async function FeaturedPackages() {
         {/* Section Heading */}
         <div className="mx-auto mb-12 max-w-3xl text-center">
           <div className="mb-3 flex items-center justify-center gap-2">
-            <Sparkles
-              size={18}
-              className="text-amber-500"
-            />
+            <Sparkles size={18} className="text-amber-500" />
 
             <p className="text-sm font-semibold uppercase tracking-[3px] text-amber-600">
               Featured Packages
             </p>
 
-            <Sparkles
-              size={18}
-              className="text-amber-500"
-            />
+            <Sparkles size={18} className="text-amber-500" />
           </div>
 
           <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
@@ -42,10 +37,7 @@ export default async function FeaturedPackages() {
         {packages.length > 0 ? (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {packages.map((pkg) => (
-              <PackageCard
-                key={pkg.id}
-                package={pkg}
-              />
+              <PackageCard key={pkg.id} package={pkg} />
             ))}
           </div>
         ) : (
@@ -55,8 +47,8 @@ export default async function FeaturedPackages() {
             </h3>
 
             <p className="mt-3 text-gray-600">
-              Our latest Umrah packages are being updated.
-              Contact our travel team for current availability.
+              Our latest Umrah packages are being updated. Contact our travel
+              team for current availability.
             </p>
 
             <Link
@@ -69,16 +61,25 @@ export default async function FeaturedPackages() {
           </div>
         )}
 
-        {/* View All */}
+        {/* Package Advice + View All */}
         {packages.length > 0 && (
           <div className="mt-12 text-center">
-            <Link
-              href="/umrah"
-              className="inline-flex items-center gap-2 rounded-xl border border-emerald-600 px-7 py-3.5 font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white"
-            >
-              View All Umrah Packages
-              <ArrowRight size={18} />
-            </Link>
+            <p className="mb-4 text-gray-600">
+              Not sure which package is right for you? Tell us your travel
+              dates, number of travellers and preferred hotel level.
+            </p>
+
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <FeaturedPackagesWhatsAppButton />
+
+              <Link
+                href="/umrah"
+                className="inline-flex items-center gap-2 rounded-xl border border-emerald-600 px-7 py-3.5 font-semibold text-emerald-700 transition hover:bg-emerald-600 hover:text-white"
+              >
+                View All Umrah Packages
+                <ArrowRight size={18} />
+              </Link>
+            </div>
           </div>
         )}
       </div>
