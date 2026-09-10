@@ -1,3 +1,5 @@
+import { Star } from "lucide-react";
+
 const testimonials = [
   {
     name: "Ahmed Khan",
@@ -21,49 +23,48 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6">
-
-        <div className="text-center mb-12">
+    <section className="bg-gray-50 py-16">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold text-gray-900">
             What Our Pilgrims Say
           </h2>
 
-          <p className="text-gray-600 mt-3">
-            Trusted by thousands of pilgrims worldwide
+          <p className="mt-3 text-gray-600">
+            Hear from pilgrims and travelers who chose our services
           </p>
         </div>
 
-
-        <div className="grid md:grid-cols-3 gap-8">
-
-          {testimonials.map((item,index)=>(
+        <div className="grid gap-8 md:grid-cols-3">
+          {testimonials.map((item) => (
             <div
-              key={index}
-              className="bg-white rounded-xl shadow p-6"
+              key={`${item.name}-${item.location}`}
+              className="rounded-xl bg-white p-6 shadow"
             >
-
-              <div className="text-yellow-500 text-xl mb-4">
-                ★★★★★
+              <div className="mb-4 flex gap-1" aria-label="5 star rating">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    size={20}
+                    className="fill-current text-yellow-500"
+                  />
+                ))}
               </div>
 
-              <p className="text-gray-600 mb-6">
-                "{item.text}"
+              <p className="mb-6 text-gray-600">
+                &quot;{item.text}&quot;
               </p>
 
-              <h3 className="font-semibold">
+              <h3 className="font-semibold text-gray-900">
                 {item.name}
               </h3>
 
               <p className="text-sm text-gray-500">
                 {item.location}
               </p>
-
             </div>
           ))}
-
         </div>
-
       </div>
     </section>
   );
