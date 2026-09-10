@@ -17,6 +17,12 @@ export const metadata: Metadata = {
     locale: "en_AE",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Makkah & Madinah Hotels | Umrah Tours",
+    description:
+      "Explore hotel accommodation in Makkah and Madinah near Masjid Al Haram and Masjid An Nabawi for your Umrah journey.",
+  },
   robots: {
     index: true,
     follow: true,
@@ -65,9 +71,66 @@ const benefits = [
   },
 ];
 
+const hotelSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Makkah & Madinah Hotels",
+  description:
+    "Explore hotel accommodation in Makkah and Madinah near the holy sites for Umrah travellers.",
+  url: "https://umrahtours.co/hotels",
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Umrah Tours",
+    url: "https://umrahtours.co",
+  },
+  about: {
+    "@type": "Thing",
+    name: "Makkah and Madinah Hotel Accommodation",
+  },
+  provider: {
+    "@id": "https://umrahtours.co/#organization",
+  },
+  areaServed: [
+    {
+      "@type": "City",
+      name: "Makkah",
+      containedInPlace: {
+        "@type": "Country",
+        name: "Saudi Arabia",
+      },
+    },
+    {
+      "@type": "City",
+      name: "Madinah",
+      containedInPlace: {
+        "@type": "Country",
+        name: "Saudi Arabia",
+      },
+    },
+  ],
+  mainEntity: {
+    "@type": "ItemList",
+    name: "Makkah and Madinah Hotels",
+    numberOfItems: hotels.length,
+    itemListElement: hotels.map((hotel, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: hotel.name,
+      description: hotel.location,
+    })),
+  },
+};
+
 export default function HotelsPage() {
   return (
     <main className="bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(hotelSchema),
+        }}
+      />
+
       {/* Hero */}
       <section className="relative h-[55vh] min-h-[480px] overflow-hidden">
         <Image
@@ -144,9 +207,7 @@ export default function HotelsPage() {
                     {hotel.name}
                   </h3>
 
-                  <p className="mt-3 text-gray-600">
-                    {hotel.location}
-                  </p>
+                  <p className="mt-3 text-gray-600">{hotel.location}</p>
 
                   <p className="mt-5 text-sm leading-6 text-gray-500">
                     Comfortable accommodation options for travellers visiting
