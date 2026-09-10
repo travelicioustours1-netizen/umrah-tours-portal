@@ -57,7 +57,7 @@ export default function PackageHero({
 
 I'm interested in the ${title}.
 
-Please share the availability, travel dates, complete package details and booking procedure.
+Please share today's best price, availability, travel dates, complete package details and booking procedure.
 
 Thank you.`
   );
@@ -71,35 +71,33 @@ Thank you.`
       {/* Main Hero */}
       <div className="relative w-full aspect-[16/7] min-h-[400px] overflow-hidden rounded-2xl bg-gray-900">
 
-  {/* Background - decorative blurred image */}
-<div
-  className="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
-  style={{
-    backgroundImage: `url("${activeImage.url}")`,
-  }}
-  aria-hidden="true"
-/>
-
-  {/* Darken blurred background */}
-  <div className="absolute inset-0 bg-black/20" />
-
-  {/* Main image - entire image remains visible */}
-  <div className="absolute inset-0 flex items-center justify-center">
-            <SupabaseImage
-          src={activeImage.url}
-          alt={activeImage.alt || title}
-          fill
-          priority
-          quality={75}
-          className="object-contain"
-          sizes="(max-width: 768px) 100vw, 1400px"
+        {/* Background - decorative blurred image */}
+        <div
+          className="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
+          style={{
+            backgroundImage: `url("${activeImage.url}")`,
+          }}
+          aria-hidden="true"
         />
-  </div>
 
-  {/* Overlay */}
-  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        {/* Darken blurred background */}
+        <div className="absolute inset-0 bg-black/20" />
 
-        
+        {/* Main image - entire image remains visible */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <SupabaseImage
+            src={activeImage.url}
+            alt={activeImage.alt || title}
+            fill
+            priority
+            quality={75}
+            className="object-contain"
+            sizes="(max-width: 768px) 100vw, 1400px"
+          />
+        </div>
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
         {/* Destination Badge */}
         <div className="absolute left-6 top-6">
@@ -155,7 +153,7 @@ Thank you.`
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 px-6 py-4 font-semibold text-white shadow-lg transition hover:bg-green-700"
               >
                 <MessageCircle size={20} />
-                Check Availability
+                Get Today's Best Price
               </a>
 
             </div>
@@ -180,13 +178,13 @@ Thank you.`
                   : "border-transparent"
               }`}
             >
-             <SupabaseImage
-              src={image.url}
-              alt={image.alt || title}
-              fill
-              className="object-cover"
-              sizes="128px"
-            />
+              <SupabaseImage
+                src={image.url}
+                alt={image.alt || title}
+                fill
+                className="object-cover"
+                sizes="128px"
+              />
             </button>
           ))}
 
