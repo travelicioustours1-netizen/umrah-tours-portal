@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 
 type GetQuoteModalProps = {
   isOpen: boolean;
@@ -81,6 +82,11 @@ export default function GetQuoteModal({
           data.message || "Unable to submit your enquiry."
         );
       }
+
+      track("quote_submitted", {
+        service,
+        travellers: Number(travellers),
+      });
 
       setSuccess(true);
     } catch (err) {
