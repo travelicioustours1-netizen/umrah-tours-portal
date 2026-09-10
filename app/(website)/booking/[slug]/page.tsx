@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { getPackageBySlug } from "@/lib/package-service";
@@ -9,6 +10,36 @@ interface Props {
   params: Promise<{
     slug: string;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { slug } = await params;
+
+  const pkg = await getPackageBySlug(slug);
+
+  if (!pkg) {
+    return {
+      title: "Booking Not Found",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  return {
+    title: `Book ${pkg.title}`,
+    robots: {
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true,
+      },
+    },
+  };
 }
 
 export default async function BookingPage({
