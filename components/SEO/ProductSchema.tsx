@@ -51,8 +51,9 @@ export default function ProductSchema({
      * organization entity.
      */
     brand: {
-      "@id": "https://umrahtours.co/#organization",
-    },
+  "@type": "Brand",
+  name: "Umrah Tours",
+},
 
     category,
 
