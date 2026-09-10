@@ -1,41 +1,29 @@
+import HomeCTAWhatsAppButton from "@/components/home/HomeCTAWhatsAppButton";
+
 export default function CTA() {
   return (
-    <section className="py-16 bg-green-800">
-
-      <div className="max-w-7xl mx-auto px-6 text-center">
-
-        <h2 className="text-3xl md:text-4xl font-bold text-white">
+    <section className="bg-green-800 py-16">
+      <div className="mx-auto max-w-7xl px-6 text-center">
+        <h2 className="text-3xl font-bold text-white md:text-4xl">
           Ready To Begin Your Umrah Journey?
         </h2>
 
-        <p className="text-green-100 mt-4 max-w-2xl mx-auto">
+        <p className="mx-auto mt-4 max-w-2xl text-green-100">
           Book your Umrah package today and experience a smooth,
           comfortable and spiritually fulfilling journey with our expert team.
         </p>
 
-
-        <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+        <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+          <HomeCTAWhatsAppButton />
 
           <a
             href="/contact"
-            className="bg-white text-green-800 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+            className="rounded-lg border border-white px-8 py-3 font-semibold text-white transition hover:bg-white hover:text-green-800"
           >
-            Book Your Umrah
+            Request a Quote
           </a>
-
-
-          <a
-            href="https://wa.me/971525657940"
-            target="_blank"
-            className="border border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-800 transition"
-          >
-            WhatsApp Us
-          </a>
-
         </div>
-
       </div>
-
     </section>
   );
 }
