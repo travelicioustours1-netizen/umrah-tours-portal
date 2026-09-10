@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { getPromotionBySlug } from "@/lib/promotion-service";
+import PromotionWhatsAppButton from "@/components/promotion/PromotionWhatsAppButton";
 
 interface PromotionPageProps {
   params: Promise<{
@@ -76,6 +77,20 @@ export default async function PromotionPage({
     notFound();
   }
 
+  const whatsappNumber = "971525657940";
+
+  const whatsappMessage = `Assalamu Alaikum,
+
+I'm interested in the ${promotion.title}.
+
+Please share today's best price, availability, travel dates, complete package details and booking procedure.
+
+Thank you.`;
+
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    whatsappMessage
+  )}`;
+
   return (
     <main className="min-h-screen bg-gray-50">
       {/* =================================================
@@ -131,20 +146,15 @@ export default async function PromotionPage({
               )}
 
               {/* =================================================
-                  CTA BUTTONS
+                  PRIMARY CTA
               ================================================= */}
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                {promotion.whatsappUrl && (
-                  <a
-                    href={promotion.whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-lg bg-green-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
-                  >
-                    WhatsApp Us
-                  </a>
-                )}
+                <PromotionWhatsAppButton
+                  href={whatsappUrl}
+                  promotionTitle={promotion.title}
+                  slug={promotion.slug}
+                />
 
                 <Link
                   href="/contact"
@@ -152,6 +162,31 @@ export default async function PromotionPage({
                 >
                   {promotion.buttonText || "Get a Quote"}
                 </Link>
+              </div>
+
+              {/* =================================================
+                  LOWER CTA
+              ================================================= */}
+
+              <div className="mt-8 rounded-xl border border-green-100 bg-green-50 p-5">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900">
+                      Ready to plan your trip?
+                    </h2>
+
+                    <p className="mt-1 text-sm text-gray-600">
+                      Message us on WhatsApp for today's best price,
+                      availability and booking details.
+                    </p>
+                  </div>
+
+                  <PromotionWhatsAppButton
+                    href={whatsappUrl}
+                    promotionTitle={promotion.title}
+                    slug={promotion.slug}
+                  />
+                </div>
               </div>
 
               {/* =================================================
