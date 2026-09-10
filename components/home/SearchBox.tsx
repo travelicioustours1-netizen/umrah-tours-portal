@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "@vercel/analytics";
 
 export default function SearchBox() {
   const router = useRouter();
@@ -11,6 +12,20 @@ export default function SearchBox() {
   const [date, setDate] = useState("");
 
   function handleSearch() {
+    if (!packageType) {
+      track("search_started", {
+        service: "NOT_SELECTED",
+      });
+
+      return;
+    }
+
+    track("search_started", {
+      service: packageType,
+      destination: destination || "ANY",
+      travel_date: date || "NOT_SELECTED",
+    });
+
     if (packageType === "UMRAH") {
       const params = new URLSearchParams();
 
@@ -55,15 +70,12 @@ export default function SearchBox() {
       router.push("/visa");
       return;
     }
-
-    router.push("/contact");
   }
 
   return (
     <section className="relative z-20 -mt-16 mb-20 px-4 sm:px-6">
       <div className="mx-auto max-w-7xl">
         <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-2xl">
-
           {/* Heading */}
           <div className="border-b border-gray-100 px-6 py-6 text-center md:px-10">
             <p className="text-sm font-semibold uppercase tracking-[4px] text-emerald-600">
@@ -82,7 +94,6 @@ export default function SearchBox() {
           {/* Search Form */}
           <div className="p-5 md:p-8">
             <div className="grid gap-4 lg:grid-cols-4">
-
               {/* Travel Type */}
               <div>
                 <label className="mb-2 block text-sm font-semibold text-gray-700">
@@ -91,9 +102,14 @@ export default function SearchBox() {
 
                 <select
                   value={packageType}
-                  onChange={(event) =>
-                    setPackageType(event.target.value)
-                  }
+                  onChange={(event) => {
+                    setPackageType(event.target.value);
+
+                    if (event.target.value === "VISA") {
+                      setDestination("");
+                      setDate("");
+                    }
+                  }}
                   className="w-full rounded-xl border border-gray-200 bg-white px-4 py-4 text-gray-700 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
                 >
                   <option value="">
@@ -180,12 +196,12 @@ export default function SearchBox() {
                 <button
                   type="button"
                   onClick={handleSearch}
-                  className="w-full rounded-xl bg-emerald-600 px-5 py-4 font-semibold text-white transition duration-200 hover:bg-emerald-700 hover:shadow-lg"
+                  disabled={!packageType}
+                  className="w-full rounded-xl bg-emerald-600 px-5 py-4 font-semibold text-white transition duration-200 hover:bg-emerald-700 hover:shadow-lg disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none"
                 >
                   Search Packages
                 </button>
               </div>
-
             </div>
           </div>
 
@@ -221,7 +237,6 @@ export default function SearchBox() {
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </section>
