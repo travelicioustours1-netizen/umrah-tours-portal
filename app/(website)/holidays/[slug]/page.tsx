@@ -886,6 +886,37 @@ export default async function HolidayPackagePage({
               </section>
 
             </div>
+{/* =============================================
+    AZERBAIJAN VISA INTERNAL LINK
+============================================= */}
+
+{packageData.slug === "azerbaijan-highlights-5-days-4-nights" && (
+  <section className="rounded-2xl border border-emerald-100 bg-emerald-50 p-6 md:p-8">
+
+    <p className="text-sm font-semibold uppercase tracking-wider text-emerald-600">
+      Travelling to Azerbaijan?
+    </p>
+
+    <h2 className="mt-2 text-2xl font-bold text-gray-900">
+      Need an Azerbaijan Tourist Visa?
+    </h2>
+
+    <p className="mt-3 max-w-2xl leading-7 text-gray-600">
+      Planning your Azerbaijan holiday from the UAE?
+      Check our Azerbaijan Tourist Visa page for eVisa
+      eligibility, document guidance, application assistance
+      and important travel requirements.
+    </p>
+
+    <Link
+      href="/visa/azerbaijan-tourist-visa"
+      className="mt-5 inline-flex items-center rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white transition hover:bg-emerald-700"
+    >
+      Explore Azerbaijan Tourist Visa
+    </Link>
+
+  </section>
+)}
 
             {/* ===============================================
                 RIGHT SIDEBAR

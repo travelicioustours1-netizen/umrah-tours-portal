@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -525,6 +526,30 @@ const isEnquiryOnlyVisa =
                       </div>
                     ))}
                   </div>
+                </section>
+              )}
+                            {isAzerbaijanVisa && (
+                <section className="rounded-2xl border border-emerald-100 bg-emerald-50 p-8">
+                  <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
+                    Planning Your Azerbaijan Trip?
+                  </p>
+
+                  <h2 className="mt-2 text-2xl font-bold text-gray-900">
+                    Explore Our Azerbaijan Holiday Package
+                  </h2>
+
+                  <p className="mt-3 leading-7 text-gray-600">
+                    Looking for more than visa assistance? Explore our
+                    Azerbaijan holiday package featuring Baku sightseeing,
+                    accommodation, transfers and selected experiences.
+                  </p>
+
+                  <Link
+                    href="/holidays/azerbaijan-highlights-5-days-4-nights"
+                    className="mt-5 inline-flex items-center rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white transition hover:bg-emerald-700"
+                  >
+                    Explore Azerbaijan Holiday
+                  </Link>
                 </section>
               )}
             </div>

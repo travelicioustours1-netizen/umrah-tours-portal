@@ -62,7 +62,8 @@ export default async function PromotionPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2">
+  <>
+    <div className="grid gap-8 md:grid-cols-2">
               {promotions.map((promotion) => (
                 <article
                   key={promotion.id}
@@ -156,8 +157,51 @@ export default async function PromotionPage() {
                       </div>
                     )}
                 </article>
-              ))}
+                            ))}
             </div>
+
+            {/* =================================================
+                AZERBAIJAN INTERNAL LINK CLUSTER
+            ================================================= */}
+
+            <section className="mt-10 rounded-2xl border border-emerald-100 bg-emerald-50 p-6 md:p-8">
+
+              <p className="text-sm font-semibold uppercase tracking-wider text-emerald-600">
+                Planning an Azerbaijan Trip?
+              </p>
+
+              <h2 className="mt-2 text-2xl font-bold text-gray-900">
+                Azerbaijan Visa & Holiday Packages
+              </h2>
+
+              <p className="mt-3 max-w-3xl leading-7 text-gray-600">
+                Planning a trip to Azerbaijan from the UAE?
+                Explore our Azerbaijan holiday package starting
+                from AED 999 and check our Azerbaijan Tourist Visa
+                assistance for eligible travellers.
+              </p>
+
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+
+                <Link
+                  href="/holidays/azerbaijan-highlights-5-days-4-nights"
+                  className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white transition hover:bg-emerald-700"
+                >
+                  Explore Azerbaijan Holiday
+                </Link>
+
+                <Link
+                  href="/visa/azerbaijan-tourist-visa"
+                  className="inline-flex items-center justify-center rounded-xl border border-emerald-600 bg-white px-5 py-3 font-semibold text-emerald-700 transition hover:bg-emerald-100"
+                >
+                  Check Azerbaijan Tourist Visa
+                </Link>
+
+              </div>
+
+                        </section>
+
+          </>
           )}
         </div>
       </section>
