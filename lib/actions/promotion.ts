@@ -58,6 +58,9 @@ function promotionData(formData: FormData) {
   const whatsappUrl =
     String(formData.get("whatsappUrl") || "").trim() || null;
 
+  const destinationUrl =
+    String(formData.get("destinationUrl") || "").trim() || null;
+
   const displayOrderValue = Number(
     formData.get("displayOrder") || 0
   );
@@ -80,6 +83,7 @@ function promotionData(formData: FormData) {
     imageUrl,
     buttonText,
     whatsappUrl,
+    destinationUrl,
     isActive: formData.get("isActive") === "true",
     displayOrder,
     startDate: startDateValue

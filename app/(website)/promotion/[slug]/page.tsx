@@ -156,11 +156,22 @@ Thank you.`;
                   slug={promotion.slug}
                 />
 
+                {promotion.destinationUrl && (
+                  <a
+                    href={promotion.destinationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                  >
+                    {promotion.buttonText || "View Offer"} ↗
+                  </a>
+                )}
+
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center rounded-lg bg-emerald-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800"
+                  className="inline-flex items-center justify-center rounded-lg border border-emerald-700 bg-white px-6 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
                 >
-                  {promotion.buttonText || "Get a Quote"}
+                  Get a Quote
                 </Link>
               </div>
 

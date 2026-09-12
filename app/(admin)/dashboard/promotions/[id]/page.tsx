@@ -54,6 +54,7 @@ export default async function EditPromotionPage({
           imageUrl: promotion.imageUrl,
           buttonText: promotion.buttonText,
           whatsappUrl: promotion.whatsappUrl,
+          destinationUrl: promotion.destinationUrl,
           isActive: promotion.isActive,
           displayOrder: promotion.displayOrder,
           startDate: promotion.startDate,

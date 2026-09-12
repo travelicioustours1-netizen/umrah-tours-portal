@@ -272,8 +272,9 @@ model Promotion {
 
   imageUrl    String
 
-  buttonText  String?
-  whatsappUrl String?
+  buttonText     String?
+  whatsappUrl    String?
+  destinationUrl String?
 
   isActive    Boolean  @default(true)
   displayOrder Int     @default(0)

@@ -17,6 +17,7 @@ interface PromotionFormProps {
     imageUrl: string;
     buttonText?: string | null;
     whatsappUrl?: string | null;
+    destinationUrl?: string | null;
     isActive: boolean;
     displayOrder: number;
     startDate?: Date | string | null;
@@ -306,6 +307,8 @@ export default function PromotionForm({
         </h2>
 
         <div className="grid gap-5 md:grid-cols-2">
+          {/* Button Text */}
+
           <div>
             <label
               htmlFor="buttonText"
@@ -321,10 +324,12 @@ export default function PromotionForm({
               defaultValue={
                 initialData?.buttonText || ""
               }
-              placeholder="e.g. Enquire Now"
+              placeholder="e.g. View Offer"
               className="w-full rounded-lg border px-4 py-3 outline-none focus:border-emerald-500"
             />
           </div>
+
+          {/* WhatsApp URL */}
 
           <div>
             <label
@@ -347,9 +352,38 @@ export default function PromotionForm({
 
             <p className="mt-1 text-xs text-gray-500">
               Leave empty if this promotion
-              does not need a button.
+              does not need a WhatsApp button.
             </p>
           </div>
+        </div>
+
+        {/* External Offer URL */}
+
+        <div className="mt-5">
+          <label
+            htmlFor="destinationUrl"
+            className="mb-2 block text-sm font-medium text-gray-700"
+          >
+            External Offer URL
+          </label>
+
+          <input
+            id="destinationUrl"
+            name="destinationUrl"
+            type="url"
+            defaultValue={
+              initialData?.destinationUrl || ""
+            }
+            placeholder="https://example.com/your-affiliate-offer"
+            className="w-full rounded-lg border px-4 py-3 outline-none focus:border-emerald-500"
+          />
+
+          <p className="mt-1 text-xs text-gray-500">
+            Use this for external offers such as
+            Trip.com, affiliate campaigns or partner
+            promotions. Leave empty for promotions
+            handled directly by Umrah Tours.
+          </p>
         </div>
       </div>
 
