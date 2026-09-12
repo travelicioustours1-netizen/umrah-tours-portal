@@ -48,36 +48,42 @@ const otherServices = [
     ],
   },
   {
-    title: "Travel Essentials",
-    icon: "ðŸŒ",
-    services: [
-      {
-        label: "Airalo",
-        href: "https://airalo.tpo.mx/gsL7tF18",
-        description: "International eSIM",
-      },
-      {
-        label: "Yesim",
-        href: "https://yesim.tpo.mx/XDKGvDzp",
-        description: "Travel eSIM",
-      },
-      {
-        label: "Drimsim",
-        href: "https://drimsim.tpo.mx/5Ue3lZeP",
-        description: "Global SIM and eSIM",
-      },
-      {
-        label: "Saily",
-        href: "https://saily.tpo.mx/31BxqJFp",
-        description: "Travel eSIM plans",
-      },
-      {
-        label: "Ekta",
-        href: "https://ektatraveling.tpo.mx/X2qttxKG",
-        description: "Travel insurance",
-      },
-    ],
-  },
+  title: "Travel Essentials",
+  icon: "ðŸŒ",
+  services: [
+    {
+      label: "Airalo",
+      href: "https://airalo.tpo.mx/gsL7tF18",
+      description: "International eSIM",
+    },
+    {
+      label: "Yesim",
+      href: "https://yesim.tpo.mx/XDKGvDzp",
+      description: "Travel eSIM",
+    },
+    {
+      label: "Drimsim",
+      href: "https://drimsim.tpo.mx/5Ue3lZeP",
+      description: "Global SIM and eSIM",
+    },
+    {
+      label: "Saily",
+      href: "https://saily.tpo.mx/31BxqJFp",
+      description: "Travel eSIM plans",
+    },
+    {
+      label: "Trip.com Long Stay",
+      href: "https://ru.trip.com/sale/w/lwp8tnnrrrfk3qhp/rulongstay.html?locale=ru-RU&transparentBar=1&wkp=1",
+      description: "Long-stay hotel deals",
+    },
+    {
+      label: "Ekta",
+      href: "https://ektatraveling.tpo.mx/X2qttxKG",
+      description: "Travel insurance",
+    },
+  ],
+},
+
   {
     title: "Travel Support",
     icon: "ðŸ§³",
