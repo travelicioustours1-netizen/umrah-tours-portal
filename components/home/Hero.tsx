@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { CarFront, PlaneTakeoff, Ticket } from "lucide-react";
 
 import HeroWhatsAppButton from "@/components/home/HeroWhatsAppButton";
 
@@ -94,24 +95,34 @@ export default function Hero() {
                   href="/car-rentals"
                   className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-black/30 px-6 py-3 font-semibold text-white backdrop-blur-sm transition hover:border-emerald-300 hover:bg-emerald-600"
                 >
-                  🚗 Car Rental
+                  <CarFront size={18} />
+                  Car Rental
+                </Link>
+
+                <Link
+                  href="/airport-transfers"
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-black/30 px-6 py-3 font-semibold text-white backdrop-blur-sm transition hover:border-emerald-300 hover:bg-emerald-600"
+                >
+                  <PlaneTakeoff size={18} />
+                  Airport Transfers
                 </Link>
 
                 <Link
                   href="/tours-activities"
                   className="inline-flex items-center gap-2 rounded-lg border border-white/40 bg-black/30 px-6 py-3 font-semibold text-white backdrop-blur-sm transition hover:border-emerald-300 hover:bg-emerald-600"
                 >
-                  🎟️ Activities
+                  <Ticket size={18} />
+                  Activities
                 </Link>
               </div>
             </div>
 
             {/* Trust Points */}
             <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-gray-200 md:text-base">
-              <div>✓ Trusted Umrah Experts</div>
-              <div>✓ Visa Assistance</div>
-              <div>✓ Hotels & Transport</div>
-              <div>✓ Customized Holidays</div>
+              <div>âœ“ Trusted Umrah Experts</div>
+              <div>âœ“ Visa Assistance</div>
+              <div>âœ“ Hotels & Transport</div>
+              <div>âœ“ Customized Holidays</div>
             </div>
           </div>
         </div>
