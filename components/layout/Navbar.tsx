@@ -18,7 +18,7 @@ const navItems = [
 const otherServices = [
   {
     title: "Airport Transfers",
-    icon: "ðŸš",
+    icon: "transfer",
     services: [
       {
         label: "Klook",
@@ -48,45 +48,44 @@ const otherServices = [
     ],
   },
   {
-  title: "Travel Essentials",
-  icon: "ðŸŒ",
-  services: [
-    {
-      label: "Airalo",
-      href: "https://airalo.tpo.mx/gsL7tF18",
-      description: "International eSIM",
-    },
-    {
-      label: "Yesim",
-      href: "https://yesim.tpo.mx/XDKGvDzp",
-      description: "Travel eSIM",
-    },
-    {
-      label: "Drimsim",
-      href: "https://drimsim.tpo.mx/5Ue3lZeP",
-      description: "Global SIM and eSIM",
-    },
-    {
-      label: "Saily",
-      href: "https://saily.tpo.mx/31BxqJFp",
-      description: "Travel eSIM plans",
-    },
-    {
-      label: "Trip.com Long Stay",
-      href: "https://ru.trip.com/sale/w/lwp8tnnrrrfk3qhp/rulongstay.html?locale=ru-RU&transparentBar=1&wkp=1",
-      description: "Long-stay hotel deals",
-    },
-    {
-      label: "Ekta",
-      href: "https://ektatraveling.tpo.mx/X2qttxKG",
-      description: "Travel insurance",
-    },
-  ],
-},
-
+    title: "Travel Essentials",
+    icon: "essentials",
+    services: [
+      {
+        label: "Airalo",
+        href: "https://airalo.tpo.mx/gsL7tF18",
+        description: "International eSIM",
+      },
+      {
+        label: "Yesim",
+        href: "https://yesim.tpo.mx/XDKGvDzp",
+        description: "Travel eSIM",
+      },
+      {
+        label: "Drimsim",
+        href: "https://drimsim.tpo.mx/5Ue3lZeP",
+        description: "Global SIM and eSIM",
+      },
+      {
+        label: "Saily",
+        href: "https://saily.tpo.mx/31BxqJFp",
+        description: "Travel eSIM plans",
+      },
+      {
+        label: "Trip.com Long Stay",
+        href: "https://ru.trip.com/sale/w/lwp8tnnrrrfk3qhp/rulongstay.html?locale=ru-RU&transparentBar=1&wkp=1",
+        description: "Long-stay hotel deals",
+      },
+      {
+        label: "Ekta",
+        href: "https://ektatraveling.tpo.mx/X2qttxKG",
+        description: "Travel insurance",
+      },
+    ],
+  },
   {
     title: "Travel Support",
-    icon: "ðŸ§³",
+    icon: "support",
     services: [
       {
         label: "AirHelp",
@@ -111,6 +110,177 @@ const otherServices = [
     ],
   },
 ];
+
+function CategoryIcon({ type }: { type: string }) {
+  const commonProps = {
+    className: "h-5 w-5",
+    fill: "none",
+    stroke: "currentColor",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+
+  switch (type) {
+    case "transfer":
+      return (
+        <svg {...commonProps}>
+          <path d="M3 17h18" />
+          <path d="M5 17l1.5-6h11L19 17" />
+          <path d="M7 11l2-4h6l2 4" />
+          <circle cx="7.5" cy="17.5" r="1.5" />
+          <circle cx="16.5" cy="17.5" r="1.5" />
+          <path d="M3 8h5" />
+          <path d="M6 5l2 3-2 3" />
+        </svg>
+      );
+
+    case "essentials":
+      return (
+        <svg {...commonProps}>
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="m4.93 4.93 1.41 1.41" />
+          <path d="m17.66 17.66 1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="m4.93 19.07 1.41-1.41" />
+          <path d="m17.66 6.34 1.41-1.41" />
+        </svg>
+      );
+
+    case "support":
+      return (
+        <svg {...commonProps}>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 8v4l2.5 2.5" />
+          <path d="M8 3.5 6.5 2" />
+          <path d="m16 3.5 1.5-1.5" />
+        </svg>
+      );
+
+    default:
+      return null;
+  }
+}
+
+function ArrowIcon() {
+  return (
+    <svg
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4A8 8 0 1 1 20 11.5Z" />
+      <path d="M8.5 9.5c.3 1.5 1.5 3 3 3.8" />
+      <path d="M8.8 8.5c.3-.5.7-.5 1-.2l.8.9c.2.2.2.5 0 .8l-.4.5" />
+      <path d="M15.3 14.8c-.4.3-.8.4-1.2.2l-.9-.4" />
+    </svg>
+  );
+}
+
+function LogoIcon() {
+  return (
+    <svg
+      className="h-7 w-7"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={1.7}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M4 20h16" />
+      <path d="M6 20V9h12v11" />
+      <path d="M8 9V6h8v3" />
+      <path d="M10 6V4h4v2" />
+      <path d="M8 12h8" />
+      <path d="M9 15h6" />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg
+      className="h-6 w-6"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M4 6h16" />
+      <path d="M4 12h16" />
+      <path d="M4 18h16" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      className="h-6 w-6"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m6 6 12 12" />
+      <path d="m18 6-12 12" />
+    </svg>
+  );
+}
+
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      className={`h-4 w-4 transition-transform ${
+        open ? "rotate-180" : ""
+      }`}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m19 9-7 7-7-7" />
+    </svg>
+  );
+}
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -148,14 +318,15 @@ Thank you.`
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+
         {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2"
           onClick={closeAllMenus}
         >
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-600 text-xl">
-            ðŸ•‹
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-600 text-white shadow-sm">
+            <LogoIcon />
           </div>
 
           <div>
@@ -198,22 +369,7 @@ Thank you.`
               aria-expanded={otherServicesOpen}
             >
               Other Services
-
-              <svg
-                className={`h-4 w-4 transition-transform ${
-                  otherServicesOpen ? "rotate-180" : ""
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="m19 9-7 7-7-7"
-                />
-              </svg>
+              <ChevronIcon open={otherServicesOpen} />
             </button>
 
             {otherServicesOpen && (
@@ -227,6 +383,7 @@ Thank you.`
                 {/* Scrollable Desktop Dropdown */}
                 <div className="absolute right-0 top-full z-50 mt-3 max-h-[calc(100vh-110px)] w-[760px] overflow-y-auto overscroll-contain rounded-2xl border border-gray-200 bg-white shadow-2xl">
                   <div className="p-6">
+
                     {/* Header */}
                     <div className="mb-5 border-b border-gray-100 pb-4">
                       <h3 className="text-base font-bold text-gray-900">
@@ -243,8 +400,8 @@ Thank you.`
                       {otherServices.map((category) => (
                         <div key={category.title}>
                           <div className="mb-3 flex items-center gap-2">
-                            <span className="text-lg">
-                              {category.icon}
+                            <span className="text-emerald-600">
+                              <CategoryIcon type={category.icon} />
                             </span>
 
                             <h4 className="text-sm font-bold text-gray-900">
@@ -269,8 +426,8 @@ Thank you.`
                                     {service.label}
                                   </span>
 
-                                  <span className="shrink-0 text-xs text-gray-400 transition group-hover:text-emerald-600">
-                                    â†—
+                                  <span className="shrink-0 text-gray-400 transition group-hover:translate-x-1 group-hover:text-emerald-600">
+                                    <ArrowIcon />
                                   </span>
                                 </div>
 
@@ -320,7 +477,7 @@ Thank you.`
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
           >
-            <span aria-hidden="true">💬</span>
+            <WhatsAppIcon />
             WhatsApp
           </a>
 
@@ -342,18 +499,15 @@ Thank you.`
           className="inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-700 lg:hidden"
           aria-label="Toggle navigation"
         >
-          {mobileOpen ? (
-            <span className="text-2xl">âœ•</span>
-          ) : (
-            <span className="text-2xl">â˜°</span>
-          )}
+          {mobileOpen ? <CloseIcon /> : <MenuIcon />}
         </button>
       </div>
 
-      {/* Mobile Navigation - Full Screen Scrollable */}
+      {/* Mobile Navigation */}
       {mobileOpen && (
         <div className="fixed inset-x-0 bottom-0 top-20 z-50 overflow-y-auto overscroll-contain border-t border-gray-200 bg-white lg:hidden">
           <nav className="mx-auto max-w-7xl space-y-1 px-4 py-4">
+
             {/* Main Navigation */}
             {navItems.slice(0, 4).map((item) => (
               <Link
@@ -380,22 +534,7 @@ Thank you.`
                 className="flex w-full items-center justify-between bg-white px-4 py-3 text-left text-sm font-semibold text-gray-700"
               >
                 <span>Other Services</span>
-
-                <svg
-                  className={`h-5 w-5 transition-transform ${
-                    mobileServicesOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="m19 9-7 7-7-7"
-                  />
-                </svg>
+                <ChevronIcon open={mobileServicesOpen} />
               </button>
 
               {mobileServicesOpen && (
@@ -403,8 +542,8 @@ Thank you.`
                   {otherServices.map((category) => (
                     <div key={category.title}>
                       <div className="mb-2 flex items-center gap-2">
-                        <span className="text-lg">
-                          {category.icon}
+                        <span className="text-emerald-600">
+                          <CategoryIcon type={category.icon} />
                         </span>
 
                         <h4 className="text-sm font-bold text-gray-900">
@@ -425,7 +564,7 @@ Thank you.`
                             <span>{service.label}</span>
 
                             <span className="text-gray-400">
-                              â†—
+                              <ArrowIcon />
                             </span>
                           </a>
                         ))}
@@ -460,7 +599,7 @@ Thank you.`
               onClick={closeAllMenus}
               className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-green-600 px-4 py-3.5 text-center text-sm font-bold text-white shadow-sm transition hover:bg-green-700"
             >
-              <span aria-hidden="true">💬</span>
+              <WhatsAppIcon />
               WhatsApp Us — Get Today's Best Price
             </a>
 
@@ -473,7 +612,6 @@ Thank you.`
               Get a Quote
             </Link>
 
-            {/* Bottom spacing */}
             <div className="h-6" />
           </nav>
         </div>

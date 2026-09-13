@@ -4,6 +4,25 @@ import { CarFront, PlaneTakeoff, Ticket } from "lucide-react";
 
 import HeroWhatsAppButton from "@/components/home/HeroWhatsAppButton";
 
+function CheckIcon() {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+      className="h-5 w-5 shrink-0 text-emerald-300"
+    >
+      <path
+        d="M5 10.5L8.5 14L15 6.5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Hero() {
   return (
     <section className="relative min-h-[680px] overflow-hidden md:min-h-[760px]">
@@ -119,10 +138,25 @@ export default function Hero() {
 
             {/* Trust Points */}
             <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-gray-200 md:text-base">
-              <div>âœ“ Trusted Umrah Experts</div>
-              <div>âœ“ Visa Assistance</div>
-              <div>âœ“ Hotels & Transport</div>
-              <div>âœ“ Customized Holidays</div>
+              <div className="inline-flex items-center gap-2">
+                <CheckIcon />
+                <span>Trusted Umrah Experts</span>
+              </div>
+
+              <div className="inline-flex items-center gap-2">
+                <CheckIcon />
+                <span>Visa Assistance</span>
+              </div>
+
+              <div className="inline-flex items-center gap-2">
+                <CheckIcon />
+                <span>Hotels & Transport</span>
+              </div>
+
+              <div className="inline-flex items-center gap-2">
+                <CheckIcon />
+                <span>Customized Holidays</span>
+              </div>
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ import Destinations from "@/components/home/Destinations";
 import Testimonials from "@/components/home/Testimonials";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import CTA from "@/components/home/CTA";
-
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Umrah Packages & Holiday Packages from UAE",
   description:

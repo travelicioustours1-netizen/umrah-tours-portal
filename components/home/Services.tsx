@@ -150,6 +150,24 @@ function ServiceIcon({ type }: { type: string }) {
   }
 }
 
+function ArrowIcon() {
+  return (
+    <svg
+      className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
+  );
+}
+
 export default function Services() {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [selectedService, setSelectedService] = useState("");
@@ -211,10 +229,7 @@ export default function Services() {
                       className="mt-5 inline-flex items-center justify-center text-sm font-semibold text-amber-600 transition-colors hover:text-amber-700"
                     >
                       {service.button}
-
-                      <span className="ml-1 inline-block transition-transform group-hover:translate-x-1">
-                        →
-                      </span>
+                      <ArrowIcon />
                     </a>
                   ) : (
                     <button
@@ -223,10 +238,7 @@ export default function Services() {
                       className="mt-5 inline-flex items-center justify-center text-sm font-semibold text-amber-600 transition-colors hover:text-amber-700"
                     >
                       {service.button}
-
-                      <span className="ml-1 inline-block transition-transform group-hover:translate-x-1">
-                        →
-                      </span>
+                      <ArrowIcon />
                     </button>
                   )}
                 </div>
