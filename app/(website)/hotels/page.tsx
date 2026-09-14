@@ -1,4 +1,5 @@
 ﻿import Image from "next/image";
+import Script from "next/script";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -124,6 +125,22 @@ const hotelSchema = {
 export default function HotelsPage() {
   return (
     <main className="bg-gray-50">
+      {/* Stay22 LetMeAllez */}
+      <Script id="stay22-letmeallez" strategy="afterInteractive">
+        {`
+          (function (s, t, a, y, twenty, two) {
+            s.Stay22 = s.Stay22 || {};
+            s.Stay22.params = { lmaID: '6aa82064f4418a015b77cc70' };
+            twenty = t.createElement(a);
+            two = t.getElementsByTagName(a)[0];
+            twenty.async = 1;
+            twenty.src = y;
+            two.parentNode.insertBefore(twenty, two);
+          })(window, document, 'script', 'https://scripts.stay22.com/letmeallez.js');
+        `}
+      </Script>
+
+      {/* Hotel Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
