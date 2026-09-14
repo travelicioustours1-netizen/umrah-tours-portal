@@ -2,73 +2,118 @@
 import Script from "next/script";
 import type { Metadata } from "next";
 
+const baseUrl = "https://www.umrahtours.co";
+
+const stay22HotelLink =
+  "https://agoda.stay22.com/umrahtours/zMQhU4GnlS";
+
 export const metadata: Metadata = {
   title: "Makkah & Madinah Hotels | Umrah Tours",
+
   description:
-    "Explore comfortable hotel accommodation in Makkah and Madinah with Umrah Tours. Find suitable stays near the holy sites for your Umrah journey.",
+    "Find hotels in Makkah, Madinah, Dubai and other destinations. Explore comfortable hotel options for Umrah and international holidays with Umrah Tours.",
+
+  keywords: [
+    "Makkah hotels",
+    "Madinah hotels",
+    "Makkah hotels near Haram",
+    "Madinah hotels near Masjid Nabawi",
+    "Umrah hotels",
+    "Umrah hotels UAE",
+    "Dubai hotels",
+    "hotel booking UAE",
+    "hotel booking Dubai",
+    "hotel booking Sharjah",
+  ],
+
+  authors: [
+    {
+      name: "Umrah Tours",
+    },
+  ],
+
+  creator: "Umrah Tours",
+  publisher: "Umrah Tours",
+
   alternates: {
-    canonical: "https://umrahtours.co/hotels",
+    canonical: `${baseUrl}/hotels`,
   },
+
   openGraph: {
     title: "Makkah & Madinah Hotels | Umrah Tours",
+
     description:
-      "Explore comfortable hotel accommodation in Makkah and Madinah with Umrah Tours.",
-    url: "https://umrahtours.co/hotels",
+      "Explore Makkah and Madinah hotels for your Umrah journey, plus hotel options for Dubai and international holidays.",
+
+    url: `${baseUrl}/hotels`,
+
     siteName: "Umrah Tours",
+
     locale: "en_AE",
+
     type: "website",
+
+    images: [
+      {
+        url: `${baseUrl}/images/hero/umrah-hero.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Makkah and Madinah Hotels - Umrah Tours",
+      },
+    ],
   },
+
   twitter: {
     card: "summary_large_image",
+
     title: "Makkah & Madinah Hotels | Umrah Tours",
+
     description:
-      "Explore hotel accommodation in Makkah and Madinah near Masjid Al Haram and Masjid An Nabawi for your Umrah journey.",
-  },
-  robots: {
-    index: true,
-    follow: true,
+      "Find hotels in Makkah, Madinah, Dubai and other destinations with Umrah Tours.",
+
+    images: [`${baseUrl}/images/hero/umrah-hero.jpg`],
   },
 };
 
 const hotels = [
   {
     name: "Premium Makkah Hotel",
-    location: "Near Masjid Al Haram, Makkah",
-    category: "5 Star Accommodation",
-    image: "/images/hotels/makkah-hotel.jpg",
+    location: "Makkah, Saudi Arabia",
+    description:
+      "Comfortable accommodation options for pilgrims looking to stay close to the holy sites.",
+    image: "/images/hotels/makkah.jpg",
   },
   {
     name: "Comfort Makkah Stay",
     location: "Makkah, Saudi Arabia",
-    category: "3-4 Star Accommodation",
-    image: "/images/hotels/makkah-hotel2.jpg",
+    description:
+      "Practical hotel options suitable for families, couples and Umrah travellers.",
+    image: "/images/hotels/makkah.jpg",
   },
   {
     name: "Madinah Blessed Hotel",
-    location: "Near Masjid An Nabawi, Madinah",
-    category: "4 Star Accommodation",
-    image: "/images/hotels/madinah-hotel.jpg",
+    location: "Madinah, Saudi Arabia",
+    description:
+      "Stay comfortably in Madinah while visiting Masjid an-Nabawi and surrounding attractions.",
+    image: "/images/hotels/madinah.jpg",
   },
 ];
 
 const benefits = [
   {
-    title: "Quality Hotels",
+    title: "Makkah & Madinah",
     description:
-      "Comfortable accommodation options selected for Umrah travellers.",
-    icon: "★",
+      "Hotel options for pilgrims travelling to Makkah and Madinah.",
   },
   {
-    title: "Best Rates",
+    title: "Flexible Options",
     description:
-      "Hotel options suitable for different budgets and travel requirements.",
-    icon: "AED",
+      "Explore accommodation choices for different budgets and travel needs.",
   },
   {
-    title: "Prime Locations",
+    title: "Hotel Booking Assistance",
     description:
-      "Stay options close to the holy sites and convenient travel areas.",
-    icon: "LOC",
+      "Need help choosing your hotel? Contact our travel team for assistance.",
   },
 ];
 
@@ -77,47 +122,16 @@ const hotelSchema = {
   "@type": "CollectionPage",
   name: "Makkah & Madinah Hotels",
   description:
-    "Explore hotel accommodation in Makkah and Madinah near the holy sites for Umrah travellers.",
-  url: "https://umrahtours.co/hotels",
-  isPartOf: {
-    "@type": "WebSite",
-    name: "Umrah Tours",
-    url: "https://umrahtours.co",
-  },
-  about: {
-    "@type": "Thing",
-    name: "Makkah and Madinah Hotel Accommodation",
-  },
-  provider: {
-    "@id": "https://umrahtours.co/#organization",
-  },
-  areaServed: [
-    {
-      "@type": "City",
-      name: "Makkah",
-      containedInPlace: {
-        "@type": "Country",
-        name: "Saudi Arabia",
-      },
-    },
-    {
-      "@type": "City",
-      name: "Madinah",
-      containedInPlace: {
-        "@type": "Country",
-        name: "Saudi Arabia",
-      },
-    },
-  ],
+    "Hotel options in Makkah, Madinah and other destinations for Umrah and holiday travellers.",
+  url: `${baseUrl}/hotels`,
   mainEntity: {
     "@type": "ItemList",
-    name: "Makkah and Madinah Hotels",
-    numberOfItems: hotels.length,
     itemListElement: hotels.map((hotel, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: hotel.name,
-      description: hotel.location,
+      description: hotel.description,
+      url: `${baseUrl}/hotels`,
     })),
   },
 };
@@ -140,7 +154,7 @@ export default function HotelsPage() {
         `}
       </Script>
 
-      {/* Hotel Schema */}
+      {/* Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -149,122 +163,141 @@ export default function HotelsPage() {
       />
 
       {/* Hero */}
-      <section className="relative h-[55vh] min-h-[480px] overflow-hidden">
-        <Image
-          src="/images/hero/umrah-hero.jpg"
-          alt="Makkah and Madinah hotel accommodation"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+      <section className="relative overflow-hidden bg-gray-900">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero/umrah-hero.jpg"
+            alt="Makkah and Madinah hotels"
+            fill
+            priority
+            className="object-cover opacity-40"
+          />
+        </div>
 
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative mx-auto max-w-6xl px-4 py-24 text-white">
+          <div className="max-w-3xl">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-blue-300">
+              Hotel Booking
+            </p>
 
-        <div className="relative z-10 flex h-full items-center">
-          <div className="mx-auto w-full max-w-7xl px-6">
-            <div className="max-w-3xl text-white">
-              <p className="font-semibold uppercase tracking-[5px] text-emerald-300">
-                Accommodation
-              </p>
+            <h1 className="text-4xl font-bold leading-tight sm:text-5xl">
+              Makkah, Madinah & International Hotels
+            </h1>
 
-              <h1 className="mt-4 text-5xl font-bold leading-tight md:text-6xl">
-                Makkah &amp; Madinah Hotels
-              </h1>
-
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-gray-200 md:text-xl">
-                Comfortable stays near the holy sites with accommodation
-                options suitable for every budget.
-              </p>
-            </div>
+            <p className="mt-5 text-lg leading-8 text-gray-200">
+              Explore hotel options for Umrah, holidays and international
+              travel. Find accommodation that suits your location, budget and
+              travel needs.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Hotels */}
-      <section className="py-16 md:py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="font-semibold uppercase tracking-[4px] text-emerald-600">
-              Hotel Accommodation
-            </p>
+      {/* Hotel Booking CTA */}
+      <section className="mx-auto max-w-6xl px-4 py-12">
+        <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-200">
+          <div className="grid gap-8 p-8 md:grid-cols-[1fr_auto] md:items-center md:p-10">
+            <div>
+              <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-600">
+                Hotel Booking
+              </p>
 
-            <h2 className="mt-3 text-4xl font-bold text-gray-900 md:text-5xl">
-              Stay Close To The Holy Sites
-            </h2>
+              <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+                Find & Book Your Hotel
+              </h2>
 
-            <p className="mt-5 text-lg leading-8 text-gray-600">
-              Choose from accommodation options in Makkah and Madinah to make
-              your Umrah journey comfortable and convenient.
-            </p>
+              <p className="mt-3 max-w-2xl leading-7 text-gray-600">
+                Search and compare accommodation options for your next trip.
+                Book hotels through our hotel booking partner and explore
+                available options for your destination.
+              </p>
+
+              <p className="mt-3 text-sm text-gray-500">
+                Hotel booking is provided through our accommodation partner.
+              </p>
+            </div>
+
+            <a
+              href={stay22HotelLink}
+              target="_blank"
+              rel="sponsored nofollow noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-7 py-3.5 font-semibold text-white transition hover:bg-blue-700"
+            >
+              Search Hotels
+            </a>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {hotels.map((hotel) => (
-              <article
-                key={hotel.name}
-                className="overflow-hidden rounded-2xl bg-white shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
-                <div className="relative h-64">
-                  <Image
-                    src={hotel.image}
-                    alt={`${hotel.name} in ${hotel.location}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover"
-                  />
-                </div>
+      {/* Featured Hotel Options */}
+      <section className="mx-auto max-w-6xl px-4 pb-16">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-gray-900">
+            Hotel Options for Your Journey
+          </h2>
 
-                <div className="p-6">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-emerald-600">
-                    {hotel.category}
-                  </p>
+          <p className="mt-2 max-w-2xl text-gray-600">
+            Whether you are travelling for Umrah or planning an international
+            holiday, we can help you find suitable accommodation.
+          </p>
+        </div>
 
-                  <h3 className="mt-2 text-2xl font-bold text-gray-900">
-                    {hotel.name}
-                  </h3>
+        <div className="grid gap-6 md:grid-cols-3">
+          {hotels.map((hotel) => (
+            <article
+              key={hotel.name}
+              className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-200"
+            >
+              <div className="relative h-56">
+                <Image
+                  src={hotel.image}
+                  alt={hotel.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
 
-                  <p className="mt-3 text-gray-600">{hotel.location}</p>
+              <div className="p-6">
+                <p className="text-sm font-medium text-blue-600">
+                  {hotel.location}
+                </p>
 
-                  <p className="mt-5 text-sm leading-6 text-gray-500">
-                    Comfortable accommodation options for travellers visiting
-                    the holy cities.
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
+                <h3 className="mt-2 text-xl font-bold text-gray-900">
+                  {hotel.name}
+                </h3>
+
+                <p className="mt-3 leading-6 text-gray-600">
+                  {hotel.description}
+                </p>
+
+                <a
+                  href={stay22HotelLink}
+                  target="_blank"
+                  rel="sponsored nofollow noopener noreferrer"
+                  className="mt-5 inline-flex font-semibold text-blue-600 hover:text-blue-700"
+                >
+                  Search Hotels →
+                </a>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
       {/* Benefits */}
-      <section className="bg-emerald-50 py-16 md:py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="font-semibold uppercase tracking-[4px] text-emerald-600">
-              Why Book With Us
-            </p>
-
-            <h2 className="mt-3 text-4xl font-bold text-gray-900">
-              Comfortable Stays For Your Journey
-            </h2>
-          </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+      <section className="bg-white">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <div className="grid gap-6 md:grid-cols-3">
             {benefits.map((benefit) => (
               <div
                 key={benefit.title}
-                className="rounded-2xl bg-white p-8 text-center shadow-sm"
+                className="rounded-2xl border border-gray-200 p-6"
               >
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-700">
-                  {benefit.icon}
-                </div>
-
-                <h3 className="mt-5 text-xl font-bold text-gray-900">
+                <h3 className="text-xl font-bold text-gray-900">
                   {benefit.title}
                 </h3>
 
-                <p className="mt-3 leading-7 text-gray-600">
+                <p className="mt-3 leading-6 text-gray-600">
                   {benefit.description}
                 </p>
               </div>
@@ -273,27 +306,25 @@ export default function HotelsPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-emerald-800 py-16 text-center text-white md:py-20">
-        <div className="mx-auto max-w-3xl px-6">
-          <p className="font-semibold uppercase tracking-[4px] text-emerald-200">
-            Hotel Enquiries
-          </p>
-
-          <h2 className="mt-3 text-4xl font-bold md:text-5xl">
-            Need Help Choosing A Hotel?
+      {/* WhatsApp CTA */}
+      <section className="bg-gray-900">
+        <div className="mx-auto max-w-4xl px-4 py-16 text-center text-white">
+          <h2 className="text-3xl font-bold">
+            Need Help Choosing a Hotel?
           </h2>
 
-          <p className="mt-5 text-lg leading-8 text-emerald-50">
-            Contact Umrah Tours for hotel options in Makkah and Madinah based
-            on your preferred location, category and budget.
+          <p className="mx-auto mt-4 max-w-2xl leading-7 text-gray-300">
+            Speak with Umrah Tours for hotel recommendations, Umrah
+            accommodation and customized travel assistance.
           </p>
 
           <a
-            href="/contact"
-            className="mt-8 inline-flex items-center justify-center rounded-lg bg-white px-8 py-4 font-semibold text-emerald-800 transition hover:bg-gray-100"
+            href="https://wa.me/971525657940?text=Assalamu%20Alaikum%2C%20I%20need%20help%20with%20hotel%20booking."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-7 inline-flex items-center justify-center rounded-lg bg-green-600 px-7 py-3.5 font-semibold text-white transition hover:bg-green-700"
           >
-            Enquire Now
+            WhatsApp Us
           </a>
         </div>
       </section>
