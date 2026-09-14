@@ -119,7 +119,6 @@ Thank you.`;
   return (
     <aside className="lg:sticky lg:top-6">
       <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg">
-
         {/* Header */}
         <div className="border-b bg-gray-50 p-6">
           <p className="text-xs font-semibold uppercase tracking-[2px] text-emerald-600">
@@ -132,7 +131,6 @@ Thank you.`;
         </div>
 
         <div className="space-y-6 p-6">
-
           {/* Price */}
           <div>
             {isEnquiryOnlyVisa ? (
@@ -353,7 +351,7 @@ Thank you.`;
                     onClick={handleCustomizedWhatsAppClick}
                     className="mt-3 inline-flex text-xs font-semibold text-emerald-700 hover:underline"
                   >
-                    Chat with our team â†’
+                    Chat with our team →
                   </a>
                 </div>
               </div>
@@ -374,7 +372,6 @@ Thank you.`;
               +971 52 565 7940
             </p>
           </div>
-
         </div>
       </div>
     </aside>
